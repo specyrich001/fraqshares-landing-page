@@ -1,0 +1,10 @@
+/* The active tab's progress line is the carousel timer: it fills over the interval, and its
+   animationend advances to the next card. Pausing the animation pauses the timer. */
+@keyframes feature-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}

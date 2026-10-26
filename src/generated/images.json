@@ -1,0 +1,72 @@
+{
+  "features/cars": {
+    "width": 95,
+    "height": 81,
+    "src": "/images/features/cars-95.webp",
+    "srcset": "/images/features/cars-95.webp 95w, /images/features/cars-189.webp 189w"
+  },
+  "features/house": {
+    "width": 450,
+    "height": 411,
+    "src": "/images/features/house-450.webp",
+    "srcset": "/images/features/house-450.webp 450w"
+  },
+  "features/land": {
+    "width": 79,
+    "height": 79,
+    "src": "/images/features/land-79.webp",
+    "srcset": "/images/features/land-79.webp 79w, /images/features/land-158.webp 158w"
+  },
+  "features/phone": {
+    "width": 290,
+    "height": 592,
+    "src": "/images/features/phone-290.webp",
+    "srcset": "/images/features/phone-290.webp 290w, /images/features/phone-580.webp 580w"
+  },
+  "features/villa": {
+    "width": 95,
+    "height": 81,
+    "src": "/images/features/villa-95.webp",
+    "srcset": "/images/features/villa-95.webp 95w, /images/features/villa-189.webp 189w"
+  },
+  "hero/grain": {
+    "width": 432,
+    "height": 288,
+    "src": "/images/hero/grain.webp"
+  },
+  "hero/photo": {
+    "width": 1440,
+    "height": 748,
+    "src": "/images/hero/photo-1440.webp",
+    "srcset": "/images/hero/photo-1440.webp 1440w, /images/hero/photo-1920.webp 1920w, /images/hero/photo-2000.webp 2000w"
+  },
+  "shared/green-blur": {
+    "width": 800,
+    "height": 291,
+    "src": "/images/shared/green-blur-800.webp",
+    "srcset": "/images/shared/green-blur-800.webp 800w"
+  },
+  "wealth/bottom-blur": {
+    "width": 1440,
+    "height": 357,
+    "src": "/images/wealth/bottom-blur.webp"
+  },
+  "wealth/card-thumb": {
+    "width": 64,
+    "height": 64,
+    "src": "/images/wealth/card-thumb-64.webp",
+    "srcset": "/images/wealth/card-thumb-64.webp 64w, /images/wealth/card-thumb-128.webp 128w"
+  },
+  "wealth/photo-full": {
+    "width": 1000,
+    "height": 667,
+    "src": "/images/wealth/photo-full-1000.webp",
+    "srcset": "/images/wealth/photo-full-1000.webp 1000w, /images/wealth/photo-full-1440.webp 1440w, /images/wealth/photo-full-2000.webp 2000w"
+  },
+  "wealth/photo": {
+    "width": 473,
+    "height": 649,
+    "src": "/images/wealth/photo-473.webp",
+    "srcset": "/images/wealth/photo-473.webp 473w, /images/wealth/photo-946.webp 946w"
+  }
+}

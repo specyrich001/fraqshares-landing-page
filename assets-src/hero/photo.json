@@ -1,0 +1,5 @@
+{
+  "flop": true,
+  "crop": { "left": 0, "top": 67, "width": 2000, "height": 1039 },
+  "widths": [1440, 1920, 2000]
+}

@@ -1,0 +1,195 @@
+/* ============================================================
+   Embedded product type (Ruberoid) for product-UI artwork: the
+   hero activity feed and the section-2 image overlays. These are
+   card-artwork sizes from the style guide, deliberately kept out
+   of the site tokens. When a card appears larger, scale the whole
+   card with transform: scale() rather than adding in-between sizes.
+
+   Files: assets-src/fonts — the licensed Ruberoid webfont kit
+   (Pepper Type via MyFonts), all 9 weights + obliques. The kit names
+   each style as its own family; here they're one "Ruberoid" family.
+   Its files all report weight 400, so weights come from the kit's
+   stylesheet, with ExtraLight at 250: the kit gives it 200 like
+   UltraLight, and measured ink puts it between UltraLight and Light.
+   Declaring every face costs nothing — browsers fetch a file only
+   when text uses that weight/style.
+   Ruberoid has no ₦ (U+20A6); it falls through to DM Sans.
+   ============================================================ */
+
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-Thin.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-ThinOblique.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-UltraLight.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-UltraLightOblique.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 250;
+  font-style: normal;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-ExtraLight.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 250;
+  font-style: italic;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-ExtraLightOblique.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-Light.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-LightOblique.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-Oblique.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-Medium.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-MediumOblique.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-SemiBold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-SemiBoldOblique.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-Bold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-BoldOblique.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-ExtraBold.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Ruberoid";
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+  src: url("../../../assets-src/fonts/Ruberoid-ExtraBoldOblique.woff2") format("woff2");
+}
+
+@layer components {
+  /* Wrapper for any product-UI artwork */
+  .product-ui {
+    font-family: "Ruberoid", "DM Sans", system-ui, sans-serif;
+    letter-spacing: 0;
+  }
+
+  /* "FRAQSHARES" app name — Regular 10 / normal, uppercase */
+  .product-app {
+    font-size: 10px;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: uppercase;
+  }
+
+  /* "Now" — Light 8 / normal */
+  .product-time {
+    font-size: 8px;
+    font-weight: 300;
+    line-height: normal;
+  }
+
+  /* Card titles, pill labels — Bold 12 / 140% */
+  .product-title {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  /* Body + meta — Light 10 / 140% */
+  .product-detail {
+    font-size: 10px;
+    font-weight: 300;
+    line-height: 1.4;
+  }
+
+  /* Amounts — SemiBold 10 / normal (hero feed) */
+  .product-amount {
+    font-size: 10px;
+    font-weight: 600;
+    line-height: normal;
+  }
+
+  /* Amounts — Regular 12 / normal (section-2 card) */
+  .product-amount-lg {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: normal;
+  }
+}

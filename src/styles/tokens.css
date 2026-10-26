@@ -1,0 +1,190 @@
+/* ============================================================
+   Fraqshares — type + color tokens
+   Source: Figma style guide, 1440px desktop. Every value here is
+   from the guide; the only additions are the clamp() minimums on
+   display tokens (marked MOBILE — pending review).
+
+   Each --text-<role> generates a `text-<role>` utility that sets
+   size, line-height, weight and tracking together. Components and
+   animations reference roles, never raw values.
+
+   Tailwind's default size scale (text-sm, text-lg, …) is removed
+   so off-guide sizes can't creep in.
+   ============================================================ */
+
+@theme static {
+  --font-sans: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* ---- Brand colors (Figma variables) ----------------------- */
+  --color-forest: #034c3c; /* Fraqvest/Color 1 — primary dark */
+  --color-olive: #abb06d; /* Fraqvest/Color 2 */
+  --color-mint: #eff9f0; /* Fraqvest/Color 3 */
+  --color-strong: #111111; /* text-strong */
+  --color-muted: #999999; /* text-muted — DISPLAY SIZES ONLY (fails contrast below ~24px) */
+  --color-nav: #606060; /* text-nav — header links (6.3:1 on white) */
+  --color-secondary: #5e5e5e; /* text-secondary — supporting paragraphs (6.5:1 on white) */
+  --color-tab-inactive: #a1a1a1; /* text-tab-inactive — unselected tabs. 2.6:1 on white: below AA for 20px text (design call, flagged) */
+
+  /* Product UI (hero activity feed cards) */
+  --color-money-in: #35b705;
+  --color-money-out: #fd2a2a;
+  --color-meta: #767676; /* text-meta — 4.5:1 on white */
+
+  /* ---- Layout ---------------------------------------------- */
+  --spacing-gutter: clamp(1rem, 5.5556vw, 5rem); /* 80px at 1440 → px-gutter */
+
+  --text-*: initial;
+
+  /* ---- Display & section ------------------------------------
+     clamp() runs 375px → 1440px; the desktop value is the max.
+     rem + vw so text still grows with browser zoom.            */
+
+  /* 72px / 100% / 500 / -4%   MOBILE: 40px @ 375 */
+  --text-hero-h1: clamp(2.5rem, 1.7958rem + 3.005vw, 4.5rem);
+  --text-hero-h1--line-height: 1;
+  --text-hero-h1--font-weight: 500;
+  --text-hero-h1--letter-spacing: -0.04em;
+
+  /* 58px / 110% / 500 / -4%   MOBILE: 36px @ 375
+     (guide also allows 100% — add `leading-none`) */
+  --text-section-h2: clamp(2.25rem, 1.7658rem + 2.0658vw, 3.625rem);
+  --text-section-h2--line-height: 1.1;
+  --text-section-h2--font-weight: 500;
+  --text-section-h2--letter-spacing: -0.04em;
+
+  /* 62px / 100% / 500 / -4%   MOBILE: 38px @ 375 */
+  --text-testimonial-intro: clamp(2.375rem, 1.8468rem + 2.2536vw, 3.875rem);
+  --text-testimonial-intro--line-height: 1;
+  --text-testimonial-intro--font-weight: 500;
+  --text-testimonial-intro--letter-spacing: -0.04em;
+
+  /* 62px / 100% / 700 / -1%   MOBILE: 38px @ 375 */
+  --text-conversion-headline: clamp(2.375rem, 1.8468rem + 2.2536vw, 3.875rem);
+  --text-conversion-headline--line-height: 1;
+  --text-conversion-headline--font-weight: 700;
+  --text-conversion-headline--letter-spacing: -0.01em;
+
+  /* ---- Reading & interface (fixed at every width) ----------- */
+
+  /* 24px / 140% / 400 / -1% */
+  --text-intro-body: 1.5rem;
+  --text-intro-body--line-height: 1.4;
+  --text-intro-body--font-weight: 400;
+  --text-intro-body--letter-spacing: -0.01em;
+
+  /* 24px / 140% / 500 / -1% */
+  --text-step-title: 1.5rem;
+  --text-step-title--line-height: 1.4;
+  --text-step-title--font-weight: 500;
+  --text-step-title--letter-spacing: -0.01em;
+
+  /* 20px / 140% / 400 / -1% */
+  --text-body-main: 1.25rem;
+  --text-body-main--line-height: 1.4;
+  --text-body-main--font-weight: 400;
+  --text-body-main--letter-spacing: -0.01em;
+
+  /* 20px / 140% / 500 / -1% */
+  --text-tab: 1.25rem;
+  --text-tab--line-height: 1.4;
+  --text-tab--font-weight: 500;
+  --text-tab--letter-spacing: -0.01em;
+
+  --text-faq-question: var(--text-tab);
+  --text-faq-question--line-height: var(--text-tab--line-height);
+  --text-faq-question--font-weight: var(--text-tab--font-weight);
+  --text-faq-question--letter-spacing: var(--text-tab--letter-spacing);
+
+  /* 20px / 140% / 700 / -1% */
+  --text-feature-subtitle: 1.25rem;
+  --text-feature-subtitle--line-height: 1.4;
+  --text-feature-subtitle--font-weight: 700;
+  --text-feature-subtitle--letter-spacing: -0.01em;
+
+  /* 18px / 150% / 400 / -1% */
+  --text-step-description: 1.125rem;
+  --text-step-description--line-height: 1.5;
+  --text-step-description--font-weight: 400;
+  --text-step-description--letter-spacing: -0.01em;
+
+  /* 16px / 150% / 400 / -1% */
+  --text-body: 1rem;
+  --text-body--line-height: 1.5;
+  --text-body--font-weight: 400;
+  --text-body--letter-spacing: -0.01em;
+
+  --text-faq-answer: var(--text-body);
+  --text-faq-answer--line-height: var(--text-body--line-height);
+  --text-faq-answer--font-weight: var(--text-body--font-weight);
+  --text-faq-answer--letter-spacing: var(--text-body--letter-spacing);
+
+  /* Legal mixes 400 and 700 inline: wrap the bold runs in <strong>/font-bold */
+  --text-legal: var(--text-body);
+  --text-legal--line-height: var(--text-body--line-height);
+  --text-legal--font-weight: var(--text-body--font-weight);
+  --text-legal--letter-spacing: var(--text-body--letter-spacing);
+
+  /* 16px / 140% / 500 / -2% */
+  --text-nav-link: 1rem;
+  --text-nav-link--line-height: 1.4;
+  --text-nav-link--font-weight: 500;
+  --text-nav-link--letter-spacing: -0.02em;
+
+  /* 16px / 125% / 500 / 0 */
+  --text-button: 1rem;
+  --text-button--line-height: 1.25;
+  --text-button--font-weight: 500;
+  --text-button--letter-spacing: 0em;
+
+  /* 16px / 140% / 700 / 0 */
+  --text-footer-heading: 1rem;
+  --text-footer-heading--line-height: 1.4;
+  --text-footer-heading--font-weight: 700;
+  --text-footer-heading--letter-spacing: 0em;
+
+  /* 16px / 140% / 400 / 0 */
+  --text-footer-link: 1rem;
+  --text-footer-link--line-height: 1.4;
+  --text-footer-link--font-weight: 400;
+  --text-footer-link--letter-spacing: 0em;
+
+  /* 12px / auto / 700 / +4% */
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: normal;
+  --text-eyebrow--font-weight: 700;
+  --text-eyebrow--letter-spacing: 0.04em;
+
+  --text-label: var(--text-eyebrow);
+  --text-label--line-height: var(--text-eyebrow--line-height);
+  --text-label--font-weight: var(--text-eyebrow--font-weight);
+  --text-label--letter-spacing: var(--text-eyebrow--letter-spacing);
+}
+
+/* The guide's names for the text colors. Tailwind reserves --text-*
+   for sizes, so the theme exposes them as --color-strong / --color-muted /
+   --color-nav (utilities: text-strong, text-muted, text-nav); these aliases
+   keep the guide's names available to plain CSS and JS. */
+:root {
+  --text-strong: var(--color-strong);
+  --text-muted: var(--color-muted);
+  --text-nav: var(--color-nav);
+  --text-secondary: var(--color-secondary);
+  --text-tab-inactive: var(--color-tab-inactive);
+  --text-meta: var(--color-meta);
+  --money-in: var(--color-money-in);
+  --money-out: var(--color-money-out);
+}
+
+/* Page content row: 1280px with 80px gutters at 1440 (Figma), centred beyond that. */
+@utility page-row {
+  margin-inline: auto;
+  width: 100%;
+  max-width: calc(1280px + 2 * var(--spacing-gutter));
+  padding-inline: var(--spacing-gutter);
+}
+
+@layer base {
+  body {
+    @apply bg-white font-sans text-body text-strong;
+  }
+}
