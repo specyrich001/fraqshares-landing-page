@@ -44,8 +44,8 @@ export function HeroWealthStage() {
         const heroContent = el('[data-hero-content]')
         const heroCtas = el('[data-hero-ctas]')
         const heroFeed = stage.querySelector<HTMLElement>('[data-feed]')
-        // The feed's visible pieces, faded one by one (see "Hero content out").
-        const heroFeedParts = heroFeed ? [...heroFeed.querySelectorAll<HTMLElement>('[data-feed-card], [data-feed-connector]')] : []
+        // The feed's visible pieces (its data-feed-fade leaves), faded one by one (see "Hero content out").
+        const heroFeedParts = heroFeed ? [...heroFeed.querySelectorAll<HTMLElement>('[data-feed-fade]')] : []
         const handoff = el<HTMLImageElement>('[data-stage-handoff]')
         const slot = el('[data-wealth-slot]')
         const slotPhoto = el('[data-wealth-photo]')

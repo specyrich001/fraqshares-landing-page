@@ -1,0 +1,26 @@
+/*
+ * Hero activity feed: the intro's starting state before the script takes over (HeroActivityFeed).
+ * Only with JS on (:root[data-js], set inline in index.html before first paint) and motion allowed,
+ * and only until the intro starts (data-intro="pending"). Otherwise the feed shows its final state.
+ * The script sets the same values inline before first paint, then moves data-intro on.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-js] [data-feed][data-intro='pending'] :is([data-feed-card='transaction-in'], [data-feed-card='transaction-out'], [data-feed-card='notification']) {
+    transform: translateY(24px) scale(0.85);
+    transform-origin: 50% 100%;
+  }
+  :root[data-js] [data-feed][data-intro='pending'] [data-feed-card='ghost'] {
+    transform: translateY(8px);
+  }
+  :root[data-js] [data-feed][data-intro='pending'] [data-feed-fade]:not([data-feed-connector]) {
+    opacity: 0;
+    visibility: hidden;
+  }
+  :root[data-js] [data-feed][data-intro='pending'] [data-feed-dot] {
+    opacity: 0;
+    transform: scale(0);
+  }
+  :root[data-js] [data-feed][data-intro='pending'] [data-feed-line] {
+    clip-path: inset(100% 0 0 0);
+  }
+}

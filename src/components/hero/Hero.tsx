@@ -8,6 +8,24 @@ import { buttonBase, focusRingOnDark } from '../linkStyles.ts'
 import { HeroActivityFeed } from './HeroActivityFeed.tsx'
 import { heroIntroTiming as I } from './heroIntroTiming.ts'
 
+/**
+ * Pointer parallax on the hero photo: it drifts against the cursor, a few px, while the hero sits at
+ * the top of the page. Scroll can't drive it: scrolling already moves the photo (the hero → section-2
+ * shrink). The activity feed rides the same layer transform so its dot stays on the phone.
+ */
+const PARALLAX = {
+  /** Furthest drift at the section's edges, px. */
+  x: 10,
+  y: 6,
+  /** Zoom that keeps the drift from showing the section's edges (≥ 1 + 2 × drift / size). */
+  overscan: 1.015,
+  /** Follow lag: each pointer move eases the layers to the new spot over this. */
+  follow: { duration: 1.1, ease: 'power3.out' },
+  /** Back to rest (no drift, no zoom) when the page scrolls away from the top, and back again. */
+  reset: { duration: 0.5, ease: 'power2.out' },
+}
+const PARALLAX_MEDIA = '(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)'
+
 gsap.registerPlugin(SplitText, useGSAP)
 
 const photo = images['hero/photo']
@@ -98,6 +116,55 @@ export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
     { scope: sectionRef },
   )
 
+  // Parallax (PARALLAX): both layers get the same transform about the section centre.
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia()
+      mm.add(PARALLAX_MEDIA, () => {
+        const section = sectionRef.current!
+        const layers = [...section.querySelectorAll<HTMLElement>('[data-hero-parallax]')]
+        const P = PARALLAX
+        gsap.set(layers, { scale: P.overscan, transformOrigin: '50% 50%' })
+        const toX = gsap.quickTo(layers, 'x', P.follow)
+        const toY = gsap.quickTo(layers, 'y', P.follow)
+        let active = window.scrollY <= 0
+
+        const onMove = (e: PointerEvent) => {
+          if (!active) return
+          const r = section.getBoundingClientRect()
+          // -1 … 1 across the section; the photo moves the other way, as a far layer would.
+          const nx = gsap.utils.clamp(-1, 1, ((e.clientX - r.left) / r.width) * 2 - 1)
+          const ny = gsap.utils.clamp(-1, 1, ((e.clientY - r.top) / r.height) * 2 - 1)
+          toX(-nx * P.x)
+          toY(-ny * P.y)
+        }
+        const toRest = () => {
+          toX(0)
+          toY(0)
+        }
+        // Scrolled away: settle to identity so the shrink transition's measurements hold exactly.
+        const onScroll = () => {
+          const atTop = window.scrollY <= 0
+          if (atTop === active) return
+          active = atTop
+          toRest()
+          gsap.to(layers, { scale: atTop ? P.overscan : 1, ...P.reset, overwrite: 'auto' })
+        }
+        window.addEventListener('pointermove', onMove, { passive: true })
+        document.documentElement.addEventListener('pointerleave', toRest)
+        window.addEventListener('scroll', onScroll, { passive: true })
+        if (!active) gsap.set(layers, { scale: 1 })
+        return () => {
+          window.removeEventListener('pointermove', onMove)
+          document.documentElement.removeEventListener('pointerleave', toRest)
+          window.removeEventListener('scroll', onScroll)
+          gsap.set(layers, { clearProps: 'transform,translate,rotate,scale,transformOrigin' })
+        }
+      })
+    },
+    { scope: sectionRef },
+  )
+
   return (
     <section
       ref={sectionRef}
@@ -106,19 +173,22 @@ export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
       aria-labelledby="hero-title"
       className="relative flex min-h-[max(100svh,704px)] flex-col justify-end overflow-hidden bg-black"
     >
-      {/* 1. Photo (LCP): eager + high priority. Rendered width is max(100vw, 1773px) at desktop height. */}
-      <img
-        src={photo.src}
-        srcSet={photo.srcset}
-        sizes="max(100vw, 1773px)"
-        width={photo.width}
-        height={photo.height}
-        alt=""
-        loading="eager"
-        fetchPriority="high"
-        data-hero-photo
-        className="absolute inset-0 size-full object-cover object-[52.27%_74.05%] group-data-staged/stage:will-change-transform"
-      />
+      {/* 1. Photo (LCP): eager + high priority. Rendered width is max(100vw, 1773px) at desktop height.
+          Inside the parallax layer (PARALLAX), which the scroll transition never touches. */}
+      <div data-hero-parallax className="absolute inset-0">
+        <img
+          src={photo.src}
+          srcSet={photo.srcset}
+          sizes="max(100vw, 1773px)"
+          width={photo.width}
+          height={photo.height}
+          alt=""
+          loading="eager"
+          fetchPriority="high"
+          data-hero-photo
+          className="absolute inset-0 size-full object-cover object-[52.27%_74.05%] group-data-staged/stage:will-change-transform"
+        />
+      </div>
       {/* 2. Gradient: transparent → black over the full section, as in Figma. The clear top keeps the nav readable. */}
       <div aria-hidden="true" data-hero-gradient className="absolute inset-0 bg-linear-to-b from-black/0 to-black" />
       {/* 3. Grain: 432×288 tile from the top-left, 10% opacity. */}
@@ -162,8 +232,11 @@ export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
         </div>
       </div>
 
-      <div aria-hidden="true" className={photoBox}>
-        <HeroActivityFeed className={feedPosition} />
+      {/* The feed's layer moves exactly as the photo's, so the dot stays on the phone. */}
+      <div data-hero-parallax className="pointer-events-none absolute inset-0">
+        <div aria-hidden="true" className={photoBox}>
+          <HeroActivityFeed className={feedPosition} />
+        </div>
       </div>
     </section>
   )
