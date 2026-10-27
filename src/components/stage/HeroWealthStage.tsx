@@ -44,6 +44,8 @@ export function HeroWealthStage() {
         const heroContent = el('[data-hero-content]')
         const heroCtas = el('[data-hero-ctas]')
         const heroFeed = stage.querySelector<HTMLElement>('[data-feed]')
+        // The feed's visible pieces, faded one by one (see "Hero content out").
+        const heroFeedParts = heroFeed ? [...heroFeed.querySelectorAll<HTMLElement>('[data-feed-card], [data-feed-connector]')] : []
         const handoff = el<HTMLImageElement>('[data-stage-handoff]')
         const slot = el('[data-wealth-slot]')
         const slotPhoto = el('[data-wealth-photo]')
@@ -133,13 +135,14 @@ export function HeroWealthStage() {
         const fromRest = { immediateRender: false }
 
         // --- Hero content out ---------------------------------------------------------------
+        // Text block and feed drift up together; the feed fades piece by piece, never as a whole.
+        // Opacity below 1 on an ancestor of the notification card makes that ancestor the card's
+        // backdrop root, so its backdrop-filter would see only the feed (nothing behind it) and the
+        // frosted card would turn clear the moment the fade started. Opacity on the card itself is fine.
         const out = T.heroContentOut
-        tl.fromTo(
-          [heroContent, heroFeed].filter(Boolean),
-          { opacity: 1, y: 0 },
-          { ...fromRest, opacity: 0, y: out.driftY, duration: span(out), ease: out.ease },
-          out.start,
-        )
+        const contentOut = { ...fromRest, duration: span(out), ease: out.ease }
+        tl.fromTo([heroContent, heroFeed].filter(Boolean), { y: 0 }, { ...contentOut, y: out.driftY }, out.start)
+        tl.fromTo([heroContent, ...heroFeedParts], { opacity: 1 }, { ...contentOut, opacity: 0 }, out.start)
 
         // --- Shrink into the slot (clip, hero photo and copy share one ease and duration, which
         //     keeps both photos covering the clip at every frame) ------------------------------
@@ -234,6 +237,7 @@ export function HeroWealthStage() {
           gsap.set([heroPhoto, heroContent, heroFeed, handoff].filter(Boolean), {
             clearProps: 'transform,transformOrigin,translate,rotate,scale,opacity',
           })
+          gsap.set(heroFeedParts, { clearProps: 'opacity' })
           gsap.set(
             [
               el('[data-hero-gradient]'),

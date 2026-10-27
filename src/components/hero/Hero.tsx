@@ -1,8 +1,14 @@
-import type { ReactNode } from 'react'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { SplitText } from 'gsap/SplitText'
+import { useRef, type ReactNode } from 'react'
 import images from '../../generated/images.json'
 import { ArrowRightIcon } from '../icons/ArrowRightIcon.tsx'
 import { buttonBase, focusRingOnDark } from '../linkStyles.ts'
 import { HeroActivityFeed } from './HeroActivityFeed.tsx'
+import { heroIntroTiming as I } from './heroIntroTiming.ts'
+
+gsap.registerPlugin(SplitText, useGSAP)
 
 const photo = images['hero/photo']
 const grain = images['hero/grain']
@@ -42,8 +48,59 @@ const feedPosition = 'absolute top-[calc(74.05%_-_479px)] left-[calc(74.17%_-_15
  * scroll transition puts its copy of the section-2 photo there. data-hero-* attributes are its hooks.
  */
 export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  // Intro (heroIntroTiming): runs once on load, never with reduced motion. It animates the text
+  // elements themselves, so it can't collide with the scroll transition, which moves their wrapper.
+  // The text is hidden before first paint (layout effect), revealed once the font is in, and the
+  // split is reverted afterwards so the headline is plain text again and reflows normally.
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia()
+      mm.add('(prefers-reduced-motion: no-preference)', (context) => {
+        const section = sectionRef.current!
+        const title = section.querySelector<HTMLElement>('#hero-title')!
+        const paragraph = section.querySelector<HTMLElement>('[data-hero-paragraph]')!
+        const buttons = [...section.querySelectorAll<HTMLElement>('[data-hero-ctas] > *')]
+        const text = [title, paragraph, ...buttons]
+        gsap.set(text, { autoAlpha: 0 })
+
+        let split: SplitText | undefined
+        let cancelled = false
+        // Named, so it isn't run now: context.add(name, fn) returns fn bound to this matchMedia context.
+        const play = context.add('play', () => {
+          if (cancelled) return
+          split = SplitText.create(title, { type: 'lines', mask: 'lines', linesClass: 'hero-line' })
+          gsap.set(title, { autoAlpha: 1 })
+          const { headline: h, paragraph: p, buttons: b } = I
+          gsap
+            .timeline({
+              delay: I.delay,
+              // Back to plain text with no inline styles, so it reflows and the scroll transition owns it.
+              onComplete: () => {
+                split?.revert()
+                gsap.set(text, { clearProps: 'opacity,visibility,transform,translate,rotate,scale' })
+              },
+            })
+            .from(split.lines, { yPercent: h.yPercent, duration: h.duration, stagger: h.stagger, ease: h.ease }, 0)
+            .fromTo(paragraph, { autoAlpha: 0, y: p.y }, { autoAlpha: 1, y: 0, duration: p.duration, ease: p.ease }, p.at)
+            .fromTo(buttons, { autoAlpha: 0, y: b.y }, { autoAlpha: 1, y: 0, duration: b.duration, stagger: b.stagger, ease: b.ease }, b.at)
+        })
+        Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, I.fontTimeoutMs))]).then(() => play())
+
+        return () => {
+          cancelled = true
+          split?.revert()
+          gsap.set(text, { clearProps: 'opacity,visibility,transform,translate' })
+        }
+      })
+    },
+    { scope: sectionRef },
+  )
+
   return (
     <section
+      ref={sectionRef}
       id="hero"
       data-hero
       aria-labelledby="hero-title"
@@ -78,12 +135,18 @@ export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
           of the 88px header when the text wraps tall (narrow screens, zoom). */}
       <div data-hero-content className="page-row relative pt-[128px] pb-[130px]">
         <div className="max-w-[638px]">
-          <h1 id="hero-title" className="text-hero-h1 text-white">
+          {/* The 1.0 line box is too tight for the masks' clip: descenders and the ampersand would be cut.
+              Widen what each mask shows with a clip-path past its box (no margins: they collapse between
+              stacked lines, making the split headline taller and jumping when it's reverted). */}
+          <h1
+            id="hero-title"
+            className="text-hero-h1 text-white [&_.hero-line-mask]:overflow-visible! [&_.hero-line-mask]:[clip-path:inset(-0.2em_-0.15em_-0.25em)]"
+          >
             Buy, sell, and
             <br />
             own shares in real estate &amp; businesses
           </h1>
-          <p className="mt-[18px] max-w-[557px] text-body-main text-white/70">
+          <p data-hero-paragraph className="mt-[18px] max-w-[557px] text-body-main text-white/70">
             Diversify your portfolio with income and growth potential, without the management hassle
           </p>
           <div data-hero-ctas className="mt-12 flex flex-wrap gap-4">
