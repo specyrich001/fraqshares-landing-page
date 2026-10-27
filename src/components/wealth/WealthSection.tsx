@@ -28,7 +28,9 @@ export function WealthSection() {
     <section
       id="build-wealth"
       aria-labelledby="build-wealth-title"
-      className="relative min-h-[909px] overflow-hidden bg-white"
+      // Pinned behind the hero (HeroWealthStage), it must be at least as tall as the hero (the viewport),
+      // or the stage clips the hero and leaves a band below it; the row centres in any extra height.
+      className="relative min-h-[909px] overflow-hidden bg-white group-data-staged/stage:flex group-data-staged/stage:min-h-[max(909px,100svh)] group-data-staged/stage:flex-col group-data-staged/stage:justify-center"
     >
       {/* Figma's render of its blur layer (10806:75658) on white: y 552 → bottom, full width. */}
       <img

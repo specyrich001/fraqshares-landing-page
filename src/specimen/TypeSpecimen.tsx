@@ -175,6 +175,12 @@ const colors = [
   { name: 'meta', hex: '#767676', note: '--text-meta · product-card meta' },
   { name: 'money-in', hex: '#35B705', note: '--money-in · product-card amounts' },
   { name: 'money-out', hex: '#FD2A2A', note: '--money-out · product-card amounts' },
+  { name: 'soft', hex: '#FAFAFA', note: '--bg-soft · FAQ section background' },
+  { name: 'footer-muted', hex: '#C5C8BA', note: '--text-footer-muted · footer copyright line' },
+  { name: 'dark', hex: '#0E1711', note: '--bg-dark · steps section background' },
+  { name: 'step-body', hex: '#827979', note: '--text-step-body · step descriptions, on bg-dark' },
+  { name: 'indicator-inactive', hex: '#5C5C5C', note: '--indicator-inactive · step indicator' },
+  { name: 'indicator-progress', hex: '#F3FF60', note: '--indicator-progress · step indicator fill' },
 ]
 
 const px = (v: string) => `${+parseFloat(v).toFixed(2)}px`

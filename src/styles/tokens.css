@@ -30,6 +30,15 @@
   --color-money-out: #fd2a2a;
   --color-meta: #767676; /* text-meta — 4.5:1 on white */
 
+  --color-soft: #fafafa; /* bg-soft — FAQ section background */
+  --color-footer-muted: #c5c8ba; /* text-footer-muted — footer copyright line (shown at 80%) */
+
+  /* "Getting started" steps section (dark) */
+  --color-dark: #0e1711; /* bg-dark — section background, step frames */
+  --color-step-body: #827979; /* text-step-body — step descriptions. 4.3:1 on bg-dark: just below AA for 18px text (design call, flagged) */
+  --color-indicator-inactive: #5c5c5c; /* step indicator, inactive segments (decorative) */
+  --color-indicator-progress: #f3ff60; /* step indicator, progress fill (decorative) */
+
   /* ---- Layout ---------------------------------------------- */
   --spacing-gutter: clamp(1rem, 5.5556vw, 5rem); /* 80px at 1440 → px-gutter */
 
@@ -173,6 +182,12 @@
   --text-meta: var(--color-meta);
   --money-in: var(--color-money-in);
   --money-out: var(--color-money-out);
+  --bg-soft: var(--color-soft);
+  --text-footer-muted: var(--color-footer-muted);
+  --bg-dark: var(--color-dark);
+  --text-step-body: var(--color-step-body);
+  --indicator-inactive: var(--color-indicator-inactive);
+  --indicator-progress: var(--color-indicator-progress);
 }
 
 /* Page content row: 1280px with 80px gutters at 1440 (Figma), centred beyond that. */

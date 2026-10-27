@@ -1,0 +1,65 @@
+/*
+ * FAQ accordion. Collapsing only happens once the page's script has run (:root[data-js], set inline
+ * in index.html before first paint), so without JavaScript every answer stays visible.
+ */
+
+/* Open-item highlight: white panel 30px above/below and 32px either side of the item, out of flow.
+   Positioned, so it paints over the (unpositioned) dividers next to it; the item's text is positioned
+   too and comes after it, so it stays on top. */
+[data-faq-item] {
+  position: relative;
+}
+[data-faq-item]::before {
+  content: '';
+  position: absolute;
+  inset: -30px -32px;
+  background: var(--color-white);
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+[data-faq-item][data-open]::before {
+  opacity: 1;
+}
+[data-faq-item] > * {
+  position: relative;
+}
+
+/* Answer height: grid rows 0fr → 1fr. The 16px gap lives inside, so a closed item has none.
+   visibility follows the close so collapsed answers drop out of the tab order and reading order. */
+[data-faq-answer] {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition:
+    grid-template-rows 300ms ease,
+    visibility 0s;
+}
+:root[data-js] [data-faq-item]:not([data-open]) [data-faq-answer] {
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 300ms ease,
+    visibility 0s 300ms;
+}
+[data-faq-answer] > div {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Plus / minus crossfade. */
+[data-faq-icon] {
+  transition: opacity 300ms ease;
+}
+[data-faq-item][data-open] [data-faq-icon='closed'],
+[data-faq-item]:not([data-open]) [data-faq-icon='open'] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-faq-item]::before,
+  [data-faq-answer],
+  :root[data-js] [data-faq-item]:not([data-open]) [data-faq-answer],
+  [data-faq-icon] {
+    transition: none;
+  }
+}

@@ -1,0 +1,94 @@
+/*
+ * Testimonial cards — card artwork, not site type. Figma renders the base card (24px quote, 20px name,
+ * 28 / 46 padding) at ×1.314; built here at that rendered size. Colours are the cards' own.
+ */
+[data-testimonials] {
+  --card-a-bg: #ededed;
+  --card-b-name: #c4c4c4;
+  --card-c-name: #2f2f2f;
+}
+
+.testimonial-card {
+  position: relative;
+  width: 382.371px;
+  height: 463.838px;
+  overflow: hidden;
+}
+.testimonial-quote {
+  position: absolute;
+  top: 60.44px;
+  left: 36.8px;
+  width: 308.788px;
+  margin: 0;
+  font-size: 31.536px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.testimonial-name {
+  position: absolute;
+  top: 383.68px;
+  left: 36.79px;
+  font-size: 26.28px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+/* Static layout (no JS, reduced motion, under 1024px): Figma's split row. Each card sits centred in
+   its rotated bounding box, and the boxes overlap by 12px (Figma's auto layout). transform, not the
+   rotate property, so the pinned sequence's GSAP transforms replace it. */
+[data-testimonial-slot] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+[data-testimonial-slot='a'] { width: 406.123px; height: 483.215px; margin-right: -12px; }
+[data-testimonial-slot='b'] { width: 390.408px; height: 470.441px; margin-right: -12px; }
+[data-testimonial-slot='c'] { width: 406.122px; height: 483.215px; }
+[data-testimonial-slot='a'] .testimonial-card { transform: rotate(3deg); }
+[data-testimonial-slot='b'] .testimonial-card { transform: rotate(-1deg); }
+[data-testimonial-slot='c'] .testimonial-card { transform: rotate(-3deg); }
+[data-testimonials]:not([data-staged]) [data-testimonial-cards] {
+  zoom: var(--cards-scale, 1);
+}
+
+/* Pinned: a sticky 100vh stage. Heading and cards are centred on the stage centre; the cards are
+   placed only by transforms from there, and the group scales to fit (--cards-scale). */
+[data-testimonials][data-staged] [data-testimonials-stage] {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+[data-testimonials][data-staged] [data-testimonials-title] {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  transform: translate(-50%, -50%);
+}
+[data-testimonials][data-staged] [data-testimonial-cards] {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin: 0;
+  transform: scale(var(--cards-scale, 1));
+}
+[data-testimonials][data-staged] [data-testimonial-slot] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+[data-testimonials][data-staged] .testimonial-card {
+  position: absolute;
+  top: -231.919px;
+  left: -191.1855px;
+}

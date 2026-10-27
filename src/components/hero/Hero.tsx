@@ -21,16 +21,21 @@ const button = `${buttonBase} h-13 px-4.5 ${focusRingOnDark}`
  *   y 74.05% → the phone's row (682 / 921). Past 1773px wide, cover starts scaling by width
  *              and crops vertically; anchoring at the phone keeps it at y 682.
  *
- * Activity feed: positioned on the section, tracking the phone so its dot stays on it.
- * The phone sits at 1315px into the rendered image (u = 1315 / 1772.9 = 74.17%), so its x is
- *   up to 1773px wide: 1315px − 52.27% × (1772.9px − section width)
- *   wider:             74.17% × section width
- * and the feed's left is that minus 153px (dot centre within the feed). At 1440 → 988px.
- * Its top keeps the dot on the phone's row: 74.05% − 479px → 203px at 921.
- * Hidden below 1200px, where it would run off the right edge (mobile design pending).
+ * Height: the viewport (100svh), never less than 704px: below that the feed's notification card
+ * would slide under the 88px header. The text block sits on the bottom, 130px above the edge as in
+ * Figma (its 921px frame put the buttons at 791), so short screens shrink the space above it.
+ *
+ * Activity feed: rides on the phone at any size. photoBox is an invisible box with the photo's
+ * rendered geometry, i.e. what object-fit: cover draws: at least the section's height and width at
+ * the photo's 1772.9 : 921 ratio, anchored by the same 52.27% / 74.05% as object-position (left/top
+ * of the section minus that share of its own size). Inside it the phone is at (74.17%, 74.05%); the
+ * feed's dot is at (153, 479) in the feed, so the feed goes at those minus 153px / 479px
+ * (988, 203 at 1440 × 921). Hidden below 1200px, where it would run off the right edge (mobile
+ * design pending).
  */
-const feedPosition =
-  'left-[max(calc(1162px_-_0.5227_*_(1772.9px_-_100%)),calc(74.17%_-_153px))] top-[calc(74.05%_-_479px)]'
+const photoBox =
+  'pointer-events-none absolute top-[74.05%] left-[52.27%] hidden aspect-[1772.9/921] h-full min-w-full -translate-x-[52.27%] -translate-y-[74.05%] min-[1200px]:block'
+const feedPosition = 'absolute top-[calc(74.05%_-_479px)] left-[calc(74.17%_-_153px)]'
 
 /**
  * `transitionMedia` renders above the photo layers and below the content: the hero → section-2
@@ -38,7 +43,12 @@ const feedPosition =
  */
 export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
   return (
-    <section id="hero" data-hero aria-labelledby="hero-title" className="relative min-h-[921px] overflow-hidden bg-black">
+    <section
+      id="hero"
+      data-hero
+      aria-labelledby="hero-title"
+      className="relative flex min-h-[max(100svh,704px)] flex-col justify-end overflow-hidden bg-black"
+    >
       {/* 1. Photo (LCP): eager + high priority. Rendered width is max(100vw, 1773px) at desktop height. */}
       <img
         src={photo.src}
@@ -64,8 +74,9 @@ export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
 
       {transitionMedia}
 
-      {/* 4. Content: 401px = 88px header + Figma's 313px to the headline. */}
-      <div data-hero-content className="page-row relative pt-[401px] pb-20">
+      {/* 4. Content, on the bottom: 130px under the buttons (Figma). The top padding only keeps it clear
+          of the 88px header when the text wraps tall (narrow screens, zoom). */}
+      <div data-hero-content className="page-row relative pt-[128px] pb-[130px]">
         <div className="max-w-[638px]">
           <h1 id="hero-title" className="text-hero-h1 text-white">
             Buy, sell, and
@@ -88,7 +99,9 @@ export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
         </div>
       </div>
 
-      <HeroActivityFeed className={`absolute hidden min-[1200px]:block ${feedPosition}`} />
+      <div aria-hidden="true" className={photoBox}>
+        <HeroActivityFeed className={feedPosition} />
+      </div>
     </section>
   )
 }

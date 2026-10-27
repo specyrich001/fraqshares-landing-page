@@ -16,7 +16,13 @@
 //                                                      for the others), like Figma's "fill" on blurs
 //   { "quality": 80, "alphaQuality": 60 }             WebP overrides (alpha is lossless at 100,
 //                                                      which bloats noise/grain textures)
+//   { "flatten": "#0e1711" }                          composite over a colour (drops alpha)
+//   { "recomb": [[r],[g],[b]], "offset": [r, g, b] }  colour matrix + offset, after flatten (Figma
+//                                                      image filters such as tint, fitted to its render)
 // Widths larger than the (cropped) source are skipped with a warning, never upscaled.
+//
+// Derived assets: <name>.derive.json with "source" (a path relative to it) and the options above
+// renders another source a second way — one original, several crops/grades, no second export.
 //
 // SVGs are skipped: vectors stay SVG and are never rasterised.
 // Writes src/generated/images.json: width/height (1x, or the smallest width) for the <img>
@@ -34,12 +40,13 @@ const QUALITY = 80
 const force = process.argv.includes('--force')
 
 const RASTER = /\.(png|jpe?g|webp|avif|tiff?)$/i
+const DERIVE = /\.derive\.json$/i
 
 async function* walk(dir) {
   for (const entry of await readdir(dir, { withFileTypes: true }).catch(() => [])) {
     const full = path.join(dir, entry.name)
     if (entry.isDirectory()) yield* walk(full)
-    else if (RASTER.test(entry.name)) yield full
+    else if (RASTER.test(entry.name) || DERIVE.test(entry.name)) yield full
   }
 }
 
@@ -59,21 +66,32 @@ function pipeline(file, config) {
   let img = sharp(file).rotate() // honour EXIF orientation first
   if (config.flop) img = img.flop()
   if (config.crop) img = img.extract(config.crop)
+  if (config.flatten) img = img.flatten({ background: config.flatten })
+  if (config.recomb) img = img.recomb(config.recomb)
+  if (config.offset) img = img.linear([1, 1, 1], config.offset)
   return img
+}
+
+/** A raster plus its optional sidecar, or a .derive.json pointing at another raster. */
+async function resolveSource(file) {
+  if (!DERIVE.test(file)) return { source: file, rel: path.relative(srcDir, file), ...(await readSidecar(file)) }
+  const [text, s] = await Promise.all([readFile(file, 'utf8'), stat(file)])
+  const config = JSON.parse(text)
+  const rel = path.relative(srcDir, file).replace(DERIVE, '.derived')
+  return { source: path.resolve(path.dirname(file), config.source), rel, config, mtimeMs: s.mtimeMs }
 }
 
 const manifest = {}
 let converted = 0
 let skipped = 0
 
-for await (const file of walk(srcDir)) {
-  const rel = path.relative(srcDir, file)
+for await (const found of walk(srcDir)) {
+  const { source: file, rel, config, mtimeMs: sidecarMtime } = await resolveSource(found)
   const parsed = path.parse(rel)
   const match = parsed.name.match(/^(.*?)(?:@(\d)x)?$/)
   const base = match[1]
   const scale = Number(match[2] ?? 1)
   const key = path.join(parsed.dir, base).replaceAll('\\', '/')
-  const { config, mtimeMs: sidecarMtime } = await readSidecar(file)
 
   const meta = await sharp(file).rotate().metadata()
   const srcW = config.crop?.width ?? meta.autoOrient.width

@@ -1,4 +1,10 @@
 {
+  "faq/glow": {
+    "width": 1304,
+    "height": 323,
+    "src": "/images/faq/glow-1304.webp",
+    "srcset": "/images/faq/glow-1304.webp 1304w"
+  },
   "features/cars": {
     "width": 95,
     "height": 81,
@@ -29,6 +35,12 @@
     "src": "/images/features/villa-95.webp",
     "srcset": "/images/features/villa-95.webp 95w, /images/features/villa-189.webp 189w"
   },
+  "footer/phone-hand": {
+    "width": 490,
+    "height": 538,
+    "src": "/images/footer/phone-hand.webp",
+    "src2x": "/images/footer/phone-hand@2x.webp"
+  },
   "hero/grain": {
     "width": 432,
     "height": 288,
@@ -45,6 +57,72 @@
     "height": 291,
     "src": "/images/shared/green-blur-800.webp",
     "srcset": "/images/shared/green-blur-800.webp 800w"
+  },
+  "steps/buy-listing": {
+    "width": 255,
+    "height": 62,
+    "src": "/images/steps/buy-listing-255.webp",
+    "srcset": "/images/steps/buy-listing-255.webp 255w, /images/steps/buy-listing-511.webp 511w"
+  },
+  "steps/buy-units": {
+    "width": 255,
+    "height": 392,
+    "src": "/images/steps/buy-units-255.webp",
+    "srcset": "/images/steps/buy-units-255.webp 255w, /images/steps/buy-units-511.webp 511w"
+  },
+  "steps/dashboard-back": {
+    "width": 299,
+    "height": 156,
+    "src": "/images/steps/dashboard-back-299.webp",
+    "srcset": "/images/steps/dashboard-back-299.webp 299w, /images/steps/dashboard-back-598.webp 598w"
+  },
+  "steps/dashboard-front": {
+    "width": 366,
+    "height": 191,
+    "src": "/images/steps/dashboard-front-366.webp",
+    "srcset": "/images/steps/dashboard-front-366.webp 366w, /images/steps/dashboard-front-732.webp 732w"
+  },
+  "steps/dashboard-middle": {
+    "width": 327,
+    "height": 171,
+    "src": "/images/steps/dashboard-middle-327.webp",
+    "srcset": "/images/steps/dashboard-middle-327.webp 327w, /images/steps/dashboard-middle-654.webp 654w"
+  },
+  "steps/fund-wallet": {
+    "width": 297,
+    "height": 467,
+    "src": "/images/steps/fund-wallet-297.webp",
+    "srcset": "/images/steps/fund-wallet-297.webp 297w, /images/steps/fund-wallet-594.webp 594w"
+  },
+  "steps/glow": {
+    "width": 496,
+    "height": 230,
+    "src": "/images/steps/glow-496.webp",
+    "srcset": "/images/steps/glow-496.webp 496w, /images/steps/glow-697.webp 697w"
+  },
+  "steps/listing-center": {
+    "width": 305,
+    "height": 306,
+    "src": "/images/steps/listing-center-305.webp",
+    "srcset": "/images/steps/listing-center-305.webp 305w, /images/steps/listing-center-610.webp 610w"
+  },
+  "steps/listing-left": {
+    "width": 252,
+    "height": 253,
+    "src": "/images/steps/listing-left-252.webp",
+    "srcset": "/images/steps/listing-left-252.webp 252w, /images/steps/listing-left-504.webp 504w"
+  },
+  "steps/listing-right": {
+    "width": 252,
+    "height": 253,
+    "src": "/images/steps/listing-right-252.webp",
+    "srcset": "/images/steps/listing-right-252.webp 252w, /images/steps/listing-right-504.webp 504w"
+  },
+  "steps/sign-up": {
+    "width": 321,
+    "height": 462,
+    "src": "/images/steps/sign-up-321.webp",
+    "srcset": "/images/steps/sign-up-321.webp 321w, /images/steps/sign-up-642.webp 642w"
   },
   "wealth/bottom-blur": {
     "width": 1440,

@@ -1,0 +1,92 @@
+/*
+ * "Getting started" — pinned layout. Applies only while the sequence runs ([data-staged], set by
+ * StepsSection at >= 1024px). Without it the section is the static stack built with utilities.
+ * Unlayered on purpose: it overrides those utilities without !important.
+ *
+ * The canvas is Figma's 1440-wide frame cut to its graphic area: y 130 (top square) to 940 (bottom
+ * square) = 810px, so every Figma y below is (y − 130). It sits at the stage centre and scales as one
+ * piece (--steps-scale, set from the viewport) so nothing crops or collides below 1440 × 870.
+ */
+
+[data-steps][data-staged] [data-steps-stage] {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+[data-steps][data-staged] [data-steps-canvas] {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1440px;
+  max-width: none;
+  height: 810px;
+  padding: 0;
+  transform: translate(-50%, -50%) scale(var(--steps-scale, 1));
+}
+
+/* H2: left 80, vertically centred (Figma y 439, 192 tall). The canvas scales as a whole, so the
+   heading keeps the section-h2 token's 1440 value instead of shrinking twice. */
+[data-staged] [data-steps-title] {
+  position: absolute;
+  top: 309px;
+  left: 80px;
+  margin: 0;
+  font-size: 3.625rem;
+}
+
+/* Slot markers, measured for the collapse scale and offsets. Figma: squares centred at x 724 (true
+   centre here: 720), y 145.5 and 924.5; the active frame 496 × 588 at y 241. */
+[data-staged] [data-steps-slot] {
+  display: block;
+  position: absolute;
+  visibility: hidden;
+}
+[data-staged] [data-steps-slot='top'] { top: 0; left: 707px; width: 26px; height: 31px; }
+[data-staged] [data-steps-slot='active'] { top: 111px; left: 472px; width: 496px; height: 588px; }
+[data-staged] [data-steps-slot='bottom'] { top: 779px; left: 707px; width: 26px; height: 31px; }
+
+/* Every step fills the canvas; frame and text place themselves inside it. Only the current step's
+   text takes the pointer (the others sit on top of it at opacity 0). */
+[data-staged] [data-step] {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  pointer-events: none;
+}
+[data-staged] [data-step][aria-current] [data-step-text] {
+  pointer-events: auto;
+}
+
+[data-staged] [data-step-frame] {
+  position: absolute;
+  top: 111px;
+  left: 472px;
+  max-width: none;
+  margin: 0;
+}
+
+/* Text block: left 1060, 222 wide, vertically centred on the active frame (its height varies). */
+[data-staged] [data-step-text] {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 1060px;
+  display: flex;
+  align-items: center;
+  width: 222px;
+  margin: 0;
+}
+
+/* Indicator: x 1360 (the 1280 row's right edge), 182 tall, centred. */
+[data-staged] [data-steps-indicator] {
+  display: block;
+  position: absolute;
+  top: 314px;
+  left: 1360px;
+}
+
+[data-staged] [data-steps-line] {
+  display: block;
+}
