@@ -6,6 +6,7 @@ import images from '../../generated/images.json'
 import { ArrowRightIcon } from '../icons/ArrowRightIcon.tsx'
 import { buttonBase, focusRingOnDark } from '../linkStyles.ts'
 import { HeroActivityFeed } from './HeroActivityFeed.tsx'
+import { HERO_COPY_SHOWN } from './heroEvents.ts'
 import { heroIntroTiming as I } from './heroIntroTiming.ts'
 
 /**
@@ -98,6 +99,9 @@ export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
               onComplete: () => {
                 split?.revert()
                 gsap.set(text, { clearProps: 'opacity,visibility,transform,translate,rotate,scale' })
+                // The copy is in: the activity feed starts its intro after this (HeroActivityFeed).
+                section.dataset.copy = 'shown'
+                section.dispatchEvent(new Event(HERO_COPY_SHOWN))
               },
             })
             .from(split.lines, { yPercent: h.yPercent, duration: h.duration, stagger: h.stagger, ease: h.ease }, 0)

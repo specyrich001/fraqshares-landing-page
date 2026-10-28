@@ -8,3 +8,81 @@
     transform: scaleX(1);
   }
 }
+
+/*
+ * Card 1 (FractionalVisual): three card elements trade roles as the stack loops. This is the static
+ * state 1 (no JS, reduced motion, and before the script runs): element 1 in front, element 2 as the
+ * frosted strip behind it, element 3 hidden. The script then sets the same values inline. The back
+ * slot's numbers come from the component (--stack-back-*).
+ */
+[data-card1] [data-stack-role='front'] {
+  z-index: 3;
+}
+[data-card1] [data-stack-role='back'] {
+  z-index: 2;
+}
+[data-card1] [data-stack-role='back'] [data-stack-card] {
+  transform: translateY(var(--stack-back-y)) scale(var(--stack-back-scale));
+  opacity: var(--stack-back-opacity);
+}
+[data-card1] [data-stack-role='back'] :is([data-stack-white], [data-stack-content]) {
+  opacity: 0;
+}
+[data-card1] [data-stack-role='spare'] {
+  z-index: 1;
+}
+[data-card1] [data-stack-role='spare'] [data-stack-card] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/*
+ * Card 1's intro starting state: the overlays hidden until the first play(). Only with JS on
+ * (:root[data-js], set inline in index.html before first paint) and motion allowed, and only on
+ * copies mounted before the intro has played (data-anim="pending").
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-js] [data-card1][data-anim='pending'] :is([data-pill-tile], [data-pill-label], [data-stack-card]) {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/*
+ * Card 3's intro starting state (RealEstateVisual): the three stack layers hidden, 28px low and at
+ * 92%, growing from their bottom edge, until the first play(). Same gating as card 1: JS on, motion
+ * allowed, and only on copies mounted before the intro has played. Otherwise the final stack, static.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-js] [data-card3][data-anim='pending'] [data-feature-stack-layer] {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(28px) scale(0.92);
+    transform-origin: 50% 100%;
+  }
+  :root[data-js] [data-card3][data-anim='pending'] [data-stack-content] {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+/*
+ * Card 4's starting state (VerifiedVisual): all four banners hidden 48px to the right, the middle two
+ * as empty placeholders (white fill and content hidden), until the first play(). Same gating as cards
+ * 1 and 3; otherwise the verified state, static.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-js] [data-card4][data-anim='pending'] [data-feature-feed-item] {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(48px);
+  }
+  :root[data-js] [data-card4] :is([data-verify-fill], [data-verify-thumb], [data-verify-text], [data-verify-badge]) {
+    opacity: 0;
+  }
+
+  /* Card 2's starting state (PortfolioVisual): the phone below the visual's bottom edge (490 − 46). */
+  :root[data-js] [data-card2] [data-feature-phone] {
+    transform: translateY(444px);
+  }
+}

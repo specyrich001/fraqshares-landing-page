@@ -16,6 +16,8 @@ type Props = {
   widthClassName?: string
   /** E.g. a max-width where the design truncates the title earlier than the card would. */
   titleClassName?: string
+  /** The card's shadow; '' when a separate layer draws it (e.g. so it can fade). */
+  shadowClassName?: string
 } & HTMLAttributes<HTMLDivElement>
 
 /**
@@ -34,13 +36,14 @@ export function TransactionCard({
   gapClassName = 'gap-2',
   widthClassName = 'w-[306px]',
   titleClassName = '',
+  shadowClassName = 'shadow-[0_4px_34px_rgba(0,0,0,0.25)]',
   className = '',
   ...rest
 }: Props) {
   return (
     <div
       {...rest}
-      className={`flex ${widthClassName} items-center gap-3 shadow-[0_4px_34px_rgba(0,0,0,0.25)] ${surfaceClassName} ${paddingClassName} ${className}`}
+      className={`flex ${widthClassName} items-center gap-3 ${shadowClassName} ${surfaceClassName} ${paddingClassName} ${className}`}
     >
       <div className={`flex min-w-0 flex-1 items-center ${gapClassName}`}>
         {media}
@@ -50,7 +53,11 @@ export function TransactionCard({
           <p className="product-detail text-meta">{meta}</p>
         </div>
       </div>
-      {amount && <p className={`shrink-0 ${amountClassName}`}>{amount}</p>}
+      {amount && (
+        <p data-tx-amount className={`shrink-0 ${amountClassName}`}>
+          {amount}
+        </p>
+      )}
     </div>
   )
 }

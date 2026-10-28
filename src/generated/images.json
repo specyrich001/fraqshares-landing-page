@@ -23,6 +23,12 @@
     "src": "/images/features/land-79.webp",
     "srcset": "/images/features/land-79.webp 79w, /images/features/land-158.webp 158w"
   },
+  "features/oyster": {
+    "width": 79,
+    "height": 79,
+    "src": "/images/features/oyster-79.webp",
+    "srcset": "/images/features/oyster-79.webp 79w, /images/features/oyster-158.webp 158w"
+  },
   "features/phone": {
     "width": 290,
     "height": 592,

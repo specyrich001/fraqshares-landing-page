@@ -7,6 +7,7 @@ import appIcon from '../../assets/icons/fraqshares-app.svg'
 import moneyReceiveIcon from '../../assets/icons/money-receive.svg'
 import moneySendIcon from '../../assets/icons/money-send.svg'
 import { TransactionCard } from '../product/TransactionCard.tsx'
+import { HERO_COPY_SHOWN } from './heroEvents.ts'
 import './heroFeed.css'
 
 gsap.registerPlugin(useGSAP, CustomEase)
@@ -24,16 +25,17 @@ CustomEase.create('rallyRise', 'M0,0 C0.2,0.9 0.3,1.08 1,1')
 
 /**
  * Intro micro-animation. Seconds unless marked; positions are from the start of the intro.
- * The dot is the phone in the photo: it appears and starts pulsing on its own, a signal trickles up
- * the line, and the cards pop into the stack one after another, bottom to top, as if arriving on
- * the phone. Then (loop) the signal repeats: the cards clear, the line drains back into the dot,
- * the dot pulses alone for a beat, and the line climbs and the cards arrive again.
+ * The dot is the phone in the photo: it pops in with the line climbing out of it, and the cards pop
+ * into the stack one after another, bottom to top, as if arriving on the phone. Then (loop) the
+ * signal repeats: the cards clear, the line drains back into the dot, the dot leaves, and it pops
+ * back in with the line, and the cards arrive again.
  */
 const FEED = {
-  /** Starts once the hero photo has loaded and the fonts are ready, plus this. */
+  /** Starts after the hero copy has shown (headline, paragraph, buttons) and the photo has loaded,
+   *  plus this, so the copy and then the dot read as one sequence. */
   startDelay: 0.3,
-  /** Stop waiting for the photo / fonts after this long (ms). */
-  readyTimeoutMs: 3000,
+  /** Stop waiting for the copy / photo / fonts after this long (ms). */
+  readyTimeoutMs: 4500,
 
   /** The dot appears first, popping in from nothing; it starts pulsing as it lands. */
   /** Rally's group pop: scale 0.15 → peak → dip → 1 (rf-pop), fading in over the first fadeAt. */
@@ -42,9 +44,9 @@ const FEED = {
   pulse: { period: 1.6, peak: 1.08, ease: 'sine.inOut' },
   ripple: { period: 1.6, scale: 2.4, opacity: 0.45, ease: 'power2.out' },
 
-  /** The line is revealed from the dot up (about one pulse after the dot lands), then its dashes
-   *  keep flowing toward the cards. */
-  line: { at: 1.7, duration: 0.6, ease: 'power2.inOut' },
+  /** The line is revealed from the dot up, starting this long after the dot starts popping in
+   *  (0 = together, intro and loop), then its dashes keep flowing toward the cards. */
+  line: { at: 0, duration: 0.6, ease: 'power2.inOut' },
   /** Seconds per dash + gap (11.6px) of upward travel. */
   flowPeriod: 1,
 
@@ -75,8 +77,7 @@ const FEED = {
   /**
    * Repeat the whole intro, forever: hold with the cards in place, fade them out top to bottom,
    * drain the line back into the dot, then the dot stops pulsing and shrinks away; after dotGap it
-   * pops back in (as in the intro), pulses alone for loopGap, the line climbs again and the cards
-   * pop back in. Stops, with everything shown, while the page is scrolled away from the top; starts
+   * pops back in with the line climbing (as in the intro) and the cards pop back in. Stops, with everything shown, while the page is scrolled away from the top; starts
    * again from the hold when it's back.
    */
   loop: true,
@@ -86,7 +87,6 @@ const FEED = {
   dotOut: { duration: 0.35, ease: 'power2.in' },
   /** Empty beat between the dot leaving and coming back. */
   dotGap: 0.4,
-  loopGap: 1.2,
 }
 
 /** Pulse / ripple / flow and the optional loop: paused off screen and in background tabs. */
@@ -299,7 +299,7 @@ export function HeroActivityFeed({ className = '' }: { className?: string }) {
           const dotInAt = dotOutAt + FEED.dotOut.duration + FEED.dotGap
           dotPop(tl, dotInAt)
           tl.call(startPulse, [], dotInAt + D.duration)
-          const climbAt = dotInAt + D.duration + FEED.loopGap
+          const climbAt = dotInAt + L.at
           tl.fromTo(line, { clipPath: LINE_HIDDEN }, { clipPath: LINE_SHOWN, duration: L.duration, ease: L.ease }, climbAt)
           tl.add(cardsIn(false), climbAt + L.duration)
           cycle = tl
@@ -372,9 +372,14 @@ export function HeroActivityFeed({ className = '' }: { className?: string }) {
         io.observe(root)
         document.addEventListener('visibilitychange', sync)
 
-        // Start once the hero photo has loaded and the fonts are ready (or after the timeout).
-        const photo = root.closest('[data-hero]')?.querySelector<HTMLImageElement>('[data-hero-photo]')
+        // Start once the hero copy has shown and the photo has loaded (or after the timeout).
+        const hero = root.closest<HTMLElement>('[data-hero]')
+        const photo = hero?.querySelector<HTMLImageElement>('[data-hero-photo]')
         const photoReady = photo ? photo.decode().catch(() => {}) : Promise.resolve()
+        const copyShown = new Promise<void>((resolve) => {
+          if (!hero || hero.dataset.copy === 'shown') return resolve()
+          hero.addEventListener(HERO_COPY_SHOWN, () => resolve(), { once: true })
+        })
         const timeout = new Promise((r) => setTimeout(r, FEED.readyTimeoutMs))
         let cancelled = false
         let delayed: gsap.core.Tween | undefined
@@ -384,7 +389,7 @@ export function HeroActivityFeed({ className = '' }: { className?: string }) {
           else delayed = gsap.delayedCall(FEED.startDelay, () => intro.play(0))
           sync()
         })
-        Promise.race([Promise.all([document.fonts.ready, photoReady]), timeout]).then(() => begin())
+        Promise.race([Promise.all([document.fonts.ready, photoReady, copyShown]), timeout]).then(() => begin())
 
         const replayIntro = context.add('replay', () => {
           cycle?.kill()
