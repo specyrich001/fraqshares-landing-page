@@ -3,11 +3,12 @@ import { CloseIcon, MenuIcon } from './icons/MenuIcons.tsx'
 import { buttonBase, focusRing, focusRingOnDark } from './linkStyles.ts'
 import { Logo } from './Logo.tsx'
 import { MOBILE_MENU_ID, MobileMenu } from './MobileMenu.tsx'
+import { HOW_IT_WORKS_HREF, LOGIN_URL, SIGNUP_URL } from './siteLinks.ts'
 
-// Section anchors are placeholders until those sections exist.
+// About, Learn and List Property are placeholders until those sections or pages exist.
 const links = [
   { label: 'About', href: '#about' },
-  { label: 'How It Works', href: '#how-it-works' },
+  { label: 'How It Works', href: HOW_IT_WORKS_HREF },
   { label: 'Learn', href: '#learn' },
   { label: 'List Property', href: '#list-property' },
 ]
@@ -143,10 +144,10 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
 
         <div className="flex shrink-0 gap-4 max-lg:hidden">
           {/* 17px + 1px border = Figma's 18px inset. Figma centres the stroke on the 80×40 box; CSS keeps it inside. */}
-          <a href="#login" className={`${button} border px-[17px] ${tone.login}`}>
+          <a href={LOGIN_URL} className={`${button} border px-[17px] ${tone.login}`}>
             Log In
           </a>
-          <a href="#get-started" className={`${button} px-4.5 ${tone.cta}`}>
+          <a href={SIGNUP_URL} className={`${button} px-4.5 ${tone.cta}`}>
             Get Started
           </a>
         </div>

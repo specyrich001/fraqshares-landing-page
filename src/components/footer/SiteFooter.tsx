@@ -8,6 +8,7 @@ import logoFooter from '../../assets/logo-footer.svg'
 import images from '../../generated/images.json'
 import { ArrowRightIcon } from '../icons/ArrowRightIcon.tsx'
 import { buttonBase, focusRing, focusRingOnDark } from '../linkStyles.ts'
+import { SIGNUP_URL, SOCIAL_URLS } from '../siteLinks.ts'
 import { STAGE_MEDIA } from '../stage/stageTiming.ts'
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from './SocialIcons.tsx'
 
@@ -26,10 +27,10 @@ const columns = [
 ]
 
 const socials = [
-  { label: 'Fraqshares on X (Twitter)', Icon: TwitterIcon },
-  { label: 'Fraqshares on Facebook', Icon: FacebookIcon },
-  { label: 'Fraqshares on LinkedIn', Icon: LinkedinIcon },
-  { label: 'Fraqshares on Instagram', Icon: InstagramIcon },
+  { label: 'Fraqshares on X (Twitter)', href: SOCIAL_URLS.x, Icon: TwitterIcon },
+  { label: 'Fraqshares on Facebook', href: SOCIAL_URLS.facebook, Icon: FacebookIcon },
+  { label: 'Fraqshares on LinkedIn', href: SOCIAL_URLS.linkedin, Icon: LinkedinIcon },
+  { label: 'Fraqshares on Instagram', href: SOCIAL_URLS.instagram, Icon: InstagramIcon },
 ]
 
 /** Takes no height: Figma draws its 1px rules in the row above, so the 50px gaps stay 50px. */
@@ -120,7 +121,7 @@ export function SiteFooter() {
               {/* Section 3's outline button: 17px + 1px border = 18px, 10px to the arrow (Figma) → 180 wide.
                   Mobile: 162 × 48 with the 14px label (Figma 11006:49367). */}
               <a
-                href="#get-started"
+                href={SIGNUP_URL}
                 className={`${buttonBase} h-13 gap-2.5 border border-black px-[17px] text-black hover:bg-black hover:text-white max-lg:h-12 max-lg:text-button-sm ${focusRing}`}
               >
                 Start Investing
@@ -202,13 +203,12 @@ export function SiteFooter() {
                 </span>
               </p>
               <ul role="list" className="flex items-center gap-4">
-                {socials.map(({ label, Icon }) => (
+                {socials.map(({ label, href, Icon }) => (
                   <li key={label} className="flex">
-                    {/* PLACEHOLDER href: profile URLs not supplied yet. */}
                     <a
-                      href="#"
+                      href={href}
                       target="_blank"
-                      rel="noopener"
+                      rel="noopener noreferrer"
                       aria-label={label}
                       className={`text-olive transition-colors duration-150 hover:text-mint focus-visible:text-mint motion-reduce:transition-none ${focusRingOnDark}`}
                     >

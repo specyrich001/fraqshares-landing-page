@@ -1,5 +1,6 @@
 import { useEffect, useRef, type RefObject } from 'react'
 import { buttonBase, focusRing } from './linkStyles.ts'
+import { LOGIN_URL, SIGNUP_URL } from './siteLinks.ts'
 import { smoothScroll } from '../motion/useSmoothScroll.ts'
 
 export const MOBILE_MENU_ID = 'mobile-menu'
@@ -109,10 +110,10 @@ export function MobileMenu({
 
         <div className="mt-auto flex shrink-0 gap-4 px-6 pt-10 pb-10">
           {/* 17px + 1px border = Figma's 18px inset. */}
-          <a href="#login" onClick={onClose} className={`${button} border border-black px-[17px] text-black hover:bg-black hover:text-white ${focusRing}`}>
+          <a href={LOGIN_URL} onClick={onClose} className={`${button} border border-black px-[17px] text-black hover:bg-black hover:text-white ${focusRing}`}>
             Log In
           </a>
-          <a href="#get-started" onClick={onClose} className={`${button} bg-black px-4.5 text-white hover:bg-forest ${focusRing}`}>
+          <a href={SIGNUP_URL} onClick={onClose} className={`${button} bg-black px-4.5 text-white hover:bg-forest ${focusRing}`}>
             Get Started
           </a>
         </div>

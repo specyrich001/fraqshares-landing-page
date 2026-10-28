@@ -5,6 +5,7 @@ import { useRef, type ReactNode } from 'react'
 import images from '../../generated/images.json'
 import { ArrowRightIcon } from '../icons/ArrowRightIcon.tsx'
 import { buttonBase, focusRingOnDark } from '../linkStyles.ts'
+import { HOW_IT_WORKS_HREF, SIGNUP_URL } from '../siteLinks.ts'
 import { useMediaQuery } from '../../motion/useMediaQuery.ts'
 import { HeroActivityFeed } from './HeroActivityFeed.tsx'
 import { HERO_COPY_SHOWN } from './heroEvents.ts'
@@ -246,11 +247,12 @@ export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
           </p>
           <div data-hero-ctas className="mt-12 flex flex-wrap gap-4">
             {/* Figma: 10px between label and arrow (18 + 110 + 10 + 24 + 18 = 180). */}
-            <a href="#get-started" className={`${button} gap-2.5 bg-forest text-white hover:bg-olive hover:text-strong`}>
+            <a href={SIGNUP_URL} className={`${button} gap-2.5 bg-forest text-white hover:bg-olive hover:text-strong`}>
               Start Investing
               <ArrowRightIcon className="shrink-0 max-lg:size-5" />
             </a>
-            <a href="#how-it-works" className={`${button} bg-white text-black hover:bg-mint`}>
+            {/* Learn More: the same place as the nav's How It Works. */}
+            <a href={HOW_IT_WORKS_HREF} className={`${button} bg-white text-black hover:bg-mint`}>
               Learn More
             </a>
           </div>

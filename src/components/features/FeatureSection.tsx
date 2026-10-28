@@ -12,6 +12,7 @@ import { useMediaQuery } from '../../motion/useMediaQuery.ts'
 import { ArrowIcon } from '../icons/ArrowIcon.tsx'
 import { ArrowRightIcon } from '../icons/ArrowRightIcon.tsx'
 import { buttonBase, focusRing } from '../linkStyles.ts'
+import { SIGNUP_URL } from '../siteLinks.ts'
 import './features.css'
 import { featureTiming as F } from './featureTiming.ts'
 import { FractionalVisual } from './FractionalVisual.tsx'
@@ -268,7 +269,7 @@ export function FeatureSection() {
               arrow (Figma), which makes the 180px width: 18 + 110 + 10 + 24 + 18. Mobile: 162 × 48,
               14px label, 20px arrow. */}
           <a
-            href="#get-started"
+            href={SIGNUP_URL}
             className={`${buttonBase} h-13 gap-2.5 border border-black px-[17px] text-black hover:bg-black hover:text-white max-lg:h-12 max-lg:text-button-sm ${focusRing}`}
           >
             Start Investing
