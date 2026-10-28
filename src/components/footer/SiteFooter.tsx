@@ -44,7 +44,12 @@ const divider = <div aria-hidden="true" className="-mt-px w-full border-t border
  * distance still to go, so its top stays pinned to the viewport top and the FAQ uncovers it; then
  * it scrolls on normally. A transform, not position: sticky, because the footer is taller than the
  * viewport (sticky bottom would reveal its bottom first). The wrapper is the untransformed trigger,
- * dark so nothing light can show past the shifted footer. Static under 1024px and for reduced motion.
+ * dark so nothing light can show past the shifted footer. Static for reduced motion.
+ *
+ * Mobile reveal, CSS only (a scroll-linked transform shakes against native touch scrolling): the
+ * wrapper is pulled up one screen under the FAQ's last screen, and the footer is sticky at the top
+ * with one screen of spacer after it, so it holds still while the FAQ scrolls off, then scrolls on.
+ * The page's length doesn't change (−100svh + 100svh).
  *
  * Mobile, below 1024px (Figma 11006:49360, 393 × 2029): one 345px column (24px padding, capped at
  * 560 on tablets). The banner is 604 tall with its text centred, Figma's own phone crop and the same
@@ -76,8 +81,8 @@ export function SiteFooter() {
   )
 
   return (
-    <div ref={revealRef} data-footer-reveal className="bg-dark">
-      <footer className="bg-dark py-[100px]">
+    <div ref={revealRef} data-footer-reveal className="bg-dark max-lg:motion-safe:-mt-[100svh]">
+      <footer className="bg-dark py-[100px] max-lg:motion-safe:sticky max-lg:motion-safe:top-0">
         <div className="page-row max-lg:max-w-[560px] max-lg:px-6">
           {/* CTA banner, 1280 × 546 (mobile 345 × 604). Bottom to top: zigzag strip, phone, text. */}
           <div className="relative h-[546px] overflow-hidden bg-olive max-lg:h-[604px]">
@@ -216,6 +221,8 @@ export function SiteFooter() {
           </div>
         </div>
       </footer>
+      {/* Mobile reveal: the screen of scroll the footer holds still for. */}
+      <div aria-hidden="true" className="hidden h-[100svh] max-lg:motion-safe:block" />
     </div>
   )
 }
