@@ -9,9 +9,13 @@
     <script>document.documentElement.dataset.js = ''</script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- DM Sans 400/500/700 only. No opsz axis: Figma sets every layer to "opsz" 14, which is the cut
-         Google serves when the axis isn't requested. -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" />
+    <!-- DM Sans 400/500/700. Desktop (1024px up): no opsz axis — Figma's desktop frames are all "opsz" 14,
+         which is the cut Google serves when the axis isn't requested. Mobile: the variable font with the
+         axis, which the browser sizes automatically (CSS default): Figma's mobile frames render that way
+         (measured: the 46px hero headline matches opsz 40). Each sheet applies only at its widths, so
+         desktop loads exactly what it did before. -->
+    <link rel="stylesheet" media="(min-width: 1024px)" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" />
+    <link rel="stylesheet" media="(max-width: 1023.98px)" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" />
   </head>
   <body>
     <div id="root"></div>

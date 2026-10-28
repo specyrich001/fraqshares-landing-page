@@ -448,6 +448,7 @@ export function FractionalVisual({ active, playing }: VisualProps) {
                 <TransactionCard
                   data-stack-content
                   media={
+                    // Not lazy: the carousel clips off-screen cards, so a lazy image would only load as its card slides in.
                     <img
                       src={inv.thumb.src}
                       srcSet={inv.thumb.srcset}
@@ -455,7 +456,7 @@ export function FractionalVisual({ active, playing }: VisualProps) {
                       width={inv.thumb.width}
                       height={inv.thumb.height}
                       alt=""
-                      loading="lazy"
+                      fetchPriority="low"
                       className="size-[49.09px] shrink-0 object-cover"
                     />
                   }

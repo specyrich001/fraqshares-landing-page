@@ -1,6 +1,7 @@
 /*
  * Testimonial cards — card artwork, not site type. Figma renders the base card (24px quote, 20px name,
- * 28 / 46 padding) at ×1.314; built here at that rendered size. Colours are the cards' own.
+ * 28 / 46 padding) at ×1.314 on desktop; built here at that rendered size, and at the base size
+ * below 1024px. Colours are the cards' own.
  */
 [data-testimonials] {
   --card-a-bg: #ededed;
@@ -36,7 +37,7 @@
   white-space: nowrap;
 }
 
-/* Static layout (no JS, reduced motion, under 1024px): Figma's split row. Each card sits centred in
+/* Static layout from 1024px up (no JS, reduced motion): Figma's split row. Each card sits centred in
    its rotated bounding box, and the boxes overlap by 12px (Figma's auto layout). transform, not the
    rotate property, so the pinned sequence's GSAP transforms replace it. */
 [data-testimonial-slot] {
@@ -91,4 +92,68 @@
   position: absolute;
   top: -231.919px;
   left: -191.1855px;
+}
+
+/*
+ * Mobile, below 1024px (Figma 11004:16343, 393 × 1311): the base card (292 × 354, unscaled) in a
+ * vertical column, centred, with each card's centre at Figma's y (284.7, 650.7, 1021.7 less the 100px
+ * top padding). Rotations: A 3deg, B 0, C −5deg. Static (no JS, reduced motion), the heading sits
+ * above the column; with motion ([data-staged-mobile]) it's sticky behind the column, ending centred
+ * at Figma's y 426.
+ */
+@media (max-width: 1023.98px) {
+  .testimonial-card {
+    width: 292.22px;
+    height: 354.48px;
+  }
+  .testimonial-quote {
+    top: 46.19px;
+    left: 28.117px;
+    width: 235.99px;
+    font-size: 24px;
+  }
+  .testimonial-name {
+    top: 293.22px;
+    left: 28.117px;
+    font-size: 20px;
+  }
+  [data-testimonial-cards] {
+    position: relative;
+    width: 100%;
+    height: 1111px;
+  }
+  [data-testimonial-slot] {
+    position: absolute;
+    left: 50%;
+    width: 0;
+    height: 0;
+    margin: 0;
+  }
+  [data-testimonial-slot='a'] { top: 184.7px; }
+  [data-testimonial-slot='b'] { top: 550.7px; }
+  [data-testimonial-slot='c'] { top: 921.7px; }
+  [data-testimonial-slot] .testimonial-card {
+    position: absolute;
+    top: -177.24px;
+    left: -146.11px;
+  }
+  [data-testimonial-slot='b'] .testimonial-card { transform: rotate(0deg); }
+  [data-testimonial-slot='c'] .testimonial-card { transform: rotate(-5deg); }
+
+  /* The heading (Figma: 120px tall) sticks on the screen's centre. Its wrapper holds it from where it
+     sits alone on the screen (A's top 50svh − 60px below it, just off the bottom) to its release
+     centred at the column's y 326 (Figma 426), between A and B; the wrapper then overlaps the column
+     by that much plus the stage's 50px gap, so the column keeps its place. */
+  /* Figma 11004:16327: the heading alone on the screen, centred (366px down at 852 tall), when it sticks. */
+  [data-testimonials][data-staged-mobile] [data-testimonials-stage] {
+    padding-top: calc(50svh - 60px);
+  }
+  [data-testimonials][data-staged-mobile] [data-testimonials-heading] {
+    height: calc(50svh + 446px);
+    margin-bottom: calc(-386px - 50px);
+  }
+  [data-testimonials][data-staged-mobile] [data-testimonials-title] {
+    position: sticky;
+    top: calc(50svh - 60px);
+  }
 }

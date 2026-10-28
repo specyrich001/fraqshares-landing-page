@@ -149,6 +149,7 @@ export function PortfolioVisual({ active, playing }: VisualProps) {
   return (
     <Visual background="var(--color-olive)">
       <div ref={rootRef} data-card2 className="absolute inset-0">
+        {/* Not lazy: the carousel clips off-screen cards, so a lazy image would only load as its card slides in. */}
         <img
           data-feature-phone
           src={phone.src}
@@ -157,7 +158,7 @@ export function PortfolioVisual({ active, playing }: VisualProps) {
           width={phone.width}
           height={phone.height}
           alt=""
-          loading="lazy"
+          fetchPriority="low"
           className="absolute top-[46px] left-[124px] h-[591px] w-[290px] object-cover"
         />
       </div>

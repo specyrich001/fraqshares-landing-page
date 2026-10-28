@@ -4,7 +4,7 @@
  * Eases are GSAP names; sine curves keep peak speed low (≈1.6× average) so motion reads as a glide.
  */
 export const stageTiming = {
-  /** Scroll distance of the transition while the stage is pinned, in viewport heights. */
+  /** Scroll distance of the transition while the stage is pinned, in (small) viewport heights. */
   trackVh: 250,
   /** Then the stage stays pinned this much longer while section 3 scrolls up over section 2. */
   overlapVh: 100,
@@ -31,5 +31,13 @@ export const stageTiming = {
   /** 0.85–1 holds. Then section 3 slides over (overlapVh), and the stage unpins underneath it. */
 } as const
 
-/** Where the pinned sequence runs. Elsewhere the two sections render as the static stack. */
+/** Desktop-only scroll scenes (the footer reveal). */
 export const STAGE_MEDIA = '(min-width: 1024px) and (prefers-reduced-motion: no-preference)'
+
+/**
+ * Where the hero → section 2 sequence runs: every width, mobile included. With reduced motion (and
+ * without JS) the two sections render as the static stack.
+ */
+export const HERO_STAGE_MEDIA = '(prefers-reduced-motion: no-preference)'
+/** From here up it's the desktop composition (Figma's 1440 framing); below, the mobile one. */
+export const DESKTOP_MEDIA = '(min-width: 1024px)'

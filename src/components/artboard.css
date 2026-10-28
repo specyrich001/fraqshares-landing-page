@@ -1,0 +1,19 @@
+/* ScaledArtboard: below 1024px the child (its native size) scales to the box's width from the top
+   left, and the box takes the scaled height. --artboard-scale comes from a ResizeObserver. */
+@media (max-width: 1023.98px) {
+  [data-artboard] {
+    position: relative;
+    width: 100%;
+    max-width: var(--artboard-w);
+    height: calc(var(--artboard-h) * var(--artboard-scale, 1) * 1px);
+  }
+  [data-artboard] > * {
+    transform: scale(var(--artboard-scale, 1));
+    transform-origin: 0 0;
+  }
+}
+@media (min-width: 1024px) {
+  [data-artboard] {
+    display: contents;
+  }
+}

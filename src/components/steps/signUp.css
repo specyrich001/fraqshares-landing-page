@@ -1,0 +1,50 @@
+/*
+ * Step 1's sign-up screen (SignUpGraphic). Colours read from the Figma screen images (11017:49788 …
+ * 49872); forest, olive and text-strong are the site tokens, the rest are this screen's own.
+ */
+[data-signup] {
+  --signup-ink: #061e18; /* button labels, result titles, the check circle */
+  --signup-label: #545663; /* field labels and placeholders */
+  --signup-muted: #7e7e7e; /* subtitles, OR */
+  --signup-legal: #7b7b7b;
+  --signup-body: #828282; /* KYC body */
+  --signup-kyc-title: #06282e;
+  --signup-rule: #bdbdbd; /* field underlines */
+  --signup-link: #fa7921; /* LOGIN */
+  --signup-icon: #333333;
+  --signup-icon-soft: #adadad;
+}
+
+/* The static screen (no JS, reduced motion): the form filled in, as Figma state 2. */
+[data-signup] [data-signup-placeholder] {
+  opacity: 0;
+}
+
+/*
+ * Starting state until the first play(): the card hidden, the form empty. Only with JS on
+ * (:root[data-js], set inline in index.html before first paint) and motion allowed; the script then
+ * sets the same values inline.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-js] [data-signup] [data-signup-card] {
+    opacity: 0;
+  }
+  :root[data-js] [data-signup] [data-signup-placeholder] {
+    opacity: 1;
+  }
+  :root[data-js] [data-signup] [data-signup-value] {
+    opacity: 0;
+  }
+}
+
+/* DEV ?overlay=1: the Figma image of the state showing (data-screen), at 50%. */
+[data-signup] [data-signup-ref] {
+  opacity: 0;
+}
+[data-signup][data-screen='1'] [data-signup-ref='1'],
+[data-signup][data-screen='2'] [data-signup-ref='2'],
+[data-signup][data-screen='3'] [data-signup-ref='3'],
+[data-signup][data-screen='4'] [data-signup-ref='4'],
+[data-signup][data-screen='5'] [data-signup-ref='5'] {
+  opacity: 0.5;
+}

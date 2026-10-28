@@ -145,6 +145,89 @@
   --text-button--font-weight: 500;
   --text-button--letter-spacing: 0em;
 
+  /* Mobile section H2s (Figma 11003:2246): 40px / 500 / -4%. Line height differs per section (100% or
+     110%), so sections set it; this one defaults to 100%. */
+  --text-section-h2-mobile: 2.5rem;
+  --text-section-h2-mobile--line-height: 1;
+  --text-section-h2-mobile--font-weight: 500;
+  --text-section-h2-mobile--letter-spacing: -0.04em;
+
+  /* Mobile section 3 cards (Figma 11004:15574). Title: 18px / 140% / 700 / -1%; body: 12px / 150% / 400 / -1% */
+  --text-feature-subtitle-mobile: 1.125rem;
+  --text-feature-subtitle-mobile--line-height: 1.4;
+  --text-feature-subtitle-mobile--font-weight: 700;
+  --text-feature-subtitle-mobile--letter-spacing: -0.01em;
+
+  --text-feature-body-mobile: 0.75rem;
+  --text-feature-body-mobile--line-height: 1.5;
+  --text-feature-body-mobile--font-weight: 400;
+  --text-feature-body-mobile--letter-spacing: -0.01em;
+
+  /* Mobile Getting Started (Figma 11004:16302). Step title: 18px / 140% / 500 / -1%; body: 14px / 150% / 400 / -1% */
+  --text-step-title-mobile: 1.125rem;
+  --text-step-title-mobile--line-height: 1.4;
+  --text-step-title-mobile--font-weight: 500;
+  --text-step-title-mobile--letter-spacing: -0.01em;
+
+  --text-step-description-mobile: 0.875rem;
+  --text-step-description-mobile--line-height: 1.5;
+  --text-step-description-mobile--font-weight: 400;
+  --text-step-description-mobile--letter-spacing: -0.01em;
+
+  /* Mobile FAQ (Figma 11006:49244). Question: 16px / 140% / 500 / -1%; answer: 14px / 150% / 400 / -1% */
+  --text-faq-question-mobile: 1rem;
+  --text-faq-question-mobile--line-height: 1.4;
+  --text-faq-question-mobile--font-weight: 500;
+  --text-faq-question-mobile--letter-spacing: -0.01em;
+
+  --text-faq-answer-mobile: 0.875rem;
+  --text-faq-answer-mobile--line-height: 1.5;
+  --text-faq-answer-mobile--font-weight: 400;
+  --text-faq-answer-mobile--letter-spacing: -0.01em;
+
+  /* Mobile footer (Figma 11006:49360). CTA headline: 40px / 100% / 700 / -1%; legal: 14px / 150% / 400 / -1% */
+  --text-conversion-headline-mobile: 2.5rem;
+  --text-conversion-headline-mobile--line-height: 1;
+  --text-conversion-headline-mobile--font-weight: 700;
+  --text-conversion-headline-mobile--letter-spacing: -0.01em;
+
+  --text-legal-mobile: 0.875rem;
+  --text-legal-mobile--line-height: 1.5;
+  --text-legal-mobile--font-weight: 400;
+  --text-legal-mobile--letter-spacing: -0.01em;
+
+  /* Mobile section 2 paragraph (Figma 11004:15513): 18px / 140% / 400 / -1% */
+  --text-intro-body-mobile: 1.125rem;
+  --text-intro-body-mobile--line-height: 1.4;
+  --text-intro-body-mobile--font-weight: 400;
+  --text-intro-body-mobile--letter-spacing: -0.01em;
+
+  /* Mobile hero (Figma 11027:49948, set to 46px on request). H1: 46px / 100% / 500 / -4%. Its
+     longest line ("estate & businesses") is 357px at 46px, in a box up to 363px wide (Hero.tsx); on
+     screens too narrow for that it scales down to keep the three lines (46 / 357).
+     Subtext: 16px / 140% / 400 / -1% */
+  --text-hero-h1-mobile: min(2.875rem, calc((100vw - 30px) * 0.1288));
+  --text-hero-h1-mobile--line-height: 1;
+  --text-hero-h1-mobile--font-weight: 500;
+  --text-hero-h1-mobile--letter-spacing: -0.04em;
+
+  --text-body-main-mobile: 1rem;
+  --text-body-main-mobile--line-height: 1.4;
+  --text-body-main-mobile--font-weight: 400;
+  --text-body-main-mobile--letter-spacing: -0.01em;
+
+  /* Mobile (Figma 11003:2246 / 11023:49893). Menu links: 20px / 140% / 500 / -2% */
+  --text-nav-link-mobile: 1.25rem;
+  --text-nav-link-mobile--line-height: 1.4;
+  --text-nav-link-mobile--font-weight: 500;
+  --text-nav-link-mobile--letter-spacing: -0.02em;
+
+  /* Mobile buttons: 14px / 125% / 500 / 0 */
+  --text-button-sm: 0.875rem;
+  --text-button-sm--line-height: 1.25;
+  --text-button-sm--font-weight: 500;
+  --text-button-sm--letter-spacing: 0em;
+
   /* 16px / 140% / 700 / 0 */
   --text-footer-heading: 1rem;
   --text-footer-heading--line-height: 1.4;

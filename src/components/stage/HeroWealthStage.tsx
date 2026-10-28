@@ -5,7 +5,7 @@ import { useRef } from 'react'
 import { Hero } from '../hero/Hero.tsx'
 import { WealthSection } from '../wealth/WealthSection.tsx'
 import { wealthFullPhoto, wealthPhotoCrop as crop } from '../wealth/wealthPhoto.ts'
-import { STAGE_MEDIA, stageTiming as T } from './stageTiming.ts'
+import { DESKTOP_MEDIA, HERO_STAGE_MEDIA, stageTiming as T } from './stageTiming.ts'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
@@ -15,7 +15,11 @@ const span = (s: Span) => s.end - s.start
 /**
  * Hero + "Build wealth" as one scroll stage.
  *
- * Static by default (no JS, reduced motion, under 1024px): the two sections simply stack.
+ * Static by default (no JS, reduced motion): the two sections simply stack. Runs at every width; on
+ * mobile (below 1024px) the slot is the scaled artboard (its on-screen rect is what's measured), the
+ * full photo starts as a centred cover of the hero rather than Figma's 1440 framing, and the stage
+ * pins once its bottom reaches the screen's bottom when it's taller than the screen (section 2 is 856px
+ * on a phone), so the whole of section 2 is in view while it's pinned.
  * When the sequence runs, `data-staged` turns the stage into section 2 with the hero laid over it
  * (z-10), and the stage pins for T.trackVh of scroll:
  *   - the hero layer is clipped (clip-path: inset) from full-bleed down to section 2's image slot;
@@ -35,7 +39,9 @@ export function HeroWealthStage() {
     () => {
       const mm = gsap.matchMedia()
 
-      mm.add(STAGE_MEDIA, () => {
+      mm.add({ motion: HERO_STAGE_MEDIA, desktop: DESKTOP_MEDIA }, (context) => {
+        const { motion, desktop } = context.conditions as { motion: boolean; desktop: boolean }
+        if (!motion) return
         const stage = stageRef.current!
         const el = <E extends HTMLElement = HTMLElement>(selector: string) => stage.querySelector<E>(selector)!
 
@@ -54,7 +60,7 @@ export function HeroWealthStage() {
 
         stage.dataset.staged = ''
         const spacer = spacerRef.current!
-        spacer.style.height = `${T.trackVh}vh`
+        spacer.style.height = `${T.trackVh}svh`
 
         // Slot rect in the hero layer's coordinates. Neither box is transformed, pinned separately
         // or scrolled relative to the other, so this is stable at any progress.
@@ -85,8 +91,14 @@ export function HeroWealthStage() {
         }
         // Where it starts: Figma's full-bleed frame, i.e. the hero's 1773 × 921 rect at x −174 with
         // the photo cover-fitted and centred. Past 1773px wide the rect fills the width, as the hero does.
+        // Mobile: a centred cover of the hero.
         const start = () => {
           const g = geometry()
+          if (!desktop) {
+            const s = Math.max(g.W / crop.sourceWidth, g.H / crop.sourceHeight)
+            const w = crop.sourceWidth * s
+            return { left: (g.W - w) / 2, top: (g.H - crop.sourceHeight * s) / 2, width: w }
+          }
           const rectW = Math.max(g.W, (1773 * g.H) / 921)
           const rectLeft = (g.W - rectW) * (174 / (1773 - 1440))
           const s = Math.max(rectW / crop.sourceWidth, g.H / crop.sourceHeight)
@@ -106,7 +118,9 @@ export function HeroWealthStage() {
           defaults: { ease: 'none' },
           scrollTrigger: {
             trigger: stage,
-            start: 'top top',
+            // Mobile: section 2 can be taller than the screen; pin it bottom-aligned so none of it is
+            // out of view for the whole sequence.
+            start: () => (!desktop && stage.offsetHeight > window.innerHeight ? 'bottom bottom' : 'top top'),
             // Pinned for the transition and then one more screen while section 3 scrolls up over it.
             // No pin spacing: the spacer below covers only the transition, so section 3 arrives
             // exactly as the transition ends instead of after the overlap.
@@ -237,7 +251,7 @@ export function HeroWealthStage() {
           gsap.set([heroPhoto, heroContent, heroFeed, handoff].filter(Boolean), {
             clearProps: 'transform,transformOrigin,translate,rotate,scale,opacity',
           })
-          gsap.set(heroFeedParts, { clearProps: 'opacity' })
+          if (heroFeedParts.length) gsap.set(heroFeedParts, { clearProps: 'opacity' })
           gsap.set(
             [
               el('[data-hero-gradient]'),

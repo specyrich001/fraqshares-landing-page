@@ -8,6 +8,8 @@ import {
   FIT_MEDIA,
   REST,
   TESTIMONIALS_MEDIA,
+  TESTIMONIALS_MOBILE_MEDIA,
+  testimonialsMobile as M,
   testimonialsTiming as T,
 } from './testimonialsTiming.ts'
 
@@ -51,10 +53,16 @@ const HALF_CARD = 463.838 / 2
  * Figma: Testimonial (10815:83133 heading only, 10821:86101 split) and Desktop - 18 (10815:83135
  * stacked), each 1440 × 820.
  *
- * Static by default (no JS, reduced motion, under 1024px): the heading, then the three cards in
- * Figma's split row. With motion at 1024px and up, `data-staged` makes the section a tall track with a
- * sticky 100vh stage; heading and cards are centred on the stage, and every state is a transform of
- * the cards from that centre. One scrubbed timeline runs heading → stack → split.
+ * Static by default (no JS, reduced motion): the heading, then the three cards in Figma's split row.
+ * With motion at 1024px and up, `data-staged` makes the section a tall track with a sticky 100vh
+ * stage; heading and cards are centred on the stage, and every state is a transform of the cards from
+ * that centre. One scrubbed timeline runs heading → stack → split.
+ *
+ * Mobile, below 1024px (Figma 11004:16327 heading, 11004:16343 split, 393 × 1311): no stack and no
+ * pin; the split is a vertical column of base-size cards that scrolls. Static, the heading sits above
+ * it. With motion (`data-staged-mobile`) the heading is sticky on the screen's centre, behind the
+ * column: it scrolls in alone (16327), card A scrolls up over it while it dims to 10%, and it releases
+ * between A and B, where 16343 has it, to scroll away with the column.
  */
 export function TestimonialsSection() {
   const rootRef = useRef<HTMLElement>(null)
@@ -157,6 +165,35 @@ export function TestimonialsSection() {
           gsap.set(all, { clearProps: 'transform,translate,rotate,scale,willChange' })
         }
       })
+
+      mm.add(TESTIMONIALS_MOBILE_MEDIA, () => {
+        const title = root.querySelector<HTMLElement>('[data-testimonials-title]')!
+        root.dataset.stagedMobile = ''
+
+        // The heading dims to Figma's 10% as card A scrolls up over it.
+        const fade = gsap.fromTo(
+          title,
+          { opacity: 1 },
+          {
+            opacity: T.headingDimmed,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: root.querySelector('[data-testimonial="a"]'),
+              start: M.fade.start,
+              end: M.fade.end,
+              scrub: T.scrub,
+              invalidateOnRefresh: true,
+            },
+          },
+        )
+
+        return () => {
+          fade.scrollTrigger?.kill()
+          fade.kill()
+          delete root.dataset.stagedMobile
+          gsap.set(title, { clearProps: 'opacity' })
+        }
+      })
     },
     { scope: rootRef },
   )
@@ -170,11 +207,22 @@ export function TestimonialsSection() {
       className="relative overflow-x-clip bg-white"
     >
       <div data-testimonials-track>
-        <div data-testimonials-stage className="flex flex-col items-center gap-[100px] py-[130px]">
-          {/* 623px at 62px, kept in em so the three-line wrap survives the token's smaller sizes. */}
-          <h2 id="testimonials-title" data-testimonials-title className="w-[10.048em] max-w-full text-center text-testimonial-intro text-muted">
-            Join our pool of <span className="text-strong">investors and start building your portfolio</span>
-          </h2>
+        <div
+          data-testimonials-stage
+          className="flex flex-col items-center gap-[100px] py-[130px] max-lg:mx-auto max-lg:max-w-[560px] max-lg:gap-[50px] max-lg:px-6 max-lg:py-[100px]"
+        >
+          {/* 623px at 62px, kept in em so the three-line wrap survives the token's smaller sizes. Mobile:
+              Figma's 345px, allowed past the 24px padding on narrower phones so it keeps three lines. The
+              wrapper is the mobile heading's sticky range (testimonials.css); desktop has no box for it. */}
+          <div data-testimonials-heading className="lg:contents max-lg:flex max-lg:w-full max-lg:items-start max-lg:justify-center">
+            <h2
+              id="testimonials-title"
+              data-testimonials-title
+              className="w-[10.048em] max-w-full text-center text-testimonial-intro text-muted max-lg:w-[min(345px,calc(100vw-30px))] max-lg:max-w-none max-lg:shrink-0 max-lg:text-section-h2-mobile"
+            >
+              Join our pool of <span className="text-strong">investors and start building your portfolio</span>
+            </h2>
+          </div>
 
           <ul role="list" data-testimonial-cards className="flex flex-wrap items-center justify-center">
             {cards.map(({ id, quote, name, card, quoteColor, nameColor }) => (

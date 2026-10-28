@@ -67,7 +67,8 @@
   margin: 0;
 }
 
-/* Text block: left 1060, 222 wide, vertically centred on the active frame (its height varies). */
+/* Text block: left 1060, vertically centred on the active frame (its height varies). Its width comes
+   from the step: 222, or 245 for step 1, whose title is one line in Figma. */
 [data-staged] [data-step-text] {
   position: absolute;
   top: 0;
@@ -75,7 +76,6 @@
   left: 1060px;
   display: flex;
   align-items: center;
-  width: 222px;
   margin: 0;
 }
 
@@ -89,4 +89,29 @@
 
 [data-staged] [data-steps-line] {
   display: block;
+}
+
+/*
+ * Mobile pinned sequence ([data-staged-mobile], below 1024px; StepsSection's stageMobile). The stage
+ * is Figma's column at full size (at least a screen tall), sticky; the five steps share one grid cell
+ * (the tallest sets its height), so only the current one shows (opacity, set by the script).
+ */
+[data-steps][data-staged-mobile] [data-steps-stage] {
+  /* top: set by the script (negative when the stage is taller than the screen). */
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100svh;
+  overflow: hidden;
+}
+[data-staged-mobile] [data-steps-list] {
+  display: grid;
+  /* The track is the list's width, not the frames' native 496px (they're scaled artboards). */
+  grid-template-columns: minmax(0, 1fr);
+}
+[data-staged-mobile] [data-step] {
+  position: relative;
+  grid-area: 1 / 1;
 }

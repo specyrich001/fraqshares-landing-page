@@ -14,6 +14,7 @@ import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from './Social
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 const phone = images['footer/phone-hand']
+const phoneMobile = images['footer/phone-hand-mobile']
 /** Read once when the page loads. */
 const year = new Date().getFullYear()
 
@@ -44,6 +45,10 @@ const divider = <div aria-hidden="true" className="-mt-px w-full border-t border
  * it scrolls on normally. A transform, not position: sticky, because the footer is taller than the
  * viewport (sticky bottom would reveal its bottom first). The wrapper is the untransformed trigger,
  * dark so nothing light can show past the shifted footer. Static under 1024px and for reduced motion.
+ *
+ * Mobile, below 1024px (Figma 11006:49360, 393 × 2029): one 345px column (24px padding, capped at
+ * 560 on tablets). The banner is 604 tall with its text centred, Figma's own phone crop and the same
+ * zigzag; the main footer stacks logo, link columns (wrapping), legal text and the bottom row.
  */
 export function SiteFooter() {
   const revealRef = useRef<HTMLDivElement>(null)
@@ -73,11 +78,12 @@ export function SiteFooter() {
   return (
     <div ref={revealRef} data-footer-reveal className="bg-dark">
       <footer className="bg-dark py-[100px]">
-        <div className="page-row">
-          {/* CTA banner, 1280 × 546. Bottom to top: zigzag strip, phone, text. */}
-          <div className="relative h-[546px] overflow-hidden bg-olive">
+        <div className="page-row max-lg:max-w-[560px] max-lg:px-6">
+          {/* CTA banner, 1280 × 546 (mobile 345 × 604). Bottom to top: zigzag strip, phone, text. */}
+          <div className="relative h-[546px] overflow-hidden bg-olive max-lg:h-[604px]">
             {/* Figma 10994:214 (already upright), its shapes joined into one path so no seams show between
-                them. 1440 wide and centred on the page, so the banner crops 80px each side. */}
+                them. 1440 wide and centred on the page, so the banner crops 80px each side. Mobile: the
+                same strip centred on the banner (Figma 11006:49362, left −547). */}
             <img
               src={zigzag}
               width={1439.57}
@@ -86,40 +92,49 @@ export function SiteFooter() {
               className="pointer-events-none absolute bottom-0 left-1/2 h-[89.8956px] w-[1439.57px] max-w-none -translate-x-1/2"
             />
             {/* 490 wide at (650, 8). Figma's 546 tall runs 8px past the banner; that part is never seen,
-                so the image stops at the banner edge (538). Transparency recovered from the original. */}
-            <img
-              src={phone.src}
-              srcSet={`${phone.src} 1x, ${phone.src2x} 2x`}
-              width={phone.width}
-              height={phone.height}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              className="pointer-events-none absolute top-2 left-[650px] h-[538px] w-[490px] max-w-none"
-            />
-            <div className="absolute top-[109px] left-[127px] flex w-[404px] flex-col items-start gap-10 max-md:right-gutter max-md:left-gutter max-md:w-auto">
-              <h2 className="text-conversion-headline text-dark">
+                so the image stops at the banner edge (538). Transparency recovered from the original.
+                Mobile: Figma's own crop (11006:49364), 253 × 307, centred on the banner's bottom edge. */}
+            <picture>
+              <source media="(max-width: 1023px)" srcSet={`${phoneMobile.src} 1x, ${phoneMobile.src2x} 2x`} />
+              <img
+                src={phone.src}
+                srcSet={`${phone.src} 1x, ${phone.src2x} 2x`}
+                width={phone.width}
+                height={phone.height}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="pointer-events-none absolute top-2 left-[650px] h-[538px] w-[490px] max-w-none max-lg:top-auto max-lg:bottom-0 max-lg:left-1/2 max-lg:h-[307px] max-lg:w-[253px] max-lg:-translate-x-1/2"
+              />
+            </picture>
+            {/* Mobile: 243 wide and centred, 50px from the top (Figma 11006:49365). */}
+            <div className="absolute top-[109px] left-[127px] flex w-[404px] flex-col items-start gap-10 max-lg:top-[50px] max-lg:left-1/2 max-lg:w-[243px] max-lg:-translate-x-1/2 max-lg:items-center">
+              <h2 className="text-conversion-headline text-dark max-lg:text-center max-lg:text-conversion-headline-mobile">
                 <span className="text-dark/50">Own a share.</span> Expand your possibilities.
               </h2>
-              {/* Section 3's outline button: 17px + 1px border = 18px, 10px to the arrow (Figma) → 180 wide. */}
+              {/* Section 3's outline button: 17px + 1px border = 18px, 10px to the arrow (Figma) → 180 wide.
+                  Mobile: 162 × 48 with the 14px label (Figma 11006:49367). */}
               <a
                 href="#get-started"
-                className={`${buttonBase} h-13 gap-2.5 border border-black px-[17px] text-black hover:bg-black hover:text-white ${focusRing}`}
+                className={`${buttonBase} h-13 gap-2.5 border border-black px-[17px] text-black hover:bg-black hover:text-white max-lg:h-12 max-lg:text-button-sm ${focusRing}`}
               >
                 Start Investing
-                <ArrowRightIcon className="shrink-0" />
+                <ArrowRightIcon className="shrink-0 max-lg:size-5" />
               </a>
             </div>
           </div>
 
-          <div className="mt-[100px] flex flex-col gap-[50px]">
-            <div className="flex flex-wrap items-start justify-between gap-[50px]">
+          {/* Mobile: 80px below the banner; logo, 40px, the columns (40px between wrapped rows). */}
+          <div className="mt-[100px] flex flex-col gap-[50px] max-lg:mt-20">
+            <div className="flex flex-wrap items-start justify-between gap-[50px] max-lg:flex-col max-lg:flex-nowrap max-lg:gap-10">
               <a href="/" aria-label="Fraqshares home" className={`shrink-0 ${focusRingOnDark}`}>
-                <img src={logoFooter} width={200} height={34.1271} alt="" className="block h-[34.1271px] w-[200px]" />
+                <img src={logoFooter} width={200} height={34.1271} alt="" className="block h-[34.1271px] w-[200px] max-lg:h-[25.5953px] max-lg:w-[150px]" />
               </a>
 
               <div className="flex w-[679px] max-w-full flex-col gap-[50px]">
-                <nav aria-label="Footer" className="flex flex-wrap gap-x-24 gap-y-[50px]">
+                {/* Mobile: Products and Company share the first row (Figma: 96px apart); on phones narrower than 393
+                    the gap gives way first (Products 91 + Company 146 + a little slack = 240), so they still do. */}
+                <nav aria-label="Footer" className="flex flex-wrap gap-x-24 gap-y-[50px] max-lg:gap-x-[min(96px,calc(100%-240px))] max-lg:gap-y-10">
                   {columns.map(({ heading, links }) => (
                     <div key={heading} className="flex flex-col gap-4">
                       <h2 className="text-footer-heading text-mint">{heading}</h2>
@@ -142,7 +157,8 @@ export function SiteFooter() {
 
                 {divider}
 
-                <div className="flex flex-col gap-6 text-body text-step-body">
+                {/* Paragraphs a blank line apart (1.5em: 24px, mobile 21px as Figma's empty lines). */}
+                <div className="flex flex-col gap-6 text-body text-step-body max-lg:gap-[21px] max-lg:text-legal-mobile">
                   <p>
                     Fraqshares makes fractional ownership in real estate, land, and businesses more accessible to
                     Africans at home and abroad. Discover opportunities to diversify your portfolio without purchasing
@@ -172,10 +188,11 @@ export function SiteFooter() {
 
             {divider}
 
-            <div className="flex min-h-7 flex-wrap items-center justify-between gap-6">
+            {/* Mobile: stacked, 32px apart, left-aligned; the copyright line at 14px (Figma 11006:49417). */}
+            <div className="flex min-h-7 flex-wrap items-center justify-between gap-6 max-lg:flex-col max-lg:items-start max-lg:gap-8">
               <p className="flex items-center gap-[7px] opacity-80">
                 <img src={copyrightIcon} width={20} height={20} alt="" className="shrink-0" />
-                <span className="text-footer-link font-medium tracking-[-0.03em] text-footer-muted">
+                <span className="text-footer-link font-medium tracking-[-0.03em] text-footer-muted max-lg:text-legal-mobile max-lg:leading-[normal]">
                   {year} Fraqshares. All Rights Reserved
                 </span>
               </p>

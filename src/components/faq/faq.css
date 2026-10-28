@@ -25,6 +25,21 @@
   position: relative;
 }
 
+/* Mobile (Figma 11006:49254): the panel is full bleed (24px past the column, the section's padding)
+   and ends 19px below the answer, so it no longer covers the divider below; that one fades out
+   with it instead. */
+@media (max-width: 1023.98px) {
+  [data-faq-item]::before {
+    inset: -30px -24px -19px;
+  }
+  [data-faq-divider] {
+    transition: opacity 300ms ease;
+  }
+  [data-faq-item][data-open] + [data-faq-divider] {
+    opacity: 0;
+  }
+}
+
 /* Answer height: grid rows 0fr → 1fr. The 16px gap lives inside, so a closed item has none.
    visibility follows the close so collapsed answers drop out of the tab order and reading order. */
 [data-faq-answer] {
@@ -57,6 +72,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   [data-faq-item]::before,
+  [data-faq-divider],
   [data-faq-answer],
   :root[data-js] [data-faq-item]:not([data-open]) [data-faq-answer],
   [data-faq-icon] {

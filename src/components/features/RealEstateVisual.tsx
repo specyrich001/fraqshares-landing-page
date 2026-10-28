@@ -302,6 +302,7 @@ export function RealEstateVisual({ active, playing }: VisualProps) {
   return (
     <Visual background="var(--color-forest)">
       <div ref={rootRef} data-card3 data-anim={pending ? 'pending' : undefined} className="absolute inset-0">
+        {/* Not lazy: the carousel clips off-screen cards, so a lazy image would only load as its card slides in. */}
         <img
           data-feature-photo
           src={house.src}
@@ -310,7 +311,7 @@ export function RealEstateVisual({ active, playing }: VisualProps) {
           width={house.width}
           height={house.height}
           alt=""
-          loading="lazy"
+          fetchPriority="low"
           className="absolute inset-0 size-full object-cover"
         />
         <div data-feature-stack>

@@ -1,0 +1,25 @@
+/*
+ * Step 3's listing cards (ListingsGraphic): all six sit in the centre slot; this places each one by
+ * its starting ring slot, which is Figma's layout (no JS, reduced motion, and before the script runs).
+ * The script then sets the same values inline. One slot is 313.12px; side cards are 252 / 305 at 50%.
+ */
+[data-listings] [data-listing-slot] {
+  transform: translateX(calc(var(--slot) * 313.12px)) scale(0.82623);
+  opacity: 0.5;
+}
+[data-listings] [data-listing-slot='-2'] {
+  --slot: -2;
+}
+[data-listings] [data-listing-slot='-1'] {
+  --slot: -1;
+}
+[data-listings] [data-listing-slot='0'] {
+  transform: none;
+  opacity: 1;
+}
+[data-listings] [data-listing-slot='1'] {
+  --slot: 1;
+}
+[data-listings] [data-listing-slot='2'] {
+  --slot: 2;
+}

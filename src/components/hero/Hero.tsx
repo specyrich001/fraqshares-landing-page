@@ -5,6 +5,7 @@ import { useRef, type ReactNode } from 'react'
 import images from '../../generated/images.json'
 import { ArrowRightIcon } from '../icons/ArrowRightIcon.tsx'
 import { buttonBase, focusRingOnDark } from '../linkStyles.ts'
+import { useMediaQuery } from '../../motion/useMediaQuery.ts'
 import { HeroActivityFeed } from './HeroActivityFeed.tsx'
 import { HERO_COPY_SHOWN } from './heroEvents.ts'
 import { heroIntroTiming as I } from './heroIntroTiming.ts'
@@ -30,9 +31,11 @@ const PARALLAX_MEDIA = '(hover: hover) and (pointer: fine) and (prefers-reduced-
 gsap.registerPlugin(SplitText, useGSAP)
 
 const photo = images['hero/photo']
+const photoMobile = images['hero/photo-mobile']
 const grain = images['hero/grain']
 
-const button = `${buttonBase} h-13 px-4.5 ${focusRingOnDark}`
+/** Mobile (Figma 11003:15488): 48px tall, 14px labels, a 20px arrow. */
+const button = `${buttonBase} h-13 px-4.5 max-lg:h-12 max-lg:text-button-sm ${focusRingOnDark}`
 
 /*
  * Figma: Hero Section (10799:25074), 1440 × 921 from the top of the page. The fixed SiteHeader
@@ -55,8 +58,16 @@ const button = `${buttonBase} h-13 px-4.5 ${focusRingOnDark}`
  * the photo's 1772.9 : 921 ratio, anchored by the same 52.27% / 74.05% as object-position (left/top
  * of the section minus that share of its own size). Inside it the phone is at (74.17%, 74.05%); the
  * feed's dot is at (153, 479) in the feed, so the feed goes at those minus 153px / 479px
- * (988, 203 at 1440 × 921). Hidden below 1200px, where it would run off the right edge (mobile
- * design pending).
+ * (988, 203 at 1440 × 921). Hidden below 1200px, where it would run off the right edge, and not
+ * rendered at all below 1024px (no animation either).
+ *
+ * Mobile, below 1024px (Figma 11027:49948, 393 × 749): under the 80px bar, at least 749px tall, the
+ * copy on the bottom 175px above the edge, 24px sides. The headline is 46px (on request; Figma's frame
+ * has 42), so it grows upward from Figma's position. No feed, no grain. The photo is art-directed:
+ * Figma covers a 393 × 849 box from y −100 with the whole (flipped) image, centred, so 393px shows
+ * source columns 691–1308 and rows 157–1333. photo-mobile is that region widened to 1200 columns
+ * (room for wider phones and tablets), bottom-anchored; at 393 × 749 it lands exactly on Figma's.
+ * The gradient there spans the 849px box, so the visible top starts at 12% black, not 0.
  */
 const photoBox =
   'pointer-events-none absolute top-[74.05%] left-[52.27%] hidden aspect-[1772.9/921] h-full min-w-full -translate-x-[52.27%] -translate-y-[74.05%] min-[1200px]:block'
@@ -68,6 +79,7 @@ const feedPosition = 'absolute top-[calc(74.05%_-_479px)] left-[calc(74.17%_-_15
  */
 export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
   const sectionRef = useRef<HTMLElement>(null)
+  const desktop = useMediaQuery('(min-width: 1024px)')
 
   // Intro (heroIntroTiming): runs once on load, never with reduced motion. It animates the text
   // elements themselves, so it can't collide with the scroll transition, which moves their wrapper.
@@ -175,59 +187,66 @@ export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
       id="hero"
       data-hero
       aria-labelledby="hero-title"
-      className="relative flex min-h-[max(100svh,704px)] flex-col justify-end overflow-hidden bg-black"
+      className="relative flex min-h-[max(100svh,704px)] flex-col justify-end overflow-hidden bg-black max-lg:min-h-[749px]"
     >
       {/* 1. Photo (LCP): eager + high priority. Rendered width is max(100vw, 1773px) at desktop height.
           Inside the parallax layer (PARALLAX), which the scroll transition never touches. */}
       <div data-hero-parallax className="absolute inset-0">
-        <img
-          src={photo.src}
-          srcSet={photo.srcset}
-          sizes="max(100vw, 1773px)"
-          width={photo.width}
-          height={photo.height}
-          alt=""
-          loading="eager"
-          fetchPriority="high"
-          data-hero-photo
-          className="absolute inset-0 size-full object-cover object-[52.27%_74.05%] group-data-staged/stage:will-change-transform"
-        />
+        <picture>
+          {/* Mobile crop: rendered max(100vw, 765px) wide at 749px tall. */}
+          <source media="(max-width: 1023px)" srcSet={photoMobile.srcset} sizes="max(100vw, 765px)" />
+          <img
+            src={photo.src}
+            srcSet={photo.srcset}
+            sizes="max(100vw, 1773px)"
+            width={photo.width}
+            height={photo.height}
+            alt=""
+            loading="eager"
+            fetchPriority="high"
+            data-hero-photo
+            className="absolute inset-0 size-full object-cover object-[52.27%_74.05%] group-data-staged/stage:will-change-transform max-lg:object-[50%_100%]"
+          />
+        </picture>
       </div>
       {/* 2. Gradient: transparent → black over the full section, as in Figma. The clear top keeps the nav readable. */}
-      <div aria-hidden="true" data-hero-gradient className="absolute inset-0 bg-linear-to-b from-black/0 to-black" />
-      {/* 3. Grain: 432×288 tile from the top-left, 10% opacity. */}
+      <div aria-hidden="true" data-hero-gradient className="absolute inset-0 bg-linear-to-b from-black/0 to-black max-lg:from-black/[0.12]" />
+      {/* 3. Grain: 432×288 tile from the top-left, 10% opacity. Desktop only. */}
       <div
         aria-hidden="true"
         data-hero-grain
-        className="pointer-events-none absolute inset-0 bg-[length:432px_288px] bg-top-left bg-repeat opacity-10"
+        className="pointer-events-none absolute inset-0 bg-[length:432px_288px] bg-top-left bg-repeat opacity-10 max-lg:hidden"
         style={{ backgroundImage: `url(${grain.src})` }}
       />
 
       {transitionMedia}
 
       {/* 4. Content, on the bottom: 130px under the buttons (Figma). The top padding only keeps it clear
-          of the 88px header when the text wraps tall (narrow screens, zoom). */}
-      <div data-hero-content className="page-row relative pt-[128px] pb-[130px]">
+          of the 88px header when the text wraps tall (narrow screens, zoom). Mobile: 175px under the
+          buttons, 24px sides, the header above rather than over it; tablets cap the column at 560px. */}
+      <div data-hero-content className="page-row relative pt-[128px] pb-[130px] max-lg:max-w-[560px] max-lg:px-6 max-lg:pt-10 max-lg:pb-[175px]">
         <div className="max-w-[638px]">
+          {/* Mobile: up to 363px wide, past the 345 column (as in Figma 11003:15488), so "estate &
+              businesses" stays on one line at 46px. */}
           {/* The 1.0 line box is too tight for the masks' clip: descenders and the ampersand would be cut.
               Widen what each mask shows with a clip-path past its box (no margins: they collapse between
               stacked lines, making the split headline taller and jumping when it's reverted). */}
           <h1
             id="hero-title"
-            className="text-hero-h1 text-white [&_.hero-line-mask]:overflow-visible! [&_.hero-line-mask]:[clip-path:inset(-0.2em_-0.15em_-0.25em)]"
+            className="text-hero-h1 text-white max-lg:w-[min(363px,calc(100vw-30px))] max-lg:text-hero-h1-mobile [&_.hero-line-mask]:overflow-visible! [&_.hero-line-mask]:[clip-path:inset(-0.2em_-0.15em_-0.25em)]"
           >
             Buy, sell, and
             <br />
             own shares in real estate &amp; businesses
           </h1>
-          <p data-hero-paragraph className="mt-[18px] max-w-[557px] text-body-main text-white/70">
+          <p data-hero-paragraph className="mt-[18px] max-w-[557px] text-body-main text-white/70 max-lg:text-body-main-mobile">
             Diversify your portfolio with income and growth potential, without the management hassle
           </p>
           <div data-hero-ctas className="mt-12 flex flex-wrap gap-4">
             {/* Figma: 10px between label and arrow (18 + 110 + 10 + 24 + 18 = 180). */}
             <a href="#get-started" className={`${button} gap-2.5 bg-forest text-white hover:bg-olive hover:text-strong`}>
               Start Investing
-              <ArrowRightIcon className="shrink-0" />
+              <ArrowRightIcon className="shrink-0 max-lg:size-5" />
             </a>
             <a href="#how-it-works" className={`${button} bg-white text-black hover:bg-mint`}>
               Learn More
@@ -239,7 +258,7 @@ export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
       {/* The feed's layer moves exactly as the photo's, so the dot stays on the phone. */}
       <div data-hero-parallax className="pointer-events-none absolute inset-0">
         <div aria-hidden="true" className={photoBox}>
-          <HeroActivityFeed className={feedPosition} />
+          {desktop && <HeroActivityFeed className={feedPosition} />}
         </div>
       </div>
     </section>

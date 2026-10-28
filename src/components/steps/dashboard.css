@@ -1,0 +1,27 @@
+/*
+ * Step 5's dashboard cards (DashboardGraphic): all six sit in the front slot; this places them in
+ * Figma's stack for the static state (no JS, reduced motion, and before the script runs): card 0 in
+ * front, 1 in the middle (327 / 366, 55px lower), 2 at the back (299 / 366, 92.52px lower), the
+ * spares hidden. The script then sets the same values inline.
+ */
+[data-dashboard] [data-dash-slot='0'] {
+  z-index: 3;
+}
+[data-dashboard] [data-dash-slot='0'] [data-dash-shadow] {
+  opacity: 0.8;
+}
+[data-dashboard] [data-dash-slot='1'] {
+  z-index: 2;
+  transform: translateY(55px) scale(0.89344);
+}
+[data-dashboard] [data-dash-slot='2'] {
+  z-index: 1;
+  transform: translateY(92.52px) scale(0.81694);
+}
+[data-dashboard] [data-dash-slot='2'] [data-dash-shadow] {
+  opacity: 0;
+}
+[data-dashboard] :is([data-dash-slot='3'], [data-dash-slot='4'], [data-dash-slot='5']) {
+  opacity: 0;
+  transform: translateY(92.52px) scale(0.81694);
+}

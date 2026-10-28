@@ -93,6 +93,7 @@ function VerifiedItem({ image, title, meta, item }: ItemProps) {
       <div data-verify-fill className="absolute inset-0 bg-white" />
       <div className="relative flex h-full items-center justify-between px-3 py-[13.93px]">
         <div className="flex items-center gap-[14px]">
+          {/* Not lazy: the carousel clips off-screen cards, so a lazy image would only load as its card slides in. */}
           <img
             data-verify-thumb
             src={image.src}
@@ -101,7 +102,7 @@ function VerifiedItem({ image, title, meta, item }: ItemProps) {
             width={image.width}
             height={image.height}
             alt=""
-            loading="lazy"
+            fetchPriority="low"
             className="h-[80.104px] w-[94.3px] shrink-0 object-cover"
           />
           <div className="flex w-[137.855px] flex-col gap-[2.419px] leading-[1.4]">

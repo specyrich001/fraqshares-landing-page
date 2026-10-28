@@ -45,6 +45,17 @@ export const cardStates = {
   c: { stacked: -5, split: -3, x: 386.27 },
 } as const
 
+/**
+ * Mobile (below 1024px): no pin, the column scrolls. The heading is sticky on the screen's centre
+ * (testimonials.css) and dims over this stretch of card A's scroll: from A's top reaching the
+ * heading's bottom (the heading is 120px tall) to A's centre covering it.
+ */
+export const testimonialsMobile = {
+  fade: { start: 'top center+=60', end: 'center center' },
+} as const
+
 /** Pinned at 1024px and up with motion allowed; otherwise the static split layout. */
 export const TESTIMONIALS_MEDIA = '(min-width: 1024px) and (prefers-reduced-motion: no-preference)'
 export const FIT_MEDIA = '(min-width: 1024px)'
+/** Below 1024px with motion allowed: the mobile pinned sequence; otherwise the static column. */
+export const TESTIMONIALS_MOBILE_MEDIA = '(max-width: 1023.98px) and (prefers-reduced-motion: no-preference)'

@@ -7,6 +7,7 @@ import './faq.css'
 import { faqs } from './faqContent.ts'
 
 const glow = images['faq/glow']
+const glowMobile = images['faq/glow-mobile']
 
 /** FAQPage structured data from the same copy as the accordion. `<` escaped so the JSON can't close the script. */
 const structuredData = JSON.stringify({
@@ -19,7 +20,7 @@ const structuredData = JSON.stringify({
   })),
 }).replace(/</g, '\\u003c')
 
-const divider = <div aria-hidden="true" className="-mt-px border-t border-black/8" />
+const divider = <div aria-hidden="true" data-faq-divider className="-mt-px border-t border-black/8" />
 
 /**
  * Figma: Desktop - 16 (10810:75864), 1440 × 1472.
@@ -28,6 +29,10 @@ const divider = <div aria-hidden="true" className="-mt-px border-t border-black/
  * closed. Each question is a button in an h3 controlling its answer region. The answer opens with
  * grid rows 0fr → 1fr; the white panel and the plus/minus icons crossfade (faq.css).
  * Dividers take no height (Figma draws its 1px lines in the row above), so items sit 48px apart.
+ *
+ * Mobile, below 1024px (Figma 11006:49244, 393 × 1371): the same structure in a 345px column (24px
+ * padding, capped at 560 on tablets), 100px top and bottom; 16px questions with their icon centred
+ * on them, 14px answers, a full-bleed open panel (faq.css), and Figma's own 393 × 200 blur.
  */
 export function FaqSection() {
   const [open, setOpen] = useState<number | null>(0)
@@ -37,28 +42,32 @@ export function FaqSection() {
       id="faq"
       aria-labelledby="faq-title"
       // z-10: slides up over the footer (SiteFooter reveal).
-      className="relative z-10 overflow-hidden bg-soft pt-[130px] pb-[178px]"
+      className="relative z-10 overflow-hidden bg-soft pt-[130px] pb-[178px] max-lg:pt-[100px] max-lg:pb-[100px]"
     >
       {/* The shared green blur, Figma's crop and +0.58 tint baked in (assets-src/faq/glow.derive.json),
-          1440 × 357 on the section's bottom edge. Stretches with the width, as Figma's frame does. */}
-      <img
-        src={glow.src}
-        srcSet={glow.srcset}
-        sizes="100vw"
-        width={glow.width}
-        height={glow.height}
-        alt=""
-        loading="lazy"
-        decoding="async"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[357px] w-full max-w-none"
-      />
+          1440 × 357 on the section's bottom edge. Stretches with the width, as Figma's frame does.
+          Mobile: Figma's export of its own mobile blur (11006:49245), 393 × 200. */}
+      <picture>
+        <source media="(max-width: 1023px)" srcSet={`${glowMobile.src} 1x, ${glowMobile.src2x} 2x`} />
+        <img
+          src={glow.src}
+          srcSet={glow.srcset}
+          sizes="100vw"
+          width={glow.width}
+          height={glow.height}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[357px] w-full max-w-none max-lg:h-[200px]"
+        />
+      </picture>
 
-      <div className="page-row relative flex flex-col items-center">
-        <h2 id="faq-title" className="w-[433px] max-w-full text-center text-section-h2 leading-none text-muted">
+      <div className="page-row relative flex flex-col items-center max-lg:max-w-[560px] max-lg:px-6">
+        <h2 id="faq-title" className="w-[433px] max-w-full text-center text-section-h2 leading-none text-muted max-lg:w-[271px] max-lg:text-section-h2-mobile">
           Frequently <span className="text-strong">Asked Questions</span>
         </h2>
 
-        <div className="mt-20 flex w-[651px] max-w-full flex-col gap-6">
+        <div className="mt-20 flex w-[651px] max-w-full flex-col gap-6 max-lg:mt-[90px] max-lg:w-full">
           {faqs.map(({ question, answer }, i) => {
             const isOpen = open === i
             const buttonId = `faq-q-${i + 1}`
@@ -74,11 +83,12 @@ export function FaqSection() {
                       aria-expanded={isOpen}
                       aria-controls={answerId}
                       onClick={() => setOpen(isOpen ? null : i)}
-                      className={`flex w-full cursor-pointer items-start justify-between gap-2 text-left text-faq-question text-strong ${focusRing}`}
+                      className={`flex w-full cursor-pointer items-start justify-between gap-2 text-left text-faq-question text-strong max-lg:items-center max-lg:text-faq-question-mobile ${focusRing}`}
                     >
                       <span>{question}</span>
-                      {/* 24px icon, centred on the 28px first line and staying top-right when the question wraps. */}
-                      <span aria-hidden="true" className="relative mt-0.5 size-6 shrink-0">
+                      {/* 24px icon, centred on the 28px first line and staying top-right when the question wraps.
+                          Mobile: centred on the whole question, wrapped or not (Figma 11006:49291). */}
+                      <span aria-hidden="true" className="relative mt-0.5 size-6 shrink-0 max-lg:mt-0">
                         <img data-faq-icon="closed" src={addSquare} width={24} height={24} alt="" className="absolute inset-0" />
                         <img data-faq-icon="open" src={minusSquare} width={24} height={24} alt="" className="absolute inset-0" />
                       </span>
@@ -86,7 +96,7 @@ export function FaqSection() {
                   </h3>
                   <div id={answerId} role="region" aria-labelledby={buttonId} data-faq-answer>
                     <div>
-                      <p className="m-0 pt-4 text-faq-answer text-step-body">{answer}</p>
+                      <p className="m-0 pt-4 text-faq-answer text-step-body max-lg:text-faq-answer-mobile">{answer}</p>
                     </div>
                   </div>
                 </div>
@@ -96,15 +106,17 @@ export function FaqSection() {
           {divider}
         </div>
 
-        <div className="mt-20 flex flex-col items-center gap-10">
-          <p className="m-0 w-[522px] max-w-full text-center text-intro-body leading-normal text-black">
+        <div className="mt-20 flex flex-col items-center gap-10 max-lg:mt-[100px]">
+          {/* Mobile: 20px / 150% (Figma 11006:49356). */}
+          <p className="m-0 w-[522px] max-w-full text-center text-intro-body leading-normal text-black max-lg:w-[314px] max-lg:text-body-main max-lg:leading-normal">
             Still Have Questions? We’re here to help you understand how Fraqshares works
           </p>
           {/* Outline button as section 3's, without the arrow. 17px + 1px border = Figma's 18px.
+              Mobile: 48px tall with the 14px label (Figma 110 × 48).
               PLACEHOLDER href: no contact page or anchor exists yet. */}
           <a
             href="#contact"
-            className={`${buttonBase} h-13 border border-black px-[17px] text-black hover:bg-black hover:text-white ${focusRing}`}
+            className={`${buttonBase} h-13 border border-black px-[17px] text-black hover:bg-black hover:text-white max-lg:h-12 max-lg:text-button-sm ${focusRing}`}
           >
             Contact Us
           </a>

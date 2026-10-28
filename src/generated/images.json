@@ -1,4 +1,10 @@
 {
+  "faq/glow-mobile": {
+    "width": 393,
+    "height": 200,
+    "src": "/images/faq/glow-mobile.webp",
+    "src2x": "/images/faq/glow-mobile@2x.webp"
+  },
   "faq/glow": {
     "width": 1304,
     "height": 323,
@@ -41,6 +47,12 @@
     "src": "/images/features/villa-95.webp",
     "srcset": "/images/features/villa-95.webp 95w, /images/features/villa-189.webp 189w"
   },
+  "footer/phone-hand-mobile": {
+    "width": 253,
+    "height": 307,
+    "src": "/images/footer/phone-hand-mobile.webp",
+    "src2x": "/images/footer/phone-hand-mobile@2x.webp"
+  },
   "footer/phone-hand": {
     "width": 490,
     "height": 538,
@@ -51,6 +63,12 @@
     "width": 432,
     "height": 288,
     "src": "/images/hero/grain.webp"
+  },
+  "hero/photo-mobile": {
+    "width": 765,
+    "height": 750,
+    "src": "/images/hero/photo-mobile-765.webp",
+    "srcset": "/images/hero/photo-mobile-765.webp 765w, /images/hero/photo-mobile-1200.webp 1200w"
   },
   "hero/photo": {
     "width": 1440,
@@ -77,10 +95,10 @@
     "srcset": "/images/steps/buy-units-255.webp 255w, /images/steps/buy-units-511.webp 511w"
   },
   "steps/dashboard-back": {
-    "width": 299,
-    "height": 156,
-    "src": "/images/steps/dashboard-back-299.webp",
-    "srcset": "/images/steps/dashboard-back-299.webp 299w, /images/steps/dashboard-back-598.webp 598w"
+    "width": 366,
+    "height": 191,
+    "src": "/images/steps/dashboard-back-366.webp",
+    "srcset": "/images/steps/dashboard-back-366.webp 366w, /images/steps/dashboard-back-732.webp 732w"
   },
   "steps/dashboard-front": {
     "width": 366,
@@ -89,10 +107,10 @@
     "srcset": "/images/steps/dashboard-front-366.webp 366w, /images/steps/dashboard-front-732.webp 732w"
   },
   "steps/dashboard-middle": {
-    "width": 327,
-    "height": 171,
-    "src": "/images/steps/dashboard-middle-327.webp",
-    "srcset": "/images/steps/dashboard-middle-327.webp 327w, /images/steps/dashboard-middle-654.webp 654w"
+    "width": 366,
+    "height": 191,
+    "src": "/images/steps/dashboard-middle-366.webp",
+    "srcset": "/images/steps/dashboard-middle-366.webp 366w, /images/steps/dashboard-middle-732.webp 732w"
   },
   "steps/fund-wallet": {
     "width": 297,
@@ -113,22 +131,52 @@
     "srcset": "/images/steps/listing-center-305.webp 305w, /images/steps/listing-center-610.webp 610w"
   },
   "steps/listing-left": {
-    "width": 252,
-    "height": 253,
-    "src": "/images/steps/listing-left-252.webp",
-    "srcset": "/images/steps/listing-left-252.webp 252w, /images/steps/listing-left-504.webp 504w"
+    "width": 305,
+    "height": 306,
+    "src": "/images/steps/listing-left-305.webp",
+    "srcset": "/images/steps/listing-left-305.webp 305w, /images/steps/listing-left-610.webp 610w"
   },
   "steps/listing-right": {
-    "width": 252,
-    "height": 253,
-    "src": "/images/steps/listing-right-252.webp",
-    "srcset": "/images/steps/listing-right-252.webp 252w, /images/steps/listing-right-504.webp 504w"
+    "width": 305,
+    "height": 306,
+    "src": "/images/steps/listing-right-305.webp",
+    "srcset": "/images/steps/listing-right-305.webp 305w, /images/steps/listing-right-610.webp 610w"
   },
-  "steps/sign-up": {
+  "steps/sign-up-reference/state-1": {
     "width": 321,
     "height": 462,
-    "src": "/images/steps/sign-up-321.webp",
-    "srcset": "/images/steps/sign-up-321.webp 321w, /images/steps/sign-up-642.webp 642w"
+    "src": "/images/steps/sign-up-reference/state-1-321.webp",
+    "srcset": "/images/steps/sign-up-reference/state-1-321.webp 321w, /images/steps/sign-up-reference/state-1-642.webp 642w"
+  },
+  "steps/sign-up-reference/state-2": {
+    "width": 321,
+    "height": 462,
+    "src": "/images/steps/sign-up-reference/state-2-321.webp",
+    "srcset": "/images/steps/sign-up-reference/state-2-321.webp 321w, /images/steps/sign-up-reference/state-2-642.webp 642w"
+  },
+  "steps/sign-up-reference/state-3": {
+    "width": 321,
+    "height": 328,
+    "src": "/images/steps/sign-up-reference/state-3-321.webp",
+    "srcset": "/images/steps/sign-up-reference/state-3-321.webp 321w, /images/steps/sign-up-reference/state-3-642.webp 642w"
+  },
+  "steps/sign-up-reference/state-4": {
+    "width": 321,
+    "height": 462,
+    "src": "/images/steps/sign-up-reference/state-4-321.webp",
+    "srcset": "/images/steps/sign-up-reference/state-4-321.webp 321w, /images/steps/sign-up-reference/state-4-642.webp 642w"
+  },
+  "steps/sign-up-reference/state-5": {
+    "width": 321,
+    "height": 328,
+    "src": "/images/steps/sign-up-reference/state-5-321.webp",
+    "srcset": "/images/steps/sign-up-reference/state-5-321.webp 321w, /images/steps/sign-up-reference/state-5-642.webp 642w"
+  },
+  "wealth/bottom-blur-mobile": {
+    "width": 393,
+    "height": 200,
+    "src": "/images/wealth/bottom-blur-mobile.webp",
+    "src2x": "/images/wealth/bottom-blur-mobile@2x.webp"
   },
   "wealth/bottom-blur": {
     "width": 1440,

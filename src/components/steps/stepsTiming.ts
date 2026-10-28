@@ -46,8 +46,20 @@ export const stepsTiming = {
   indicatorMs: 300,
 } as const
 
+/**
+ * Mobile pinned sequence (below 1024px): no squares, so steps switch with a timed crossfade when the
+ * scroll crosses a transition's switch point. Seconds.
+ */
+export const stepsMobile = {
+  crossfade: { duration: 0.4, ease: 'power2.out', outScale: 0.96, inScale: 1.04 },
+  /** While pinned, the lowest indicator stays at least this far above the screen's bottom edge, px. */
+  edge: 24,
+} as const
+
 export const STEPS_COUNT = 5
 
 /** Where the pinned sequence runs. Narrower: the five steps render as stacked static blocks. */
 export const STEPS_MEDIA = '(min-width: 1024px)'
+/** Below it, the mobile pinned sequence (stepsMobile). */
+export const MOBILE_MEDIA = '(max-width: 1023.98px)'
 export const REDUCED_MEDIA = '(prefers-reduced-motion: reduce)'

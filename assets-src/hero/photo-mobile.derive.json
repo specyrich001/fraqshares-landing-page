@@ -1,0 +1,6 @@
+{
+  "source": "photo.jpg",
+  "flop": true,
+  "crop": { "left": 400, "top": 157, "width": 1200, "height": 1176 },
+  "widths": [765, 1200]
+}
