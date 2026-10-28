@@ -21,7 +21,21 @@ function dropDevOnlyImages(): Plugin {
   }
 }
 
+/**
+ * %SITE_URL% in index.html: link previews need absolute URLs (og:image, og:url). SITE_URL if set,
+ * else Vercel's production domain (VERCEL_PROJECT_PRODUCTION_URL, set on Vercel builds; the custom
+ * domain once there is one), else empty (relative URLs, fine locally).
+ */
+function siteUrl(): Plugin {
+  const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  const url = (process.env.SITE_URL ?? (vercel ? `https://${vercel}` : '')).replace(/\/$/, '')
+  return {
+    name: 'site-url',
+    transformIndexHtml: { order: 'pre', handler: (html) => html.replaceAll('%SITE_URL%', url) },
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), dropDevOnlyImages()],
+  plugins: [react(), tailwindcss(), dropDevOnlyImages(), siteUrl()],
 })

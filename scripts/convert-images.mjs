@@ -24,7 +24,8 @@
 // Derived assets: <name>.derive.json with "source" (a path relative to it) and the options above
 // renders another source a second way — one original, several crops/grades, no second export.
 //
-// SVGs are skipped: vectors stay SVG and are never rasterised.
+// SVGs are skipped: vectors stay SVG and are never rasterised. assets-src/meta (favicon, Open Graph
+// image) is skipped too: those need PNG/ICO/JPG, see scripts/make-meta-images.mjs.
 // Writes src/generated/images.json: width/height (1x, or the smallest width) for the <img>
 // attributes, src, and src2x or srcset.
 
@@ -42,9 +43,13 @@ const force = process.argv.includes('--force')
 const RASTER = /\.(png|jpe?g|webp|avif|tiff?)$/i
 const DERIVE = /\.derive\.json$/i
 
+/** Favicon and Open Graph sources: not WebP, made by scripts/make-meta-images.mjs. */
+const SKIP = new Set([path.join(srcDir, 'meta')])
+
 async function* walk(dir) {
   for (const entry of await readdir(dir, { withFileTypes: true }).catch(() => [])) {
     const full = path.join(dir, entry.name)
+    if (entry.isDirectory() && SKIP.has(full)) continue
     if (entry.isDirectory()) yield* walk(full)
     else if (RASTER.test(entry.name) || DERIVE.test(entry.name)) yield full
   }
