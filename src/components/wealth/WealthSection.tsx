@@ -67,7 +67,9 @@ export function WealthSection() {
           <span className="text-muted">Build wealth,</span> <span>one share at a time</span>
         </h2>
 
-        <ScaledArtboard width={473} height={649} className="shrink-0">
+        {/* Pinned on a short screen (an iPhone 14 in Safari is 390 × 664), the photo block shrinks so
+            the column fits: 262px of heading, gaps, paragraph and padding, then 473 × 649. */}
+        <ScaledArtboard width={473} height={649} className="shrink-0 max-lg:group-data-staged/stage:[--artboard-fit:calc((100svh-262px)*473/649)]">
           <div data-wealth-slot className="relative h-[649px] w-[473px] max-w-full shrink-0 overflow-hidden max-lg:max-w-none">
             <img
               src={photo.src}

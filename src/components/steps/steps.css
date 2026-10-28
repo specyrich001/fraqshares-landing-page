@@ -106,6 +106,13 @@
   min-height: 100svh;
   overflow: hidden;
 }
+/* Short screens (an iPhone 14 in Safari is 390 × 664): the frame shrinks so the heading, frame, text
+   and indicator fit the visible screen with 24px to spare above and below. The column is 345px plus
+   the frame's height (H2 88, two 50px gaps, the text and indicator 109, 2 × 24), and the frame is
+   496 × 588. Never below 160px wide (an iPhone SE, 375 × 553, needs 175); at Figma's 852 tall the column's width wins and nothing changes. */
+[data-steps][data-staged-mobile] [data-artboard] {
+  --artboard-fit: max(160px, calc((100svh - 345px) * 496 / 588));
+}
 [data-staged-mobile] [data-steps-list] {
   display: grid;
   /* The track is the list's width, not the frames' native 496px (they're scaled artboards). */

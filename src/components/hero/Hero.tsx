@@ -187,7 +187,9 @@ export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
       id="hero"
       data-hero
       aria-labelledby="hero-title"
-      className="relative flex min-h-[max(100svh,704px)] flex-col justify-end overflow-hidden bg-black max-lg:min-h-[749px]"
+      // Mobile: Figma's 749px, but never taller than the screen under the 80px header (an iPhone 14 in
+      // Safari is 390 × 664), so the copy and buttons stay clear of the bottom.
+      className="relative flex min-h-[max(100svh,704px)] flex-col justify-end overflow-hidden bg-black max-lg:min-h-[min(749px,calc(100svh-80px))]"
     >
       {/* 1. Photo (LCP): eager + high priority. Rendered width is max(100vw, 1773px) at desktop height.
           Inside the parallax layer (PARALLAX), which the scroll transition never touches. */}
@@ -224,7 +226,7 @@ export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
       {/* 4. Content, on the bottom: 130px under the buttons (Figma). The top padding only keeps it clear
           of the 88px header when the text wraps tall (narrow screens, zoom). Mobile: 175px under the
           buttons, 24px sides, the header above rather than over it; tablets cap the column at 560px. */}
-      <div data-hero-content className="page-row relative pt-[128px] pb-[130px] max-lg:max-w-[560px] max-lg:px-6 max-lg:pt-10 max-lg:pb-[175px]">
+      <div data-hero-content className="page-row relative pt-[128px] pb-[130px] max-lg:max-w-[560px] max-lg:px-6 max-lg:pt-10 max-lg:pb-[clamp(40px,calc(100svh-460px),175px)]">
         <div className="max-w-[638px]">
           {/* Mobile: up to 363px wide, past the 345 column (as in Figma 11003:15488), so "estate &
               businesses" stays on one line at 46px. */}
