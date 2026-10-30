@@ -4,8 +4,13 @@
 export const LOGIN_URL = 'https://app.fraqshares.com/auth/login'
 export const SIGNUP_URL = 'https://app.fraqshares.com/auth/signup'
 
-/** "How It Works": the Getting Started in 5 steps section. */
-export const HOW_IT_WORKS_HREF = '#getting-started'
+/** "How It Works": the Getting Started in 5 steps section, on the home page (so it works from every page). */
+export const HOW_IT_WORKS_HREF = '/#getting-started'
+
+export const ABOUT_HREF = '/about'
+
+/** The current page's path without a trailing slash ('' for home), to mark its nav link aria-current. */
+export const currentPath = () => window.location.pathname.replace(/\/$/, '')
 
 /** Social profiles, as supplied (the X, Facebook and Instagram links keep their share parameters). */
 export const SOCIAL_URLS = {

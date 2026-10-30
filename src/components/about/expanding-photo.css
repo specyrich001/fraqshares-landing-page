@@ -1,0 +1,20 @@
+/* ExpandingPhoto. Static (no JS, reduced motion): the photo fills its 1280 × 628 box in the page row.
+   Expanding ([data-expand], set by JS): the photo is the full window width and its own ratio tall,
+   centred on that box, and clip-path cuts it back to the box. The box keeps its size, so the page
+   layout never moves; only the clip opens. --bleed-* come from the component (window and box sizes). */
+[data-expanding-photo] {
+  position: relative;
+  aspect-ratio: 1279 / 628;
+}
+[data-expanding-photo] > [data-bleed] {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+[data-expanding-photo][data-expand] > [data-bleed] {
+  inset: auto;
+  left: calc(-1 * var(--bleed-left));
+  top: calc(-1 * var(--bleed-y));
+  width: var(--bleed-w);
+  height: var(--bleed-h);
+}

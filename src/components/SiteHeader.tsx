@@ -3,11 +3,11 @@ import { CloseIcon, MenuIcon } from './icons/MenuIcons.tsx'
 import { buttonBase, focusRing, focusRingOnDark } from './linkStyles.ts'
 import { Logo } from './Logo.tsx'
 import { MOBILE_MENU_ID, MobileMenu } from './MobileMenu.tsx'
-import { HOW_IT_WORKS_HREF, LOGIN_URL, SIGNUP_URL } from './siteLinks.ts'
+import { ABOUT_HREF, currentPath, HOW_IT_WORKS_HREF, LOGIN_URL, SIGNUP_URL } from './siteLinks.ts'
 
-// About, Learn and List Property are placeholders until those sections or pages exist.
+// Learn and List Property are placeholders until those pages exist.
 const links = [
-  { label: 'About', href: '#about' },
+  { label: 'About', href: ABOUT_HREF },
   { label: 'How It Works', href: HOW_IT_WORKS_HREF },
   { label: 'Learn', href: '#learn' },
   { label: 'List Property', href: '#list-property' },
@@ -33,7 +33,8 @@ const tones = {
   },
   solid: {
     logo: 'color',
-    link: `text-nav hover:text-strong ${focusRing}`,
+    // Current page: #111 instead of #606060 (not in Figma; a proposal).
+    link: `text-nav hover:text-strong aria-[current=page]:text-strong ${focusRing}`,
     login: `border-black text-black hover:bg-black hover:text-white ${focusRing}`,
     cta: `bg-black text-white hover:bg-forest ${focusRing}`,
   },
@@ -65,6 +66,8 @@ const overlayShade = {
  */
 export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
   const tone = overlay ? tones.overlay : tones.solid
+  const path = currentPath()
+  const current = (href: string) => (href === path ? 'page' : undefined)
   const [menuOpen, setMenuOpen] = useState(false)
   const [menuTop, setMenuTop] = useState(80)
   const headerRef = useRef<HTMLElement>(null)
@@ -133,6 +136,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
               <li key={link.href}>
                 <a
                   href={link.href}
+                  aria-current={current(link.href)}
                   className={`text-nav-link whitespace-nowrap transition-colors duration-150 motion-reduce:transition-none ${tone.link}`}
                 >
                   {link.label}
@@ -153,7 +157,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
         </div>
       </div>
 
-      <MobileMenu open={menuOpen} onClose={closeMenu} links={links} top={menuTop} trap={headerRef} returnFocus={menuButton} />
+      <MobileMenu open={menuOpen} onClose={closeMenu} links={links} current={path} top={menuTop} trap={headerRef} returnFocus={menuButton} />
     </header>
   )
 }

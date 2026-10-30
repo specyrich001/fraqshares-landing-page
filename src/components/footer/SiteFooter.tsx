@@ -8,7 +8,7 @@ import logoFooter from '../../assets/logo-footer.svg'
 import images from '../../generated/images.json'
 import { ArrowRightIcon } from '../icons/ArrowRightIcon.tsx'
 import { buttonBase, focusRing, focusRingOnDark } from '../linkStyles.ts'
-import { SIGNUP_URL, SOCIAL_URLS } from '../siteLinks.ts'
+import { ABOUT_HREF, SIGNUP_URL, SOCIAL_URLS } from '../siteLinks.ts'
 import { STAGE_MEDIA } from '../stage/stageTiming.ts'
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from './SocialIcons.tsx'
 
@@ -19,7 +19,9 @@ const phoneMobile = images['footer/phone-hand-mobile']
 /** Read once when the page loads. */
 const year = new Date().getFullYear()
 
-// PLACEHOLDER hrefs: none of these pages exist yet.
+// PLACEHOLDER hrefs (#) for the pages that don't exist yet.
+const hrefs: Record<string, string> = { 'About Us': ABOUT_HREF }
+
 const columns = [
   { heading: 'Products', links: ['Listings', 'Investments'] },
   { heading: 'Company', links: ['About Us', 'Terms & Conditions', 'Privacy Policy'] },
@@ -149,7 +151,7 @@ export function SiteFooter() {
                         {links.map((label) => (
                           <li key={label}>
                             <a
-                              href="#"
+                              href={hrefs[label] ?? '#'}
                               className={`text-mint/50 transition-colors duration-150 hover:text-mint focus-visible:text-mint motion-reduce:transition-none ${focusRingOnDark}`}
                             >
                               {label}

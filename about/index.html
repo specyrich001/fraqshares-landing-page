@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- PLACEHOLDER title and description (first sentence of the intro): to be confirmed. -->
+    <title>About Fraqshares</title>
+    <meta name="description" content="Fraqshares makes ownership in real estate, land, and businesses more accessible to Africans at home and abroad." />
+
+    <!-- Favicon (Figma 11041:50166): SVG for current browsers, ICO for the rest, the 180px PNG for iOS.
+         Made by scripts/make-meta-images.mjs from assets-src/meta. -->
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Link previews: the home page's image for now (Figma 11041:50172). %SITE_URL% is filled in at
+         build (vite.config.ts): previews need absolute URLs. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Fraqshares" />
+    <meta property="og:title" content="About Fraqshares" />
+    <meta property="og:description" content="Fraqshares makes ownership in real estate, land, and businesses more accessible to Africans at home and abroad." />
+    <meta property="og:url" content="%SITE_URL%/about" />
+    <meta property="og:image" content="%SITE_URL%/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Fraqshares: Own a share. Expand your possibilities. Beside it, app notifications for a new property listing, a funded wallet and a land purchase." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="About Fraqshares" />
+    <meta name="twitter:description" content="Fraqshares makes ownership in real estate, land, and businesses more accessible to Africans at home and abroad." />
+    <meta name="twitter:image" content="%SITE_URL%/og-image.jpg" />
+    <!-- Marks the page as scripted before first paint; CSS uses it to collapse the FAQ answers, which
+         otherwise stay open (no-JS fallback). -->
+    <script>document.documentElement.dataset.js = ''</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- DM Sans 400/500/700. Desktop (1024px up): no opsz axis — Figma's desktop frames are all "opsz" 14,
+         which is the cut Google serves when the axis isn't requested. Mobile: the variable font with the
+         axis, which the browser sizes automatically (CSS default): Figma's mobile frames render that way
+         (measured: the 46px hero headline matches opsz 40). Each sheet applies only at its widths, so
+         desktop loads exactly what it did before. -->
+    <link rel="stylesheet" media="(min-width: 1024px)" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" />
+    <link rel="stylesheet" media="(max-width: 1023.98px)" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/about.tsx"></script>
+  </body>
+</html>

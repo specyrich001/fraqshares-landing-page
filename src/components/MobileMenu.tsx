@@ -24,6 +24,7 @@ export function MobileMenu({
   open,
   onClose,
   links,
+  current,
   top,
   trap,
   returnFocus,
@@ -31,6 +32,8 @@ export function MobileMenu({
   open: boolean
   onClose: () => void
   links: Link[]
+  /** The current page's path: its link gets aria-current="page". */
+  current: string
   /** The bar's bottom edge on screen when the menu opened: the panel starts here. */
   top: number
   /** Focus stays inside this (the header: bar and panel). */
@@ -100,7 +103,12 @@ export function MobileMenu({
           <ul className="flex flex-col items-start gap-10">
             {links.map((link) => (
               <li key={link.href}>
-                <a href={link.href} onClick={onClose} className={`text-nav-link-mobile text-nav hover:text-strong ${focusRing}`}>
+                <a
+                  href={link.href}
+                  onClick={onClose}
+                  aria-current={link.href === current ? 'page' : undefined}
+                  className={`text-nav-link-mobile text-nav hover:text-strong aria-[current=page]:text-strong ${focusRing}`}
+                >
                   {link.label}
                 </a>
               </li>

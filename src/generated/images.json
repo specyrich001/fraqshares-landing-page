@@ -1,4 +1,10 @@
 {
+  "about/intro-photo": {
+    "width": 1440,
+    "height": 810,
+    "src": "/images/about/intro-photo-1440.webp",
+    "srcset": "/images/about/intro-photo-1440.webp 1440w, /images/about/intro-photo-1920.webp 1920w, /images/about/intro-photo-2000.webp 2000w"
+  },
   "faq/glow-mobile": {
     "width": 393,
     "height": 200,

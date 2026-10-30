@@ -18,6 +18,13 @@ const display: Token[] = [
     sample: 'Buy, sell, and own shares in real estate & businesses',
   },
   {
+    role: 'page-title',
+    cls: 'text-page-title',
+    spec: '72px / 110% / 500 / -4% · inner-page H1 (= hero-h1, 110% leading)',
+    mobile: '40px @ 375px',
+    sample: 'Building wealth should have a smaller starting point.',
+  },
+  {
     role: 'section-h2',
     cls: 'text-section-h2',
     spec: '58px / 110% / 500 / -4%',
@@ -54,6 +61,13 @@ const reading: Token[] = [
     spec: '24px / 140% / 400 / -1%',
     sample:
       'Fraqshares is your gateway to fractional ownership. Access shares of premium real estate and businesses, all through one simple platform.',
+  },
+  {
+    role: 'intro-body-tight',
+    cls: 'text-intro-body-tight text-body-muted',
+    spec: '18px / 140% / 400 / -4% · shown in text-body-muted (FLAG: -4% vs the usual -1%)',
+    sample:
+      'Through fractional investing, you can own a share of an asset without covering its full purchase price or taking on its day-to-day management.',
   },
   {
     role: 'step-title',
@@ -172,6 +186,7 @@ const colors = [
   { name: 'muted', hex: '#999999', note: '--text-muted · display sizes only' },
   { name: 'nav', hex: '#606060', note: '--text-nav · header links' },
   { name: 'secondary', hex: '#5E5E5E', note: '--text-secondary · supporting paragraphs' },
+  { name: 'body-muted', hex: 'rgba(17,17,17,0.7)', note: '--text-body-muted · #111 at 70% · inner-page intro paragraphs' },
   { name: 'meta', hex: '#767676', note: '--text-meta · product-card meta' },
   { name: 'money-in', hex: '#35B705', note: '--money-in · product-card amounts' },
   { name: 'money-out', hex: '#FD2A2A', note: '--money-out · product-card amounts' },
@@ -341,6 +356,13 @@ export default function TypeSpecimen() {
           >
             <span className="text-muted">More ways to invest.</span>{' '}
             <span className="text-strong">More possibilities to grow.</span>
+          </Row>
+          <Row
+            token={{ role: 'split-tone page title', cls: 'text-page-title', spec: 'muted #999 → strong #111, one heading (About)' }}
+            width={width}
+            as="h3"
+          >
+            <span className="text-muted">Building wealth</span> should have a smaller starting point.
           </Row>
           <Row
             token={{
