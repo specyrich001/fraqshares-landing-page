@@ -15,7 +15,7 @@ gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP)
 const handLeft = images['about/hand-left']
 const handRight = images['about/hand-right']
 
-/** DEV: ?phase=a (start: all dim), b (hands met, statement still hidden), end (final). Static, no pin. */
+/** DEV: ?phase=a (start: all dim), b (halfway through the statement and hands coming in), end (final). Static, no pin. */
 function devPhase() {
   if (!import.meta.env.DEV) return null
   const phase = new URLSearchParams(window.location.search).get('phase')
@@ -30,9 +30,9 @@ function devPhase() {
  * hides the word spans, so screen readers read plain sentences; autoSplit re-splits when fonts load
  * or the width changes.
  *
- * Phase B: when the hands + statement group is centred in the viewport the section pins (1.5
- * screens). The hands slide in from the edges (0 → 60%), the statement's lines rise in (55 → 85%)
- * with the amount last, then it holds and unpins. Before the pin the hands are off screen and the
+ * Phase B: when the statement + hands group is centred in the viewport the section pins (1.5
+ * screens). The statement's lines rise in while the hands slide in from the edges with them, the
+ * amount last (0 → 80%); then it holds and unpins. Before the pin the hands are off screen and the
  * statement transparent, so the space under the paragraphs reads as breathing room.
  *
  * The markup is the final state, which is what reduced motion and no JS get: dark text, hands met,
@@ -102,12 +102,12 @@ export function AboutStory() {
         tl.fromTo(right, { x: () => section.clientWidth - right.offsetLeft + K.offscreen, rotate: K.rotate ? K.rotateRight : 0 }, handsIn(), K.from)
         // Opacity, not autoAlpha: visibility: hidden would drop the heading from screen readers until it's in.
         tl.fromTo(lines, { opacity: 0, y: S.rise }, { opacity: 1, y: 0, duration: S.line, stagger: S.stagger, ease: S.ease }, S.from)
-        // The amount sits in line 2 and finishes after every line.
+        // The amount sits in line 2 and finishes after every line, as the hands meet.
         const amountAt = S.from + S.stagger
         tl.fromTo(amount, { opacity: 0, scale: S.amountScale }, { opacity: 1, scale: 1, duration: S.to - amountAt, ease: S.ease }, amountAt)
         // Hold to the end of the pin.
         tl.set({}, {}, 1)
-        if (frozen) tl.progress(frozen === 'end' ? 1 : frozen === 'b' ? K.to : 0)
+        if (frozen) tl.progress(frozen === 'end' ? 1 : frozen === 'b' ? K.to / 2 : 0)
 
         return () => {
           delete section.dataset.animate
@@ -118,8 +118,9 @@ export function AboutStory() {
   )
 
   return (
-    <section ref={sectionRef} data-story className="relative z-10 overflow-clip bg-soft pt-[130px] pb-[195.2px]">
-      {/* 690 wide, centred; Figma separates the paragraphs with an empty line (1.4em, 44.8px). */}
+    <section ref={sectionRef} data-story className="relative z-10 overflow-clip bg-soft pt-[130px] pb-[251px]">
+      {/* 690 wide, centred; Figma separates the paragraphs with an empty line (1.4em, 44.8px). Its box
+          ends at 667.6 (130 + 10 lines and 2 blank ones at 44.8). */}
       <div data-story-copy className="mx-auto w-[690px] max-w-[calc(100%-2*var(--spacing-gutter))] text-center text-lead-lg text-strong [&>p+p]:mt-[1.4em]">
         <p>
           Owning property or investing in a business can feel out of reach when it requires substantial capital,
@@ -133,9 +134,28 @@ export function AboutStory() {
         </p>
       </div>
 
-      {/* The pinned group (Figma y 636 → 1289): the hands row, then the statement. The row starts at
-          636, overlapping the paragraphs' box (130 + 10 lines and 2 blank ones at 44.8 = 667.6) by 31.6. */}
-      <div data-story-stage className="-mt-[31.6px]">
+      {/* The pinned group (Figma y 770 → 1232): the statement, and the hands row 90px below its top,
+          just under its last line (Figma draws the hands over the statement's box; their dots start
+          lower). The group's height is that offset plus the row, which grows above 1440. */}
+      <div data-story-stage className="relative mt-[102.4px] h-[calc(90px+max(372px,25.8333cqw))]">
+        {/* Figma y 770, 616 wide. Its three lines are part of the design ("Start with as little as /
+            ₦25,000 and build your / portfolio over time."), so they're set here rather than split at
+            runtime; each animates on its own. */}
+        <h2 className="mx-auto w-[616px] max-w-[calc(100%-2*var(--spacing-gutter))] text-center text-statement-h2 text-strong">
+          <span data-statement-line className="block">
+            Start with as little as
+          </span>{' '}
+          <span data-statement-line className="block">
+            <span data-amount className="inline-block text-olive">
+              {MIN_INVESTMENT}
+            </span>{' '}
+            and build your
+          </span>{' '}
+          <span data-statement-line className="block">
+            portfolio over time.
+          </span>
+        </h2>
+
         <div data-story-hands aria-hidden="true">
           <img
             data-hand="left"
@@ -160,24 +180,6 @@ export function AboutStory() {
             decoding="async"
           />
         </div>
-
-        {/* Figma y 1079, 616 wide. Its three lines are part of the design ("Start with as little as /
-            ₦25,000 and build your / portfolio over time."), so they're set here rather than split at
-            runtime; each animates on its own. */}
-        <h2 className="mx-auto mt-[71px] w-[616px] max-w-[calc(100%-2*var(--spacing-gutter))] text-center text-statement-h2 text-strong">
-          <span data-statement-line className="block">
-            Start with as little as
-          </span>{' '}
-          <span data-statement-line className="block">
-            <span data-amount className="inline-block text-olive">
-              {MIN_INVESTMENT}
-            </span>{' '}
-            and build your
-          </span>{' '}
-          <span data-statement-line className="block">
-            portfolio over time.
-          </span>
-        </h2>
       </div>
     </section>
   )

@@ -2,8 +2,9 @@
  * About section 2 (Figma 11049:456): every scroll position, duration and ease for its two phases.
  *
  * Phase A, highlight (no pin): the paragraphs' words go from --text-dim to #111 in reading order.
- * Phase B, hands (pinned): the hands slide in from the screen edges and meet, then the closing
- * statement rises in line by line. Its timeline runs 0 → 1 over the pin; positions are fractions.
+ * Phase B, statement + hands (pinned): the closing statement rises in line by line while the hands
+ * slide in from the screen edges and meet under it. Its timeline runs 0 → 1 over the pin; positions
+ * are fractions.
  */
 export const STORY = {
   highlight: {
@@ -19,15 +20,16 @@ export const STORY = {
     softness: 3,
   },
   pin: {
-    /** Pins when the hands + statement group's centre reaches the viewport's centre. */
+    /** Pins when the statement + hands group's centre reaches the viewport's centre. */
     start: 'center center',
     /** Pin length, in viewport heights. */
     length: 1.5,
     scrub: 0.5,
   },
+  /** The hands come in with the statement: same start, done when the amount lands. */
   hands: {
     from: 0,
-    to: 0.6,
+    to: 0.8,
     ease: 'power2.out',
     /** Extra px past the screen edge in the start state. */
     offscreen: 40,
@@ -37,18 +39,18 @@ export const STORY = {
     rotateRight: 2,
   },
   statement: {
-    from: 0.55,
-    to: 0.85,
+    from: 0,
+    to: 0.8,
     /** Each line rises from this many px below. */
     rise: 24,
     /** One line's fade, and the gap between line starts (fractions of the pin). */
-    line: 0.16,
-    stagger: 0.05,
+    line: 0.45,
+    stagger: 0.1,
     ease: 'power2.out',
     /** The amount (₦25,000) gets a beat of its own: it ends at `to`, after the lines, scaling up from this. */
     amountScale: 0.96,
   },
-  /** 0.85 → 1: hold, then unpin. */
+  /** 0.8 → 1: hold, then unpin. */
 }
 
 /** The scroll scene runs only with motion allowed; otherwise everything shows in its final state. */
