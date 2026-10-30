@@ -34,7 +34,7 @@ const tones = {
   solid: {
     logo: 'color',
     // Current page: #111 instead of #606060 (not in Figma; a proposal).
-    link: `text-nav hover:text-strong aria-[current=page]:text-strong ${focusRing}`,
+    link: `text-nav decoration-1 underline-offset-4 hover:text-strong hover:underline aria-[current=page]:text-strong ${focusRing}`,
     login: `border-black text-black hover:bg-black hover:text-white ${focusRing}`,
     cta: `bg-black text-white hover:bg-forest ${focusRing}`,
   },
