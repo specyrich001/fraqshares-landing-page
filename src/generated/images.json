@@ -1,4 +1,16 @@
 {
+  "about/hand-left": {
+    "width": 900,
+    "height": 370,
+    "src": "/images/about/hand-left-900.webp",
+    "srcset": "/images/about/hand-left-900.webp 900w, /images/about/hand-left-1800.webp 1800w"
+  },
+  "about/hand-right": {
+    "width": 900,
+    "height": 372,
+    "src": "/images/about/hand-right-900.webp",
+    "srcset": "/images/about/hand-right-900.webp 900w, /images/about/hand-right-1800.webp 1800w"
+  },
   "about/intro-photo": {
     "width": 1440,
     "height": 810,

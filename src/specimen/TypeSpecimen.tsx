@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useState, type ReactNode } from 'react'
+import { MIN_INVESTMENT } from '../components/minimumInvestment.ts'
 import '../components/product/product-type.css'
 
 type Token = {
@@ -39,6 +40,13 @@ const display: Token[] = [
     sample: 'Build wealth, one share at a time',
   },
   {
+    role: 'statement-h2',
+    cls: 'text-statement-h2',
+    spec: '58px / 120% / 500 / -4% (= section-h2, 120% leading)',
+    mobile: '36px @ 375px',
+    sample: `Start with as little as ${MIN_INVESTMENT} and build your portfolio over time.`,
+  },
+  {
     role: 'testimonial-intro',
     cls: 'text-testimonial-intro',
     spec: '62px / 100% / 500 / -4%',
@@ -55,6 +63,12 @@ const display: Token[] = [
 ]
 
 const reading: Token[] = [
+  {
+    role: 'lead-lg',
+    cls: 'text-lead-lg',
+    spec: '32px / 140% / 400 / -4%',
+    sample: 'We created Fraqshares to make that starting point smaller.',
+  },
   {
     role: 'intro-body',
     cls: 'text-intro-body',
@@ -186,6 +200,7 @@ const colors = [
   { name: 'muted', hex: '#999999', note: '--text-muted · display sizes only' },
   { name: 'nav', hex: '#606060', note: '--text-nav · header links' },
   { name: 'secondary', hex: '#5E5E5E', note: '--text-secondary · supporting paragraphs' },
+  { name: 'dim', hex: 'rgba(17,17,17,0.3)', note: '--text-dim · #111 at 30% · words before the scroll highlights them' },
   { name: 'body-muted', hex: 'rgba(17,17,17,0.7)', note: '--text-body-muted · #111 at 70% · inner-page intro paragraphs' },
   { name: 'meta', hex: '#767676', note: '--text-meta · product-card meta' },
   { name: 'money-in', hex: '#35B705', note: '--money-in · product-card amounts' },
@@ -363,6 +378,20 @@ export default function TypeSpecimen() {
             as="h3"
           >
             <span className="text-muted">Building wealth</span> should have a smaller starting point.
+          </Row>
+          <Row
+            token={{ role: 'scroll highlight', cls: 'text-lead-lg', spec: 'strong #111 → dim #111 @ 30% (mid-scroll state)' }}
+            width={width}
+          >
+            <span className="text-strong">Owning property or investing in a business can feel</span>{' '}
+            <span className="text-dim">out of reach when it requires substantial capital.</span>
+          </Row>
+          <Row
+            token={{ role: 'statement accent', cls: 'text-statement-h2', spec: 'strong #111, amount in olive #ABB06D' }}
+            width={width}
+            as="h3"
+          >
+            Start with as little as <span className="text-olive">{MIN_INVESTMENT}</span> and build your portfolio over time.
           </Row>
           <Row
             token={{

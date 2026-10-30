@@ -24,6 +24,7 @@
   --color-nav: #606060; /* text-nav — header links (6.3:1 on white) */
   --color-secondary: #5e5e5e; /* text-secondary — supporting paragraphs (6.5:1 on white) */
   --color-tab-inactive: #a1a1a1; /* text-tab-inactive — unselected tabs. 2.6:1 on white: below AA for 20px text (design call, flagged) */
+  --color-dim: rgb(17 17 17 / 0.3); /* text-dim — #111 at 30%, About section 2's words before the scroll highlights them (decorative state; the text ends #111) */
   --color-body-muted: rgb(17 17 17 / 0.7); /* text-body-muted — #111 at 70%, inner-page intro paragraphs (≈ #585858 on white, 7:1) */
 
   /* Product UI (hero activity feed cards) */
@@ -69,6 +70,13 @@
   --text-section-h2--font-weight: 500;
   --text-section-h2--letter-spacing: -0.04em;
 
+  /* About closing statement (Figma 11050:464): section-h2 with 120% leading.
+     58px / 120% / 500 / -4%   MOBILE: 36px @ 375 (section-h2's scale; no mobile design yet) */
+  --text-statement-h2: var(--text-section-h2);
+  --text-statement-h2--line-height: 1.2;
+  --text-statement-h2--font-weight: var(--text-section-h2--font-weight);
+  --text-statement-h2--letter-spacing: var(--text-section-h2--letter-spacing);
+
   /* 62px / 100% / 500 / -4%   MOBILE: 38px @ 375 */
   --text-testimonial-intro: clamp(2.375rem, 1.8468rem + 2.2536vw, 3.875rem);
   --text-testimonial-intro--line-height: 1;
@@ -82,6 +90,12 @@
   --text-conversion-headline--letter-spacing: -0.01em;
 
   /* ---- Reading & interface (fixed at every width) ----------- */
+
+  /* 32px / 140% / 400 / -4%. About section 2's scroll-highlighted paragraphs (Figma 11049:459). */
+  --text-lead-lg: 2rem;
+  --text-lead-lg--line-height: 1.4;
+  --text-lead-lg--font-weight: 400;
+  --text-lead-lg--letter-spacing: -0.04em;
 
   /* 24px / 140% / 400 / -1% */
   --text-intro-body: 1.5rem;
@@ -279,6 +293,7 @@
   --text-secondary: var(--color-secondary);
   --text-tab-inactive: var(--color-tab-inactive);
   --text-body-muted: var(--color-body-muted);
+  --text-dim: var(--color-dim);
   --text-meta: var(--color-meta);
   --money-in: var(--color-money-in);
   --money-out: var(--color-money-out);

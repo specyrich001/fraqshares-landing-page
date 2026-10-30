@@ -16,6 +16,9 @@
 //                                                      for the others), like Figma's "fill" on blurs
 //   { "quality": 80, "alphaQuality": 60 }             WebP overrides (alpha is lossless at 100,
 //                                                      which bloats noise/grain textures)
+//   { "lossless": true }                              lossless WebP (fine detail such as halftone dots,
+//   { "nearLossless": true, "quality": 60 }           which lossy smears); near-lossless takes quality
+//                                                      as its preprocessing level (100 = off)
 //   { "flatten": "#0e1711" }                          composite over a colour (drops alpha)
 //   { "recomb": [[r],[g],[b]], "offset": [r, g, b] }  colour matrix + offset, after flatten (Figma
 //                                                      image filters such as tint, fitted to its render)
@@ -139,7 +142,13 @@ for await (const found of walk(srcDir)) {
           ? { width: t.w, height: heightFor(t.w), fit: 'fill' }
           : { width: t.w, withoutEnlargement: true },
       )
-      .webp({ quality: config.quality ?? QUALITY, alphaQuality: config.alphaQuality ?? 100, effort: 6 })
+      .webp({
+        quality: config.quality ?? QUALITY,
+        alphaQuality: config.alphaQuality ?? 100,
+        lossless: config.lossless ?? false,
+        nearLossless: config.nearLossless ?? false,
+        effort: 6,
+      })
       .toFile(out)
     converted++
   }

@@ -1,0 +1,32 @@
+/* About section 2's hands. The section is a size container, so cqw is its width (100vw minus any
+   scrollbar). Figma at 1440: left hand at x -237, right hand at x 814, both 900 wide; that is, the
+   left hand's tip at centre - 57 and the right palm at centre + 94. Above 1440 the whole row scales
+   with the width (each px value becomes its share of 1440 in cqw), so the cut-off arm ends stay off
+   screen; below 1440 it stays at Figma's size around the centre. */
+[data-story] {
+  container-type: inline-size;
+}
+[data-story-hands] {
+  position: relative;
+  height: max(372px, 25.8333cqw);
+}
+[data-story-hands] > img {
+  position: absolute;
+  top: 0;
+  width: max(900px, 62.5cqw);
+  max-width: none;
+  height: auto;
+}
+[data-story-hands] > [data-hand="left"] {
+  left: calc(50cqw - max(957px, 66.4583cqw));
+  transform-origin: 0% 50%;
+}
+[data-story-hands] > [data-hand="right"] {
+  left: calc(50cqw + max(94px, 6.5278cqw));
+  transform-origin: 100% 50%;
+}
+
+/* Scripted, motion allowed: the paragraphs start dim and their words animate back to #111. */
+[data-story][data-animate] [data-story-copy] {
+  color: var(--color-dim);
+}

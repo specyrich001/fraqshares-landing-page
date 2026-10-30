@@ -2,6 +2,8 @@
  * FAQ copy: the one source for both the accordion and the FAQPage structured data. Wording is the
  * client's, verbatim (including ₦ and the curly apostrophe).
  */
+import { MIN_INVESTMENT } from '../minimumInvestment.ts'
+
 export type Faq = { question: string; answer: string }
 
 export const faqs: Faq[] = [
@@ -17,7 +19,7 @@ export const faqs: Faq[] = [
   },
   {
     question: 'What is the minimum investment?',
-    answer: 'You can start investing on Fraqshares with ₦20,000.',
+    answer: `You can start investing on Fraqshares with ${MIN_INVESTMENT}.`,
   },
   {
     question: 'What do I legally own?',
