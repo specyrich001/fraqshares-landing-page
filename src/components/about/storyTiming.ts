@@ -56,7 +56,7 @@ export const STORY = {
     line: 0.45,
     stagger: 0.1,
     ease: 'power2.out',
-    /** The amount (₦25,000) gets a beat of its own: it ends at `to`, after the lines, scaling up from this. */
+    /** The amount (₦20,000) gets a beat of its own: it ends at `to`, after the lines, scaling up from this. */
     amountScale: 0.96,
   },
   /** 0.8 → 1: hold, then unpin. */

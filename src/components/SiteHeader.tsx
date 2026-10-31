@@ -7,7 +7,7 @@ import { ABOUT_HREF, currentPath, HOW_IT_WORKS_HREF, LOGIN_URL, SIGNUP_URL } fro
 
 // Learn and List Property are placeholders until those pages exist.
 const links = [
-  { label: 'About', href: ABOUT_HREF },
+  { label: 'About Us', href: ABOUT_HREF },
   { label: 'How It Works', href: HOW_IT_WORKS_HREF },
   { label: 'Learn', href: '#learn' },
   { label: 'List Property', href: '#list-property' },
@@ -49,7 +49,7 @@ const overlayBlurMask = {
 }
 
 // Not in Figma: a shade so the white logo and links read on the photo's lamp-lit wall. 40% black
-// through the header's content (logo 1.75:1 → 4.6:1 median, 3.6:1 at its brightest; "About"
+// through the header's content (logo 1.75:1 → 4.6:1 median, 3.6:1 at its brightest; "About Us"
 // 4.2:1 → 8.9:1), easing out over 96px and ending 72px below the bar so it has no visible edge.
 const overlayShade = {
   background:

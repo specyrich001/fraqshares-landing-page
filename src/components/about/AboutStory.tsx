@@ -168,7 +168,7 @@ export function AboutStory() {
           Below 1024 the row starts under the statement (about-story.css), 100px under the paragraphs. */}
       <div data-story-stage className="relative mt-[202.4px] h-[calc(71px+max(372px,25.8333cqw))] max-lg:mt-[100px] max-lg:h-[calc(114.6px+max(112.4px,28.6cqw))]">
         {/* Figma y 870, 616 wide. Its three lines are part of the design ("Start with as little as /
-            ₦25,000 and build your / portfolio over time."), so they're set here rather than split at
+            ₦20,000 and build your / portfolio over time."), so they're set here rather than split at
             runtime; each animates on its own. */}
         <h2 className="mx-auto w-[616px] max-w-[calc(100%-2*var(--spacing-gutter))] text-center text-statement-h2 text-strong max-lg:w-[calc(100%-32px)] max-lg:max-w-[512px]">
           <span data-statement-line className="block">
