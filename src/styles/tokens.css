@@ -91,7 +91,7 @@
   --text-statement-h2--letter-spacing: var(--text-section-h2--letter-spacing);
 
   /* About section 6 heading (Figma 11063:31701): testimonial-intro with 120% leading.
-     62px / 120% / 500 / -4%   MOBILE: 38px @ 375 (testimonial-intro's scale; no mobile design yet) */
+     62px / 120% / 500 / -4%   Below 1024: 40px (Figma 11074:79202), in the mobile block below. */
   --text-display-md: var(--text-testimonial-intro);
   --text-display-md--line-height: 1.2;
   --text-display-md--font-weight: var(--text-testimonial-intro--font-weight);
@@ -155,7 +155,8 @@
   --text-body-main-tight--font-weight: 400;
   --text-body-main-tight--letter-spacing: var(--ls-tight-body);
 
-  /* 24px / 110% / 500 / -4%. About section 6 link-card titles (Figma 11063:44957). */
+  /* 24px / 110% / 500 / -4%. About section 6 link-card titles (Figma 11063:44957).
+     Below 1024: 20px (Figma 11074:79207), in the mobile block below. */
   --text-card-title: 1.5rem;
   --text-card-title--line-height: 1.1;
   --text-card-title--font-weight: 500;
@@ -369,6 +370,8 @@
     --text-statement-h2: 2rem; /* 32px, About section 2 statement (Figma 11074:62047) */
     --text-body-main-tight: 1.125rem; /* 18px, About Mission / Vision cards (Figma 11074:78961) */
     --text-display-lg: 2.625rem; /* 42px, About section 4 title (Figma 11074:78990) */
+    --text-display-md: 2.5rem; /* 40px, About section 6 heading (Figma 11074:79202) */
+    --text-card-title: 1.25rem; /* 20px, About section 6 link-card titles (Figma 11074:79207) */
   }
 }
 

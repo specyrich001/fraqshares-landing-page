@@ -4,7 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useRef } from 'react'
 import images from '../../generated/images.json'
 import { ArrowRightIcon } from '../icons/ArrowRightIcon.tsx'
-import { LINKS, LINKS_MEDIA } from './linksTiming.ts'
+import { LINKS, LINKS_MEDIA, LINKS_MOBILE } from './linksTiming.ts'
 import { revealLines } from './revealLines.ts'
 import './about-links.css'
 
@@ -56,6 +56,11 @@ type DevWindow = Window & { linksReplay?: () => void }
  * place. Only transform and opacity animate (plus the border colour on hover).
  *
  * relative z-10 + bg-soft: the last section, so the footer reveal slides it up off the footer.
+ *
+ * Below 1024 (Figma 11074:79176, 393 × 1255): 100px above and below; the heading (40px) centred, 50px
+ * over the cards, which stack 24px apart, 345 × 271 (24px sides, 512 max on tablets), 40px top and
+ * 24px sides. The heading and each card play their entrance as they reach the screen (LINKS_MOBILE).
+ * Touch screens have no hover, so no glow there.
  */
 export function AboutLinks() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -64,6 +69,7 @@ export function AboutLinks() {
     () => {
       const mm = gsap.matchMedia()
       mm.add(LINKS_MEDIA, (context) => {
+        const { desktop } = context.conditions as { desktop: boolean }
         const section = sectionRef.current!
         const heading = section.querySelector<HTMLElement>('[data-links-title]')!
         const cards = gsap.utils.toArray<HTMLElement>('[data-link-card]', section)
@@ -89,7 +95,7 @@ export function AboutLinks() {
         }
         cards.forEach((card) => card.addEventListener('pointerenter', onEnter))
 
-        const play = context.add('play', () => {
+        const playHeading = context.add('playHeading', () => {
           const { split, tween: words } = revealLines(heading, {
             type: 'words',
             from: { yPercent: 100 },
@@ -100,23 +106,38 @@ export function AboutLinks() {
           })
           gsap.set(heading, { opacity: 1 })
           gsap.timeline({ onComplete: () => split.revert() }).add(words, L.heading.at)
-
-          const { cards: C, content: T } = L
-          cards.forEach((card, i) => {
-            if (card.dataset.entering === undefined) return // hovered before it played: already at rest
-            const parts = [...card.querySelectorAll<HTMLElement>('[data-card-part]')]
-            const tl = gsap.timeline({ delay: C.at + C.stagger * i, onComplete: () => settle(card) })
-            tl.fromTo(card, { opacity: 0, y: C.rise }, { opacity: 1, y: 0, duration: C.duration, ease: C.ease }, 0)
-            tl.fromTo(
-              parts,
-              { opacity: 0, y: T.rise },
-              { opacity: 1, y: 0, duration: T.duration, ease: T.ease, stagger: T.stagger },
-              T.after,
-            )
-            cardTimelines.set(card, tl)
-          })
         }) as () => void
-        ScrollTrigger.create({ trigger: section, start: L.start, once: true, onEnter: play })
+
+        // One card's entrance, after `delay` seconds.
+        const { cards: C, content: T } = L
+        const playCard = context.add('playCard', (card: HTMLElement, delay: number) => {
+          if (card.dataset.entering === undefined) return // hovered before it played: already at rest
+          const parts = [...card.querySelectorAll<HTMLElement>('[data-card-part]')]
+          const tl = gsap.timeline({ delay, onComplete: () => settle(card) })
+          tl.fromTo(card, { opacity: 0, y: C.rise }, { opacity: 1, y: 0, duration: C.duration, ease: C.ease }, 0)
+          tl.fromTo(
+            parts,
+            { opacity: 0, y: T.rise },
+            { opacity: 1, y: 0, duration: T.duration, ease: T.ease, stagger: T.stagger },
+            T.after,
+          )
+          cardTimelines.set(card, tl)
+        }) as (card: HTMLElement, delay: number) => void
+
+        // Desktop: everything from one trigger, the cards left to right. Mobile: the heading and each
+        // card as they reach the screen.
+        const play = () => {
+          playHeading()
+          cards.forEach((card, i) => playCard(card, C.at + C.stagger * i))
+        }
+        if (desktop) {
+          ScrollTrigger.create({ trigger: section, start: L.start, once: true, onEnter: play })
+        } else {
+          ScrollTrigger.create({ trigger: heading, start: LINKS_MOBILE.start, once: true, onEnter: playHeading })
+          cards.forEach((card) =>
+            ScrollTrigger.create({ trigger: card, start: LINKS_MOBILE.start, once: true, onEnter: () => playCard(card, 0) }),
+          )
+        }
         if (import.meta.env.DEV) {
           ;(window as DevWindow).linksReplay = () => {
             cards.forEach((card) => (card.dataset.entering = ''))
@@ -136,21 +157,22 @@ export function AboutLinks() {
   )
 
   return (
-    <section ref={sectionRef} data-links aria-labelledby="links-title" className="relative z-10 bg-soft py-[130px]">
-      <div className="page-row">
-        {/* One heading, two tones: "Build Your Investment / Portfolio with Fraqshares." at 717 wide. */}
-        <h2 id="links-title" data-links-title className="w-[717px] max-w-full text-display-md text-strong">
+    <section ref={sectionRef} data-links aria-labelledby="links-title" className="relative z-10 bg-soft py-[130px] max-lg:py-[100px]">
+      <div className="page-row max-lg:max-w-[560px] max-lg:px-6">
+        {/* One heading, two tones: "Build Your Investment / Portfolio with Fraqshares." at 717 wide.
+            Below 1024 centred, and 6px wider than the column on each side, as in Figma (357 at 393). */}
+        <h2 id="links-title" data-links-title className="w-[717px] max-w-full text-display-md text-strong max-lg:-mx-1.5 max-lg:w-auto max-lg:max-w-none max-lg:text-center">
           <span className="text-muted">Build Your</span> Investment Portfolio with Fraqshares.
         </h2>
 
-        <ul role="list" className="mt-20 grid grid-cols-3 gap-[68px]">
+        <ul role="list" className="mt-20 grid grid-cols-3 gap-[68px] max-lg:mt-[50px] max-lg:grid-cols-1 max-lg:gap-6">
           {CARDS.map((card) => (
             // isolate: the glow's -z-10 stays inside the card. Not positioned content, so the link's
             // ::after (inset 0) spans the card itself.
             <li
               key={card.title}
               data-link-card
-              className="relative isolate flex h-[268px] flex-col overflow-hidden border border-border-light px-8 py-10 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-forest"
+              className="relative isolate flex h-[268px] flex-col overflow-hidden border border-border-light px-8 py-10 max-lg:h-[271px] max-lg:px-6 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-forest"
             >
               <img
                 data-card-glow
@@ -167,14 +189,15 @@ export function AboutLinks() {
                 {card.title}
               </h3>
               {/* Figma's box is 315, but Chrome sets "…getting started, ownership," 315.83 wide and would wrap
-                  "ownership,"; 316 keeps Figma's lines (0.7px into the padding: the content box is 315.3). */}
-              <p data-card-part className="mt-6 w-[316px] text-body-sm-tight text-body-faint">
+                  "ownership,"; 316 keeps Figma's lines (0.7px into the padding: the content box is 315.3).
+                  Below 1024 it fills the card (295 at 393). */}
+              <p data-card-part className="mt-6 w-[316px] text-body-sm-tight text-body-faint max-lg:w-auto">
                 {card.body}
               </p>
               <div data-card-part className="mt-auto">
                 <a
                   href={card.href}
-                  className="inline-flex items-center gap-2.5 text-button text-black outline-none after:absolute after:inset-0 after:content-['']"
+                  className="inline-flex items-center gap-2.5 text-button text-black outline-none after:absolute after:inset-0 after:content-[''] max-lg:text-button-sm"
                 >
                   {card.label}
                   <span data-link-arrow className="inline-flex">

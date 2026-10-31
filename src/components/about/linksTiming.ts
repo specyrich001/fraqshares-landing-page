@@ -13,5 +13,15 @@ export const LINKS = {
   content: { after: 0.1, rise: 12, duration: 0.4, ease: 'power2.out', stagger: 0.06 },
 }
 
-/** The entrance runs only with motion allowed; otherwise the section shows at rest from the start. */
-export const LINKS_MEDIA = '(prefers-reduced-motion: no-preference)'
+/** Below 1024 the cards are stacked, a screen and a half tall, so the heading and each card play
+ *  their part of the entrance as they reach the screen ("<element edge> <viewport edge>"). */
+export const LINKS_MOBILE = {
+  start: 'top 85%',
+}
+
+/** The entrance runs only with motion allowed; otherwise the section shows at rest from the start.
+ *  gsap.matchMedia rebuilds it when the window crosses 1024. */
+export const LINKS_MEDIA = {
+  desktop: '(min-width: 1024px) and (prefers-reduced-motion: no-preference)',
+  mobile: '(max-width: 1023.98px) and (prefers-reduced-motion: no-preference)',
+}

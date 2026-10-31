@@ -63,7 +63,7 @@ const display: Token[] = [
     role: 'display-md',
     cls: 'text-display-md',
     spec: '62px / 120% / 500 / -4% (= testimonial-intro, 120% leading)',
-    mobile: '38px @ 375px',
+    belowLg: '40px / 120% / 500 / -4% (Figma 11074:79202)',
     sample: (
       <>
         <span className="text-muted">Build Your</span> Investment Portfolio with Fraqshares.
@@ -130,7 +130,13 @@ const reading: Token[] = [
     sample:
       'To make fractional ownership more accessible to Africans at home and abroad, opening up opportunities to build wealth through real estate, land, and businesses.',
   },
-  { role: 'card-title', cls: 'text-card-title', spec: '24px / 110% / 500 / -4%', sample: 'Still Have Questions?' },
+  {
+    role: 'card-title',
+    cls: 'text-card-title',
+    spec: '24px / 110% / 500 / -4%',
+    belowLg: '20px / 110% / 500 / -4% (Figma 11074:79207)',
+    sample: 'Still Have Questions?',
+  },
   { role: 'value-title', cls: 'text-value-title', spec: '20px / 110% / 500 / -4%', sample: 'Continuous Innovation' },
   { role: 'tab', cls: 'text-tab', spec: '20px / 140% / 500 / -1%', sample: 'Real estate' },
   { role: 'faq-question', cls: 'text-faq-question', spec: '= tab', sample: 'What is Fraqshares?' },
