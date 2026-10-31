@@ -8,7 +8,7 @@ import innovationIcon from '../../assets/about/value-innovation.svg'
 import transparencyIcon from '../../assets/about/value-transparency.svg'
 import images from '../../generated/images.json'
 import { revealLines } from './revealLines.ts'
-import { VALUES, VALUES_MEDIA } from './valuesTiming.ts'
+import { VALUES, VALUES_MEDIA, VALUES_MOBILE } from './valuesTiming.ts'
 import './about-values.css'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
@@ -72,6 +72,11 @@ function docTop(el: HTMLElement) {
  * Reduced motion and no JS: no animation; the Figma frame, everything visible. Only transform and
  * opacity animate. relative z-10 + white: it's the last section, so the footer reveal slides it up off
  * the footer.
+ *
+ * Below 1024 (Figma 11074:78979, 393 × 2323): one centred column, 345 wide (24px sides, 512 max on
+ * tablets), 100px top and between the blocks; the intro stacked (title 42px, compass 208 × 245,
+ * paragraphs, 50px apart), the values one under another, 80px apart, icon and text centred. No title
+ * travel (no column to land in); the paragraphs and each value come in as they reach the screen.
  */
 export function AboutValues() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -80,6 +85,7 @@ export function AboutValues() {
     () => {
       const mm = gsap.matchMedia()
       mm.add(VALUES_MEDIA, (context) => {
+        const { desktop } = context.conditions as { desktop: boolean }
         const section = sectionRef.current!
         const row = section.querySelector<HTMLElement>('[data-values-intro]')!
         const title = section.querySelector<HTMLElement>('[data-values-title]')!
@@ -92,7 +98,7 @@ export function AboutValues() {
         const frozen = devTitle()
         if (frozen) {
           gsap.set([compassEl, title, ...paras], { opacity: 1 })
-          gsap.set(title, { y: frozen === 'landed' ? distance() : 0 })
+          gsap.set(title, { y: frozen === 'landed' && desktop ? distance() : 0 })
           return
         }
 
@@ -118,33 +124,53 @@ export function AboutValues() {
           tl.to(compassEl, { keyframes: { rotate: C.wobble, easeEach: C.wobbleEase }, duration: C.wobbleDuration, ease: 'none' })
           tl.add(lines, T.at)
           tl.fromTo(you, { opacity: 0, scale: T.youScale }, { opacity: 1, scale: 1, duration: T.duration, ease: T.ease }, T.at + T.youDelay)
-          tl.fromTo(paras, { y: P.rise, opacity: 0 }, { y: 0, opacity: 1, duration: P.duration, ease: P.ease, stagger: P.stagger }, P.at)
+          // Desktop: in the intro. Mobile: they're a screen further down, so they get their own trigger.
+          if (desktop) tl.fromTo(paras, { y: P.rise, opacity: 0 }, { y: 0, opacity: 1, duration: P.duration, ease: P.ease, stagger: P.stagger }, P.at)
         }) as () => void
-        ScrollTrigger.create({ trigger: row, start: VALUES.intro.start, once: true, onEnter: play })
+        const M = VALUES_MOBILE
+        ScrollTrigger.create({ trigger: row, start: desktop ? VALUES.intro.start : M.introStart, once: true, onEnter: play })
+        if (!desktop) {
+          gsap.fromTo(
+            paras,
+            { y: P.rise, opacity: 0 },
+            { y: 0, opacity: 1, duration: P.duration, ease: P.ease, stagger: P.stagger, scrollTrigger: { trigger: paras[0], start: M.itemStart, once: true } },
+          )
+        }
 
-        // Travel: as far as the page scrolls, for exactly the distance to the grid, so it reads as fixed.
-        gsap.fromTo(
-          title,
-          { y: 0 },
-          {
-            y: distance,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: row,
-              start: VALUES.travel.start,
-              end: () => `+=${distance()}`,
-              scrub: true,
-              invalidateOnRefresh: true,
+        // Travel (desktop): as far as the page scrolls, for exactly the distance to the grid, so it reads as fixed.
+        if (desktop) {
+          gsap.fromTo(
+            title,
+            { y: 0 },
+            {
+              y: distance,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: row,
+                start: VALUES.travel.start,
+                end: () => `+=${distance()}`,
+                scrub: true,
+                invalidateOnRefresh: true,
+              },
             },
-          },
-        )
+          )
+        }
 
         const R = VALUES.reveal
-        if (R.enabled) {
+        if (R.enabled && desktop) {
           gsap.fromTo(
             items,
             { opacity: 0, y: R.rise },
             { opacity: 1, y: 0, duration: R.duration, ease: R.ease, stagger: R.stagger, scrollTrigger: { trigger: grid, start: R.start, once: true } },
+          )
+        } else if (R.enabled) {
+          // One column: each value as it reaches the screen.
+          items.forEach((item) =>
+            gsap.fromTo(
+              item,
+              { opacity: 0, y: R.rise },
+              { opacity: 1, y: 0, duration: R.duration, ease: R.ease, scrollTrigger: { trigger: item, start: M.itemStart, once: true } },
+            ),
           )
         }
       })
@@ -153,13 +179,13 @@ export function AboutValues() {
   )
 
   return (
-    <section ref={sectionRef} data-values aria-labelledby="values-title" className="relative z-10 bg-white pt-[130px]">
-      <div className="page-row flex flex-col gap-[130px]">
+    <section ref={sectionRef} data-values aria-labelledby="values-title" className="relative z-10 bg-white pt-[130px] max-lg:pt-[100px]">
+      <div className="page-row flex flex-col gap-[130px] max-lg:max-w-[560px] max-lg:gap-[100px] max-lg:px-6">
         {/* 407 tall, items centred, spread across the row (Figma: 81px gaps; title 80, compass 534.5,
             paragraphs 983). */}
-        <div data-values-intro className="flex h-[407px] items-center justify-between gap-[81px]">
-          {/* "Our true / north: You!" at 351 wide. */}
-          <h2 id="values-title" data-values-title className="relative z-10 w-[351px] shrink-0 text-display-lg text-strong">
+        <div data-values-intro className="flex h-[407px] items-center justify-between gap-[81px] max-lg:h-auto max-lg:flex-col max-lg:gap-[50px]">
+          {/* "Our true / north: You!" at 351 wide (211 below 1024, centred). */}
+          <h2 id="values-title" data-values-title className="relative z-10 w-[351px] shrink-0 text-display-lg text-strong max-lg:w-[211px] max-lg:text-center">
             Our true north:{' '}
             <span data-you className="inline-block text-olive">
               You!
@@ -169,16 +195,16 @@ export function AboutValues() {
             data-compass
             src={compass.src}
             srcSet={compass.srcset}
-            sizes="345px"
+            sizes="(max-width: 1023px) 208px, 345px"
             width={345}
             height={407}
             alt=""
             loading="lazy"
             decoding="async"
-            className="h-[407px] w-[345px] shrink-0"
+            className="h-[407px] w-[345px] shrink-0 max-lg:h-[245px] max-lg:w-[208px]"
           />
           {/* One empty 18px line between the paragraphs (1.4em). */}
-          <div data-values-copy className="w-[377px] shrink-0 text-intro-body-tight text-body-muted [&>p+p]:mt-[1.4em]">
+          <div data-values-copy className="w-[377px] shrink-0 text-intro-body-tight text-body-muted max-lg:w-full max-lg:text-center [&>p+p]:mt-[1.4em]">
             <p>
               We put investors at the centre of how we build Fraqshares. That means making ownership easier to
               understand, providing clear information about each opportunity, and helping you stay informed throughout
@@ -195,14 +221,15 @@ export function AboutValues() {
         <div aria-hidden="true" className="-mb-px border-t border-border-light" />
 
         {/* x 572 to 1360 (492px in from the row's left): the empty column on the left is where the title lands. */}
-        <div data-values-grid className="ml-auto grid w-[788px] grid-cols-[354px_354px] gap-20">
+        <div data-values-grid className="ml-auto grid w-[788px] grid-cols-[354px_354px] gap-20 max-lg:ml-0 max-lg:w-full max-lg:grid-cols-1">
           {/* Figma's value frames are 260 tall: its 5-line body box is 110, Chrome's 112, so the height is
-              fixed to keep the second row at y 1137. */}
+              fixed to keep the second row at y 1137. Below 1024 they size to their text (a narrow phone
+              wraps the body to more lines), at least 260. */}
           {ITEMS.map((item) => (
-            <div key={item.title} data-value className="h-[260px]">
-              <img src={item.icon} width={64} height={64} alt="" className="size-16" />
+            <div key={item.title} data-value className="h-[260px] max-lg:h-auto max-lg:min-h-[260px] max-lg:text-center">
+              <img src={item.icon} width={64} height={64} alt="" className="size-16 max-lg:mx-auto" />
               <h3 className="mt-10 text-value-title text-strong">{item.title}</h3>
-              <p className="mt-6 w-[354px] text-body-sm-tight text-body-faint">{item.body}</p>
+              <p className="mt-6 w-[354px] text-body-sm-tight text-body-faint max-lg:w-auto">{item.body}</p>
             </div>
           ))}
         </div>

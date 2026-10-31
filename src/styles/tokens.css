@@ -70,7 +70,7 @@
   --text-page-title--letter-spacing: var(--text-hero-h1--letter-spacing);
 
   /* About section 4 title (Figma 11051:29345): hero-h1 with 120% leading.
-     72px / 120% / 500 / -4%   MOBILE: 40px @ 375 (hero-h1's scale; no mobile design yet) */
+     72px / 120% / 500 / -4%   Below 1024: 42px (Figma 11074:78990), in the mobile block below. */
   --text-display-lg: var(--text-hero-h1);
   --text-display-lg--line-height: 1.2;
   --text-display-lg--font-weight: var(--text-hero-h1--font-weight);
@@ -368,6 +368,7 @@
     --text-lead-lg: 1.5rem; /* 24px, About section 2 paragraphs (Figma 11074:45141) */
     --text-statement-h2: 2rem; /* 32px, About section 2 statement (Figma 11074:62047) */
     --text-body-main-tight: 1.125rem; /* 18px, About Mission / Vision cards (Figma 11074:78961) */
+    --text-display-lg: 2.625rem; /* 42px, About section 4 title (Figma 11074:78990) */
   }
 }
 

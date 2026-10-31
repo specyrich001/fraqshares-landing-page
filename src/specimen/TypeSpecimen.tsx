@@ -31,7 +31,7 @@ const display: Token[] = [
     role: 'display-lg',
     cls: 'text-display-lg',
     spec: '72px / 120% / 500 / -4% (= hero-h1, 120% leading)',
-    mobile: '40px @ 375px',
+    belowLg: '42px / 120% / 500 / -4% (Figma 11074:78990)',
     sample: (
       <>
         Our true north: <span className="text-olive">You!</span>
