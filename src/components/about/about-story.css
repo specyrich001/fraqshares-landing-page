@@ -6,11 +6,11 @@
 [data-story] {
   container-type: inline-size;
 }
-/* The row sits 90px below the statement's top (Figma: statement y 770, hands y 860). */
+/* The row sits 71px below the statement's top (Figma: statement y 870, hands y 941). */
 [data-story-hands] {
   position: absolute;
   inset-inline: 0;
-  top: 90px;
+  top: 71px;
   height: max(372px, 25.8333cqw);
 }
 [data-story-hands] > img {

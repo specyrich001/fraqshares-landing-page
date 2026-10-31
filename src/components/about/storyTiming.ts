@@ -2,6 +2,7 @@
  * About section 2 (Figma 11049:456): every scroll position, duration and ease for its two phases.
  *
  * Phase A, highlight (no pin): the paragraphs' words go from --text-dim to #111 in reading order.
+ * Then the paragraphs fade out, from the end of the highlight to the start of the pin.
  * Phase B, statement + hands (pinned): the closing statement rises in line by line while the hands
  * slide in from the screen edges and meet under it. Its timeline runs 0 → 1 over the pin; positions
  * are fractions.
@@ -18,6 +19,12 @@ export const STORY = {
     /** How many units are mid-fade at once: each one fades over this many units' worth of scroll,
      *  so the highlight's edge is soft rather than stepped. */
     softness: 3,
+  },
+  /** Paragraphs fading out: starts where the highlight ends (highlight.end), done as the pin starts
+   *  (pin.start), so the statement and hands come in on their own. */
+  fade: {
+    ease: 'power1.in',
+    scrub: 0.3,
   },
   pin: {
     /** Pins when the statement + hands group's centre reaches the viewport's centre. */

@@ -15,7 +15,8 @@ gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP)
 const handLeft = images['about/hand-left']
 const handRight = images['about/hand-right']
 
-/** DEV: ?phase=a (start: all dim), b (halfway through the statement and hands coming in), end (final). Static, no pin. */
+/** DEV, static, no pin: ?phase=a (start: all dim), b (paragraphs faded, statement and hands halfway in),
+ *  end (the Figma frame: everything shown, paragraphs included). */
 function devPhase() {
   if (!import.meta.env.DEV) return null
   const phase = new URLSearchParams(window.location.search).get('phase')
@@ -30,8 +31,8 @@ function devPhase() {
  * hides the word spans, so screen readers read plain sentences; autoSplit re-splits when fonts load
  * or the width changes.
  *
- * Phase B: when the statement + hands group is centred in the viewport the section pins (1.5
- * screens). The statement's lines rise in while the hands slide in from the edges with them, the
+ * Then, once every word is lit, the paragraphs fade away as they scroll on up, gone by the time the
+ * statement + hands group is centred in the viewport. There the section pins (1.5 screens). The statement's lines rise in while the hands slide in from the edges with them, the
  * amount last (0 → 80%); then it holds and unpins. Before the pin the hands are off screen and the
  * statement transparent, so the space under the paragraphs reads as breathing room.
  *
@@ -78,8 +79,24 @@ export function AboutStory() {
           },
         })
 
+        // Between the phases: from the end of the highlight to the pin, the paragraphs fade out, so the
+        // statement and hands have the screen to themselves. Opacity on the block, not the words.
+        const { pin: P, hands: K, statement: S, fade: F } = STORY
+        const fade = gsap.fromTo(
+          copy,
+          { opacity: 1 },
+          {
+            opacity: 0,
+            ease: F.ease,
+            paused: !!frozen,
+            scrollTrigger: frozen
+              ? undefined
+              : { trigger: copy, start: H.end, endTrigger: stage, end: P.start, scrub: F.scrub },
+          },
+        )
+        if (frozen) fade.progress(frozen === 'b' ? 1 : 0)
+
         // Phase B: the pinned hands and statement, 0 → 1 over the pin.
-        const { pin: P, hands: K, statement: S } = STORY
         const tl = gsap.timeline({
           defaults: { ease: 'none' },
           paused: !!frozen,
@@ -111,6 +128,7 @@ export function AboutStory() {
 
         return () => {
           delete section.dataset.animate
+          gsap.set(copy, { clearProps: 'opacity' })
         }
       })
     },
@@ -118,7 +136,7 @@ export function AboutStory() {
   )
 
   return (
-    <section ref={sectionRef} data-story className="relative z-10 overflow-clip bg-soft pt-[130px] pb-[251px]">
+    <section ref={sectionRef} data-story className="relative z-10 overflow-clip bg-soft pt-[130px] pb-[170px]">
       {/* 690 wide, centred; Figma separates the paragraphs with an empty line (1.4em, 44.8px). Its box
           ends at 667.6 (130 + 10 lines and 2 blank ones at 44.8). */}
       <div data-story-copy className="mx-auto w-[690px] max-w-[calc(100%-2*var(--spacing-gutter))] text-center text-lead-lg text-strong [&>p+p]:mt-[1.4em]">
@@ -134,11 +152,11 @@ export function AboutStory() {
         </p>
       </div>
 
-      {/* The pinned group (Figma y 770 → 1232): the statement, and the hands row 90px below its top,
-          just under its last line (Figma draws the hands over the statement's box; their dots start
+      {/* The pinned group (Figma y 870 → 1313): the statement, and the hands row 71px below its top,
+          tucked under its last line (Figma draws the hands over the statement's box; their dots start
           lower). The group's height is that offset plus the row, which grows above 1440. */}
-      <div data-story-stage className="relative mt-[102.4px] h-[calc(90px+max(372px,25.8333cqw))]">
-        {/* Figma y 770, 616 wide. Its three lines are part of the design ("Start with as little as /
+      <div data-story-stage className="relative mt-[202.4px] h-[calc(71px+max(372px,25.8333cqw))]">
+        {/* Figma y 870, 616 wide. Its three lines are part of the design ("Start with as little as /
             ₦25,000 and build your / portfolio over time."), so they're set here rather than split at
             runtime; each animates on its own. */}
         <h2 className="mx-auto w-[616px] max-w-[calc(100%-2*var(--spacing-gutter))] text-center text-statement-h2 text-strong">
