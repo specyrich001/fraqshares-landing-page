@@ -5,7 +5,8 @@ import { useRef } from 'react'
 import discountIcon from '../../assets/icons/discount-shape.svg'
 import images from '../../generated/images.json'
 import { CardStack } from '../product/CardStack.tsx'
-import { OWNERSHIP, OWNERSHIP_MEDIA } from './ownershipTiming.ts'
+import { ScaledArtboard } from '../ScaledArtboard.tsx'
+import { OWNERSHIP, OWNERSHIP_MEDIA, OWNERSHIP_MOBILE } from './ownershipTiming.ts'
 import { revealLines } from './revealLines.ts'
 import './about-ownership.css'
 
@@ -34,6 +35,12 @@ const devSpeed = () => (import.meta.env.DEV ? Number(new URLSearchParams(window.
  *
  * Reduced motion and no JS: the final state from the start. Only transform and opacity animate.
  * relative z-10 + white: the last section, so the footer reveal slides it up off the footer.
+ *
+ * Below 1024 (Figma 11074:79111, 393 × 1130): 100px above and below, one centred column (24px sides,
+ * 512 max on tablets): the heading and paragraphs, centred, 50px apart, then 50px below them the photo
+ * with its cards. Figma's mobile photo is the desktop one at 345/541 (same crop; card positions and
+ * blur scale with it), so it's the desktop composition in a ScaledArtboard. The text and the cards each
+ * play when they reach the screen (OWNERSHIP_MOBILE).
  */
 export function AboutOwnership() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -42,11 +49,13 @@ export function AboutOwnership() {
     () => {
       const mm = gsap.matchMedia()
       mm.add(OWNERSHIP_MEDIA, (context) => {
+        const { desktop } = context.conditions as { desktop: boolean }
         const section = sectionRef.current!
         const q = <T extends HTMLElement = HTMLElement>(s: string) => section.querySelector<T>(s)!
         const heading = q('[data-ownership-title]')
         const paras = gsap.utils.toArray<HTMLElement>('[data-ownership-copy] > p', section)
         const photoEl = q('[data-ownership-photo]')
+        const photoBox = q('[data-ownership-media]')
         const back = q('[data-stack-card=back]')
         const front = q('[data-stack-card=front]')
         const thumbEl = q('[data-stack-thumb]')
@@ -58,7 +67,9 @@ export function AboutOwnership() {
         // Hidden until it plays (the section is far below the fold, so this lands before it's seen).
         gsap.set([back, front, thumbEl, ...frontText], { opacity: 0 })
 
-        const play = context.add('play', () => {
+        // The text and the cards are two timelines with times from the same start: on desktop they play
+        // together (as one), on mobile each on its own trigger.
+        const playText = context.add('playText', () => {
           const { split, tween: lines } = revealLines(heading, {
             from: { yPercent: 100 },
             mask: true,
@@ -73,6 +84,11 @@ export function AboutOwnership() {
 
           const P = O.paragraphs
           tl.fromTo(paras, { opacity: 0, y: P.rise }, { opacity: 1, y: 0, duration: P.duration, ease: P.ease, stagger: P.stagger }, P.at)
+        }) as () => void
+
+        const playCards = context.add('playCards', () => {
+          const tl = gsap.timeline()
+          tl.timeScale(devSpeed())
 
           const I = O.image
           if (I.enabled) tl.fromTo(photoEl, { opacity: 0, scale: I.fromScale }, { opacity: 1, scale: 1, duration: I.duration, ease: I.ease }, I.at)
@@ -100,7 +116,18 @@ export function AboutOwnership() {
           const A = O.amount
           tl.to(amount, { keyframes: { scale: [A.peak, 1], easeEach: A.ease }, duration: A.duration, ease: 'none' }, A.at)
         }) as () => void
-        ScrollTrigger.create({ trigger: section, start: O.start, once: true, onEnter: play })
+
+        const play = () => {
+          playText()
+          playCards()
+        }
+        if (desktop) {
+          ScrollTrigger.create({ trigger: section, start: O.start, once: true, onEnter: play })
+        } else {
+          const M = OWNERSHIP_MOBILE
+          ScrollTrigger.create({ trigger: heading, start: M.textStart, once: true, onEnter: playText })
+          ScrollTrigger.create({ trigger: photoBox, start: M.cardsStart, once: true, onEnter: playCards })
+        }
         // DEV: window.ownershipReplay() plays the entrance again (its fromTo tweens reset each part).
         if (import.meta.env.DEV) Object.assign(window, { ownershipReplay: play })
       })
@@ -109,37 +136,41 @@ export function AboutOwnership() {
   )
 
   return (
-    <section ref={sectionRef} data-ownership aria-labelledby="ownership-title" className="relative z-10 bg-white py-[130px]">
-      <div className="page-row">
-        {/* 541 + 80 + 640 = 1261 of the 1280 row, as in Figma. */}
-        <div className="flex items-center gap-20">
-          <div className="relative h-[628px] w-[541px] shrink-0 overflow-hidden">
-            <img
-              data-ownership-photo
-              src={photo.src}
-              srcSet={photo.srcset}
-              sizes="541px"
-              width={photo.width}
-              height={photo.height}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              className="absolute inset-0 size-full object-cover"
-            />
-            {/* Front card's box at (71, 256), back card's at (85.44, 297.99): Figma 11065:45044. */}
-            <CardStack
-              thumbnail={thumb}
-              title="New business added to portfolio"
-              meta="Investment update"
-              backIcon={discountIcon}
-              backAmount="+₦250,000"
-              className="top-[256px] left-[71px]"
-            />
-          </div>
+    <section ref={sectionRef} data-ownership aria-labelledby="ownership-title" className="relative z-10 bg-white py-[130px] max-lg:py-[100px]">
+      <div className="page-row max-lg:max-w-[560px] max-lg:px-6">
+        {/* 541 + 80 + 640 = 1261 of the 1280 row, as in Figma. Below 1024 the text comes first (the
+            photo is decorative, so only the visual order changes). */}
+        <div className="flex items-center gap-20 max-lg:flex-col-reverse max-lg:gap-[50px]">
+          {/* Below 1024 the 541 × 628 composition scales to the column (0.6377 at 393). */}
+          <ScaledArtboard width={541} height={628}>
+            <div data-ownership-media className="relative h-[628px] w-[541px] shrink-0 overflow-hidden">
+              <img
+                data-ownership-photo
+                src={photo.src}
+                srcSet={photo.srcset}
+                sizes="(max-width: 1023px) min(512px, 100vw - 48px), 541px"
+                width={photo.width}
+                height={photo.height}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 size-full object-cover"
+              />
+              {/* Front card's box at (71, 256), back card's at (85.44, 297.99): Figma 11065:45044. */}
+              <CardStack
+                thumbnail={thumb}
+                title="New business added to portfolio"
+                meta="Investment update"
+                backIcon={discountIcon}
+                backAmount="+₦250,000"
+                className="top-[256px] left-[71px]"
+              />
+            </div>
+          </ScaledArtboard>
 
-          <div className="flex h-[628px] w-[640px] flex-col justify-between">
-            {/* "A clearer path / to ownership." at 464 wide. */}
-            <h2 id="ownership-title" data-ownership-title className="w-[464px] text-display-lg text-strong">
+          <div className="flex h-[628px] w-[640px] flex-col justify-between max-lg:h-auto max-lg:w-full max-lg:items-center max-lg:justify-start max-lg:gap-[50px] max-lg:text-center">
+            {/* "A clearer path / to ownership." at 464 wide; 311 below 1024. */}
+            <h2 id="ownership-title" data-ownership-title className="w-[464px] text-display-lg text-strong max-lg:w-[311px]">
               A clearer path to ownership.
             </h2>
             {/* One empty 18px line between paragraphs (1.4em). */}

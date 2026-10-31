@@ -1,6 +1,9 @@
 /**
  * About section 5 (Figma 11053:31692), "A clearer path to ownership.": the entrance, in seconds from
  * its start. Plays once, when the section is 35% on screen.
+ *
+ * Below 1024 the photo sits under the text, so the text and the cards play on their own triggers
+ * (OWNERSHIP_MOBILE), each with the same timings as here.
  */
 export const OWNERSHIP = {
   start: '35% bottom',
@@ -19,5 +22,17 @@ export const OWNERSHIP = {
   amount: { at: 1.1, peak: 1.08, duration: 0.3, ease: 'sine.inOut' },
 }
 
-/** The entrance runs only with motion allowed; otherwise the final state shows from the start. */
-export const OWNERSHIP_MEDIA = '(prefers-reduced-motion: no-preference)'
+/** Below 1024. ScrollTrigger positions are "<element edge> <viewport edge>". */
+export const OWNERSHIP_MOBILE = {
+  /** The heading and paragraphs: as the heading's top comes 15% up the screen. */
+  textStart: 'top 85%',
+  /** The cards: as the photo's centre comes 20% up the screen (the cards, 40% down it, are in view). */
+  cardsStart: 'center 80%',
+}
+
+/** The entrance runs only with motion allowed; otherwise the final state shows from the start.
+ *  gsap.matchMedia rebuilds it when the window crosses 1024. */
+export const OWNERSHIP_MEDIA = {
+  desktop: '(min-width: 1024px) and (prefers-reduced-motion: no-preference)',
+  mobile: '(max-width: 1023.98px) and (prefers-reduced-motion: no-preference)',
+}
