@@ -1,4 +1,10 @@
 {
+  "about/card-glow": {
+    "width": 379,
+    "height": 108,
+    "src": "/images/about/card-glow.webp",
+    "src2x": "/images/about/card-glow@2x.webp"
+  },
   "about/card-thumb-cafe": {
     "width": 64,
     "height": 64,

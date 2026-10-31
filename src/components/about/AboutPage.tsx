@@ -3,6 +3,7 @@ import { SiteHeader } from '../SiteHeader.tsx'
 import { useSmoothScroll } from '../../motion/useSmoothScroll.ts'
 import { AboutBackdrop } from './AboutBackdrop.tsx'
 import { AboutIntro } from './AboutIntro.tsx'
+import { AboutLinks } from './AboutLinks.tsx'
 import { AboutMission } from './AboutMission.tsx'
 import { AboutOwnership } from './AboutOwnership.tsx'
 import { AboutStory } from './AboutStory.tsx'
@@ -23,6 +24,7 @@ export function AboutPage() {
         </AboutBackdrop>
         <AboutValues />
         <AboutOwnership />
+        <AboutLinks />
       </main>
       <SiteFooter />
     </>

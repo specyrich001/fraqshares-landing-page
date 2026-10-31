@@ -1,0 +1,57 @@
+/* About section 6 link cards. */
+
+/* Entrance: with JS and motion allowed the heading and cards start hidden (the GSAP entrance brings
+   them in), so they never show for a frame first. Without JS or with reduced motion: visible. */
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-js] [data-links] :is([data-links-title], [data-link-card]) {
+    opacity: 0;
+  }
+}
+
+/* The glow: Figma 11063:45029, the blurred green on #FAFAFA, 379 × 108 inside the card's border, behind
+   the content. Hidden and 16px low by default; hover, or keyboard focus on the card's link, brings it
+   up (400ms in, 300ms out). Pointers that can hover only: no glow on touch. Not while the card is
+   still arriving ([data-entering]; hovering it early finishes its entrance first, see AboutLinks). */
+[data-card-glow] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 300ms ease-out,
+    transform 300ms ease-out;
+}
+[data-link-card] {
+  transition: border-color 300ms ease-out;
+}
+[data-link-arrow] {
+  transition: transform 300ms ease-out;
+}
+
+@media (hover: hover) {
+  [data-link-card]:not([data-entering]):is(:hover, :has(a:focus-visible)) {
+    border-color: #d4d4d4;
+    transition-duration: 400ms;
+  }
+  [data-link-card]:not([data-entering]):is(:hover, :has(a:focus-visible)) [data-card-glow] {
+    opacity: 1;
+    transform: translateY(0);
+    transition-duration: 400ms;
+  }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  [data-link-card]:not([data-entering]):is(:hover, :has(a:focus-visible)) [data-link-arrow] {
+    transform: translateX(4px);
+    transition-duration: 400ms;
+  }
+}
+
+/* Reduced motion: the glow appears in place, at once; the arrow stays put (no rule above moves it). */
+@media (prefers-reduced-motion: reduce) {
+  [data-card-glow],
+  [data-link-card],
+  [data-link-arrow] {
+    transition: none;
+  }
+  [data-card-glow] {
+    transform: none;
+  }
+}

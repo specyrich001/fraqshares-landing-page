@@ -11,8 +11,9 @@
    Tailwind's default size scale (text-sm, text-lg, …) is removed
    so off-guide sizes can't creep in.
 
-   To consolidate later: three 72px / 500 / -4% headings differ only
-   in line height: hero-h1 (100%), page-title (110%), display-lg (120%).
+   To consolidate later, headings that differ only in line height:
+   72px / 500 / -4%: hero-h1 (100%), page-title (110%), display-lg (120%).
+   62px / 500 / -4%: testimonial-intro (100%), display-md (120%).
    ============================================================ */
 
 @theme static {
@@ -89,6 +90,13 @@
   --text-statement-h2--font-weight: var(--text-section-h2--font-weight);
   --text-statement-h2--letter-spacing: var(--text-section-h2--letter-spacing);
 
+  /* About section 6 heading (Figma 11063:31701): testimonial-intro with 120% leading.
+     62px / 120% / 500 / -4%   MOBILE: 38px @ 375 (testimonial-intro's scale; no mobile design yet) */
+  --text-display-md: var(--text-testimonial-intro);
+  --text-display-md--line-height: 1.2;
+  --text-display-md--font-weight: var(--text-testimonial-intro--font-weight);
+  --text-display-md--letter-spacing: var(--text-testimonial-intro--letter-spacing);
+
   /* 62px / 100% / 500 / -4%   MOBILE: 38px @ 375 */
   --text-testimonial-intro: clamp(2.375rem, 1.8468rem + 2.2536vw, 3.875rem);
   --text-testimonial-intro--line-height: 1;
@@ -143,6 +151,12 @@
   --text-body-main-tight--line-height: 1.4;
   --text-body-main-tight--font-weight: 400;
   --text-body-main-tight--letter-spacing: var(--ls-tight-body);
+
+  /* 24px / 110% / 500 / -4%. About section 6 link-card titles (Figma 11063:44957). */
+  --text-card-title: 1.5rem;
+  --text-card-title--line-height: 1.1;
+  --text-card-title--font-weight: 500;
+  --text-card-title--letter-spacing: -0.04em;
 
   /* 20px / 110% / 500 / -4%. About value titles (Figma 11052:30835). */
   --text-value-title: 1.25rem;
