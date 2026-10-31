@@ -33,3 +33,11 @@
 [data-story][data-animate] [data-story-copy] {
   color: var(--color-dim);
 }
+
+/* While pinned, the stage is centred, so the section ends 221.5px + its 170px padding below the
+   screen's centre (at 1440). On screens taller than 783px that is above the screen's bottom, and the
+   footer would come up under the pinned scene. Extra padding keeps the section past the bottom edge
+   for the whole pin. Above 1440 the stage grows, so this slightly overshoots there, which is harmless. */
+[data-story][data-animate] {
+  padding-bottom: max(170px, calc(50vh - 221.5px));
+}

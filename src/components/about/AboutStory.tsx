@@ -39,7 +39,8 @@ function devPhase() {
  * The markup is the final state, which is what reduced motion and no JS get: dark text, hands met,
  * statement shown, no pin. Only transform, opacity and colour animate.
  *
- * relative z-10 + bg: it's the last section, so the footer reveal slides it up off the footer.
+ * relative z-10 + bg (here and on the wrapper that spans the pin): it's the last section, so the
+ * footer reveal slides it up off the footer.
  */
 export function AboutStory() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -136,69 +137,75 @@ export function AboutStory() {
   )
 
   return (
-    <section ref={sectionRef} data-story className="relative z-10 overflow-clip bg-soft pt-[130px] pb-[170px]">
-      {/* 690 wide, centred; Figma separates the paragraphs with an empty line (1.4em, 44.8px). Its box
-          ends at 667.6 (130 + 10 lines and 2 blank ones at 44.8). */}
-      <div data-story-copy className="mx-auto w-[690px] max-w-[calc(100%-2*var(--spacing-gutter))] text-center text-lead-lg text-strong [&>p+p]:mt-[1.4em]">
-        <p>
-          Owning property or investing in a business can feel out of reach when it requires substantial capital,
-          specialist knowledge, and time to manage.
-        </p>
-        <p>We created Fraqshares to make that starting point smaller.</p>
-        <p>
-          By dividing ownership into shares, we connect investors with opportunities across real estate, land, and
-          businesses. You choose the investments that suit your goals, while professional managers oversee the
-          underlying assets and operations.
-        </p>
-      </div>
-
-      {/* The pinned group (Figma y 870 → 1313): the statement, and the hands row 71px below its top,
-          tucked under its last line (Figma draws the hands over the statement's box; their dots start
-          lower). The group's height is that offset plus the row, which grows above 1440. */}
-      <div data-story-stage className="relative mt-[202.4px] h-[calc(71px+max(372px,25.8333cqw))]">
-        {/* Figma y 870, 616 wide. Its three lines are part of the design ("Start with as little as /
-            ₦25,000 and build your / portfolio over time."), so they're set here rather than split at
-            runtime; each animates on its own. */}
-        <h2 className="mx-auto w-[616px] max-w-[calc(100%-2*var(--spacing-gutter))] text-center text-statement-h2 text-strong">
-          <span data-statement-line className="block">
-            Start with as little as
-          </span>{' '}
-          <span data-statement-line className="block">
-            <span data-amount className="inline-block text-olive">
-              {MIN_INVESTMENT}
-            </span>{' '}
-            and build your
-          </span>{' '}
-          <span data-statement-line className="block">
-            portfolio over time.
-          </span>
-        </h2>
-
-        <div data-story-hands aria-hidden="true">
-          <img
-            data-hand="left"
-            src={handLeft.src}
-            srcSet={handLeft.srcset}
-            sizes="max(900px, 62.5vw)"
-            width={900}
-            height={369.4}
-            alt=""
-            loading="lazy"
-            decoding="async"
-          />
-          <img
-            data-hand="right"
-            src={handRight.src}
-            srcSet={handRight.srcset}
-            sizes="max(900px, 62.5vw)"
-            width={900}
-            height={372}
-            alt=""
-            loading="lazy"
-            decoding="async"
-          />
+    // The pin wraps the section in a spacer 1.5 screens taller. This layer spans the spacer, so the
+    // background covers the whole pin, also below the section when it ends above the screen's bottom
+    // (at 1440 × 900 it ends at y 841), and stays above the footer, which waits shifted up behind
+    // the page for its reveal (SiteFooter).
+    <div className="relative z-10 bg-soft">
+      <section ref={sectionRef} data-story className="relative z-10 overflow-clip bg-soft pt-[130px] pb-[170px]">
+        {/* 690 wide, centred; Figma separates the paragraphs with an empty line (1.4em, 44.8px). Its box
+            ends at 667.6 (130 + 10 lines and 2 blank ones at 44.8). */}
+        <div data-story-copy className="mx-auto w-[690px] max-w-[calc(100%-2*var(--spacing-gutter))] text-center text-lead-lg text-strong [&>p+p]:mt-[1.4em]">
+          <p>
+            Owning property or investing in a business can feel out of reach when it requires substantial capital,
+            specialist knowledge, and time to manage.
+          </p>
+          <p>We created Fraqshares to make that starting point smaller.</p>
+          <p>
+            By dividing ownership into shares, we connect investors with opportunities across real estate, land, and
+            businesses. You choose the investments that suit your goals, while professional managers oversee the
+            underlying assets and operations.
+          </p>
         </div>
-      </div>
-    </section>
+
+        {/* The pinned group (Figma y 870 → 1313): the statement, and the hands row 71px below its top,
+            tucked under its last line (Figma draws the hands over the statement's box; their dots start
+            lower). The group's height is that offset plus the row, which grows above 1440. */}
+        <div data-story-stage className="relative mt-[202.4px] h-[calc(71px+max(372px,25.8333cqw))]">
+          {/* Figma y 870, 616 wide. Its three lines are part of the design ("Start with as little as /
+              ₦25,000 and build your / portfolio over time."), so they're set here rather than split at
+              runtime; each animates on its own. */}
+          <h2 className="mx-auto w-[616px] max-w-[calc(100%-2*var(--spacing-gutter))] text-center text-statement-h2 text-strong">
+            <span data-statement-line className="block">
+              Start with as little as
+            </span>{' '}
+            <span data-statement-line className="block">
+              <span data-amount className="inline-block text-olive">
+                {MIN_INVESTMENT}
+              </span>{' '}
+              and build your
+            </span>{' '}
+            <span data-statement-line className="block">
+              portfolio over time.
+            </span>
+          </h2>
+
+          <div data-story-hands aria-hidden="true">
+            <img
+              data-hand="left"
+              src={handLeft.src}
+              srcSet={handLeft.srcset}
+              sizes="max(900px, 62.5vw)"
+              width={900}
+              height={369.4}
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              data-hand="right"
+              src={handRight.src}
+              srcSet={handRight.srcset}
+              sizes="max(900px, 62.5vw)"
+              width={900}
+              height={372}
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+    </div>
   )
 }
