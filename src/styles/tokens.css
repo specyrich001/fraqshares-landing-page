@@ -63,7 +63,7 @@
   --text-hero-h1--letter-spacing: -0.04em;
 
   /* Inner-page H1 (About, Figma 11049:449): hero-h1 with 110% leading.
-     72px / 110% / 500 / -4%   MOBILE: 40px @ 375 (hero-h1's scale; no mobile design yet) */
+     72px / 110% / 500 / -4%   Below 1024: 42px (Figma 11074:45129), in the mobile block below. */
   --text-page-title: var(--text-hero-h1);
   --text-page-title--line-height: 1.1;
   --text-page-title--font-weight: var(--text-hero-h1--font-weight);
@@ -128,7 +128,8 @@
   --text-intro-body--font-weight: 400;
   --text-intro-body--letter-spacing: -0.01em;
 
-  /* 18px / 140% / 400 / -4% (--ls-tight-body). About intro paragraphs (Figma 11049:454). */
+  /* 18px / 140% / 400 / -4% (--ls-tight-body). About intro paragraphs (Figma 11049:454).
+     Below 1024: 16px (Figma 11074:45131), in the mobile block below. */
   --text-intro-body-tight: 1.125rem;
   --text-intro-body-tight--line-height: 1.4;
   --text-intro-body-tight--font-weight: 400;
@@ -352,6 +353,17 @@
   --text-step-body: var(--color-step-body);
   --indicator-inactive: var(--color-indicator-inactive);
   --indicator-progress: var(--color-indicator-progress);
+}
+
+/* ---- Mobile values (below 1024, the site's layout breakpoint) -------------------
+   Stepped values from the mobile Figma (393 wide), not clamps: the token keeps its name, so every
+   text-<role> use switches with it. Only the size steps; leading and tracking stay as above.
+   Unlayered, so these beat the theme layer's :root values. */
+@media (max-width: 1023.98px) {
+  :root {
+    --text-page-title: 2.625rem; /* 42px, About H1 (Figma 11074:45129) */
+    --text-intro-body-tight: 1rem; /* 16px, About intro paragraphs (Figma 11074:45131) */
+  }
 }
 
 /* Page content row: 1280px with 80px gutters at 1440 (Figma), centred beyond that. */

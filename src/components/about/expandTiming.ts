@@ -19,5 +19,6 @@ export const EXPAND = {
 /** Figma 11049:450: 1279 × 628. The full-bleed photo keeps this ratio. */
 export const PHOTO_ASPECT = 1279 / 628
 
-/** The expansion runs only with motion allowed; otherwise the photo stays at its Figma size. */
-export const EXPAND_MEDIA = '(prefers-reduced-motion: no-preference)'
+/** Desktop only, and only with motion allowed; otherwise the photo stays at its Figma size. Below 1024
+ *  the photo is already full-bleed (Figma 11074:45134), so there's nothing to open. */
+export const EXPAND_MEDIA = '(min-width: 1024px) and (prefers-reduced-motion: no-preference)'

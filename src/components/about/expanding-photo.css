@@ -1,10 +1,16 @@
 /* ExpandingPhoto. Static (no JS, reduced motion): the photo fills its 1280 × 628 box in the page row.
+   Below 1024: full-bleed at Figma's 393 × 418 ratio (11074:45134), never expanding.
    Expanding ([data-expand], set by JS): the photo is the full window width and its own ratio tall,
    centred on that box, and clip-path cuts it back to the box. The box keeps its size, so the page
    layout never moves; only the clip opens. --bleed-* come from the component (window and box sizes). */
 [data-expanding-photo] {
   position: relative;
   aspect-ratio: 1279 / 628;
+}
+@media (max-width: 1023.98px) {
+  [data-expanding-photo] {
+    aspect-ratio: 393 / 418;
+  }
 }
 [data-expanding-photo] > [data-bleed] {
   position: absolute;

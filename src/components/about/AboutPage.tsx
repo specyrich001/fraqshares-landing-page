@@ -16,7 +16,12 @@ export function AboutPage() {
   return (
     <>
       <SiteHeader />
-      <main>
+      {/* Below 1024 the page loads DM Sans with its opsz axis, which the browser sizes automatically
+          (about/index.html). The About mobile frames, unlike the home page's, are drawn at opsz 14:
+          Figma 11074:45129's 42px H1 measures 270px of ink for "Building wealth", opsz 14 gives ~270 and
+          auto (opsz 40 at that size) 243. So the About content is held at 14; header and footer stay as
+          on the home page. */}
+      <main className="max-lg:[font-variation-settings:'opsz'_14]">
         <AboutIntro />
         <AboutBackdrop>
           <AboutStory />

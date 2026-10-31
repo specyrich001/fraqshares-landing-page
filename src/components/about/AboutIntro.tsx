@@ -20,7 +20,11 @@ gsap.registerPlugin(useGSAP)
  * further up and down (at 1440), so the gaps become ~61px above it and ~91px below.
  *
  * relative z-10 + white: the footer reveal slides it up off the footer (SiteFooter), as the FAQ does
- * on the home page. Desktop only so far: below 1024 the row just stacks.
+ * on the home page.
+ *
+ * Below 1024 (Figma 11074:45092, 393 wide): 100px top, no bottom padding. The text centred in one
+ * column, 24px sides (capped at 560 on tablets, as on the home page), 24px between H1 and paragraphs;
+ * 100px under it the photo, full-bleed to the section's bottom edge, never expanding (ExpandingPhoto).
  */
 export function AboutIntro() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -76,15 +80,16 @@ export function AboutIntro() {
   )
 
   return (
-    <section ref={sectionRef} aria-labelledby="about-title" className="relative z-10 bg-white py-[130px]">
-      <div className="page-row">
-        <div className="flex items-center justify-between gap-10 max-lg:flex-col max-lg:items-start">
+    <section ref={sectionRef} aria-labelledby="about-title" className="relative z-10 bg-white py-[130px] max-lg:pt-[100px] max-lg:pb-0">
+      <div className="page-row max-lg:max-w-[560px] max-lg:px-6">
+        <div className="flex items-center justify-between gap-10 max-lg:flex-col max-lg:gap-6 max-lg:text-center">
           {/* One element, two tones: "Building wealth / should have a smaller / starting point." The break
               is explicit: Chrome sets "Building wealth should" 695px wide, so it would fit the 698 box.
+              Mobile breaks there too: "Building wealth / should have a / smaller starting / point."
               Its intro line masks are widened (as on the hero) so descenders aren't cut while rising. */}
           <h1
             id="about-title"
-            className="w-[698px] max-w-full text-page-title text-strong [&_.intro-line-mask]:overflow-visible! [&_.intro-line-mask]:[clip-path:inset(-0.2em_-0.15em_-0.25em)]"
+            className="w-[698px] max-w-full text-page-title max-lg:w-full text-strong [&_.intro-line-mask]:overflow-visible! [&_.intro-line-mask]:[clip-path:inset(-0.2em_-0.15em_-0.25em)]"
           >
             <span className="text-muted">Building wealth</span>
             <br /> should have a smaller starting point.
@@ -92,7 +97,7 @@ export function AboutIntro() {
           {/* Figma separates the two with an empty 18px line: one line height (1.4em, 25.2px).
               Figma's box is 414, but Chrome sets "…you can own a share of an" 415.25px wide and would wrap
               "an"; 416 with the 2px hung into the gutter keeps Figma's lines and its left edge (x 946). */}
-          <div data-intro-copy className="-mr-0.5 w-[416px] max-w-full shrink-0 text-intro-body-tight text-body-muted [&>p+p]:mt-[1.4em]">
+          <div data-intro-copy className="-mr-0.5 w-[416px] max-w-full shrink-0 text-intro-body-tight max-lg:mr-0 max-lg:w-full text-body-muted [&>p+p]:mt-[1.4em]">
             <p>
               Fraqshares makes ownership in real estate, land, and businesses more accessible to Africans at home
               and abroad.
@@ -103,8 +108,11 @@ export function AboutIntro() {
             </p>
           </div>
         </div>
+      </div>
 
-        <ExpandingPhoto className="mt-[100px]" />
+      {/* In the row on desktop (it opens from there); outside it below 1024, full-bleed. */}
+      <div className="mt-[100px] lg:page-row">
+        <ExpandingPhoto />
       </div>
     </section>
   )

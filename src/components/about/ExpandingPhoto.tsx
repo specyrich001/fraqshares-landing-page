@@ -18,7 +18,8 @@ const photo = images['about/intro-photo']
  *
  * The bleed is the window's clientWidth, not 100vw, which counts the scrollbar on Windows and would
  * scroll sideways. Sizes are measured on every ScrollTrigger refresh (load, fonts, resize).
- * Static for reduced motion and without JS.
+ * Static for reduced motion and without JS, and below 1024, where the photo is already full-bleed
+ * (EXPAND_MEDIA: matchMedia kills and restores the expansion when the window crosses 1024).
  */
 export function ExpandingPhoto({ className = '' }: { className?: string }) {
   const boxRef = useRef<HTMLDivElement>(null)
@@ -83,11 +84,13 @@ export function ExpandingPhoto({ className = '' }: { className?: string }) {
   return (
     <div ref={boxRef} data-expanding-photo className={className}>
       <div data-bleed>
-        {/* Decorative: the heading and paragraphs carry the message. Above the fold at 1440, so eager. */}
+        {/* Decorative: the heading and paragraphs carry the message. Above the fold at 1440, so eager.
+            Below 1024 the 393 × 418 crop covers with the photo 189vw wide (418/393 × 2000/1125), so
+            even the 1440w file covers a 393 screen at 2x (it needs 1486). */}
         <img
           src={photo.src}
           srcSet={photo.srcset}
-          sizes="100vw"
+          sizes="(max-width: 1023px) 189vw, 100vw"
           width={photo.width}
           height={photo.height}
           alt=""

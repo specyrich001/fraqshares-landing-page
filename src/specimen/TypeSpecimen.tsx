@@ -7,6 +7,8 @@ type Token = {
   cls: string
   spec: string
   mobile?: string
+  /** A stepped value from the mobile Figma, below 1024 (tokens.css mobile block). */
+  belowLg?: string
   sample: ReactNode
 }
 
@@ -22,7 +24,7 @@ const display: Token[] = [
     role: 'page-title',
     cls: 'text-page-title',
     spec: '72px / 110% / 500 / -4% · inner-page H1 (= hero-h1, 110% leading)',
-    mobile: '40px @ 375px',
+    belowLg: '42px / 110% / 500 / -4% (Figma 11074:45129)',
     sample: 'Building wealth should have a smaller starting point.',
   },
   {
@@ -102,6 +104,7 @@ const reading: Token[] = [
     role: 'intro-body-tight',
     cls: 'text-intro-body-tight text-body-muted',
     spec: '18px / 140% / 400 / -4% (--ls-tight-body) · shown in text-body-muted (FLAG: -4% vs the usual -1%)',
+    belowLg: '16px / 140% / 400 / -4% (Figma 11074:45131)',
     sample:
       'Through fractional investing, you can own a share of an asset without covering its full purchase price or taking on its day-to-day management.',
   },
@@ -303,6 +306,11 @@ function Row({
         {token.mobile && (
           <p className="font-mono text-body">
             <span className="rounded bg-olive/30 px-1">MOBILE · review</span> {token.mobile}
+          </p>
+        )}
+        {token.belowLg && (
+          <p className="font-mono text-body">
+            <span className="rounded bg-mint px-1">BELOW 1024 · Figma</span> {token.belowLg}
           </p>
         )}
         <Computed el={el} width={width} />
