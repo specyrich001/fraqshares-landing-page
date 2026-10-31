@@ -26,6 +26,9 @@ export const MISSION = {
     start: 'top top',
     /** Pin length, in viewport heights. */
     length: 1.2,
+    /** Below 1024: shorter, in the same proportion as section 2's (1 against 1.5), which the user
+     *  asked to be faster on a phone. */
+    lengthMobile: 0.8,
     scrub: 0.5,
   },
   stack: {
@@ -47,3 +50,9 @@ export const MISSION = {
 /** Scroll scenes run only with motion allowed; otherwise each section keeps its own background and the
  *  cards sit side by side. */
 export const MISSION_MEDIA = '(prefers-reduced-motion: no-preference)'
+
+/** The stack's scene, per breakpoint: the same at every width except the pin length (MISSION.pin). */
+export const STACK_MEDIA = {
+  desktop: '(min-width: 1024px) and (prefers-reduced-motion: no-preference)',
+  mobile: '(max-width: 1023.98px) and (prefers-reduced-motion: no-preference)',
+}

@@ -3,7 +3,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useRef, type CSSProperties } from 'react'
 import images from '../../generated/images.json'
-import { MISSION, MISSION_MEDIA } from './missionTiming.ts'
+import { MISSION, STACK_MEDIA } from './missionTiming.ts'
 import './about-mission.css'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
@@ -46,6 +46,12 @@ function devStack() {
  * and opacity animate. Both cards stay in the DOM in reading order, so screen readers get both.
  *
  * Without the scene (no JS, reduced motion): no pin, the cards side by side (about-mission.css).
+ *
+ * Below 1024 (Figma 11074:62050, 393 × 852): the same scene, a shorter pin (MISSION.pin.lengthMobile).
+ * Cards 345 × 439 (24px sides, 512 max on tablets), 64px top and 34px sides; the 40px title, then the
+ * 18px body 142px below it (top-aligned, as Figma's column is; desktop sets the body at the bottom).
+ * The stack sits 16.5px above centre (Figma: y 170 on 852), the glow 153 tall. Without the scene the
+ * cards stack in a column.
  */
 export function AboutMission() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -53,7 +59,8 @@ export function AboutMission() {
   useGSAP(
     () => {
       const mm = gsap.matchMedia()
-      mm.add(MISSION_MEDIA, () => {
+      mm.add(STACK_MEDIA, (context) => {
+        const { desktop } = context.conditions as { desktop: boolean }
         const section = sectionRef.current!
         const stackEl = section.querySelector<HTMLElement>('[data-mission-cards]')!
         const cards = gsap.utils.toArray<HTMLElement>('[data-card]', section)
@@ -87,7 +94,7 @@ export function AboutMission() {
             : {
                 trigger: section,
                 start: P.start,
-                end: () => `+=${window.innerHeight * P.length}`,
+                end: () => `+=${window.innerHeight * (desktop ? P.length : P.lengthMobile)}`,
                 pin: true,
                 scrub: P.scrub,
                 invalidateOnRefresh: true,
@@ -130,10 +137,13 @@ export function AboutMission() {
               key={card.id}
               data-card={card.id}
               style={{ '--i': i } as CSSProperties}
-              className={`h-[478px] w-[488px] px-[54px] pt-16 pb-14 text-strong ${card.className}`}
+              className={`h-[478px] w-[488px] px-[54px] pt-16 pb-14 text-strong max-lg:h-[439px] max-lg:w-full max-lg:px-[34px] max-lg:pb-16 ${card.className}`}
             >
-              <div data-card-content className="flex h-full w-[380px] flex-col justify-between">
-                <h2 className="text-section-h2">{card.title}</h2>
+              <div
+                data-card-content
+                className="flex h-full w-[380px] flex-col justify-between max-lg:w-auto max-lg:justify-start max-lg:gap-[142px]"
+              >
+                <h2 className="text-section-h2 max-lg:text-section-h2-mobile max-lg:leading-[1.1]">{card.title}</h2>
                 <p className="text-body-main-tight">{card.body}</p>
               </div>
             </article>
@@ -151,7 +161,7 @@ export function AboutMission() {
         alt=""
         loading="lazy"
         decoding="async"
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[230px] w-full max-w-none"
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[230px] w-full max-w-none max-lg:h-[153px]"
       />
     </section>
   )

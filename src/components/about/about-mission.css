@@ -30,3 +30,29 @@
   left: 0;
   top: calc(var(--step) * var(--i));
 }
+
+/* Below 1024 (Figma 11074:62050): the stack is 345 wide (24px sides, 512 max on tablets) and sits
+   16.5px above centre (Figma: y 170 on an 852 screen, where centred would be 186.5), so the stage
+   is padded 33px at the bottom. Without the scene the cards stack in a column, 100px above and below. */
+@media (max-width: 1023.98px) {
+  [data-mission-stage] {
+    min-height: 0;
+    padding: 100px 24px;
+  }
+  [data-mission-cards] {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  [data-mission-cards] > [data-card] {
+    max-width: 512px;
+  }
+  [data-mission][data-animate] [data-mission-stage] {
+    min-height: 560px;
+    padding: 0 0 33px;
+  }
+  [data-mission][data-animate] [data-mission-cards] {
+    width: min(512px, 100% - 48px);
+    height: calc(439px + var(--step) * (var(--count) - 1));
+  }
+}

@@ -126,6 +126,7 @@ const reading: Token[] = [
     role: 'body-main-tight',
     cls: 'text-body-main-tight',
     spec: '20px / 140% / 400 / -4% (--ls-tight-body, shared with lead-lg and intro-body-tight)',
+    belowLg: '18px / 140% / 400 / -4% (Figma 11074:78961)',
     sample:
       'To make fractional ownership more accessible to Africans at home and abroad, opening up opportunities to build wealth through real estate, land, and businesses.',
   },
