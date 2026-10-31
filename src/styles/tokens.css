@@ -84,7 +84,7 @@
   --text-section-h2--letter-spacing: -0.04em;
 
   /* About closing statement (Figma 11050:464): section-h2 with 120% leading.
-     58px / 120% / 500 / -4%   MOBILE: 36px @ 375 (section-h2's scale; no mobile design yet) */
+     58px / 120% / 500 / -4%   Below 1024: 32px (Figma 11074:62047), in the mobile block below. */
   --text-statement-h2: var(--text-section-h2);
   --text-statement-h2--line-height: 1.2;
   --text-statement-h2--font-weight: var(--text-section-h2--font-weight);
@@ -116,7 +116,8 @@
      text. If it was a Figma slip, change this one value to -0.01em. */
   --ls-tight-body: -0.04em;
 
-  /* 32px / 140% / 400 / -4%. About section 2's scroll-highlighted paragraphs (Figma 11049:459). */
+  /* 32px / 140% / 400 / -4%. About section 2's scroll-highlighted paragraphs (Figma 11049:459).
+     Below 1024: 24px (Figma 11074:45141), in the mobile block below. */
   --text-lead-lg: 2rem;
   --text-lead-lg--line-height: 1.4;
   --text-lead-lg--font-weight: 400;
@@ -363,6 +364,8 @@
   :root {
     --text-page-title: 2.625rem; /* 42px, About H1 (Figma 11074:45129) */
     --text-intro-body-tight: 1rem; /* 16px, About intro paragraphs (Figma 11074:45131) */
+    --text-lead-lg: 1.5rem; /* 24px, About section 2 paragraphs (Figma 11074:45141) */
+    --text-statement-h2: 2rem; /* 32px, About section 2 statement (Figma 11074:62047) */
   }
 }
 

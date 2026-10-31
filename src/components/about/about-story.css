@@ -29,6 +29,27 @@
   transform-origin: 100% 50%;
 }
 
+/* Below 1024 (Figma 11074:45136): desktop's row at 272/900 (0.302). Each hand is 272 wide, their tops
+   114.6px below the statement's (right under its last line); the left hand's left edge at
+   centre - 288.7, the right hand's at centre + 28.9. At 393 and below that size holds (the arm ends
+   are still off screen at 320); above 393 the row scales with the width, as desktop's does above
+   1440, so the arm ends stay off screen on tablets. */
+@media (max-width: 1023.98px) {
+  [data-story-hands] {
+    top: 114.6px;
+    height: max(112.4px, 28.6cqw);
+  }
+  [data-story-hands] > img {
+    width: max(272px, 69.2112cqw);
+  }
+  [data-story-hands] > [data-hand="left"] {
+    left: calc(50cqw - max(288.7px, 73.4606cqw));
+  }
+  [data-story-hands] > [data-hand="right"] {
+    left: calc(50cqw + max(28.9px, 7.3537cqw));
+  }
+}
+
 /* Scripted, motion allowed: the paragraphs start dim and their words animate back to #111. */
 [data-story][data-animate] [data-story-copy] {
   color: var(--color-dim);
@@ -41,4 +62,11 @@
    this slightly overshoots there, which is harmless. */
 [data-story][data-animate] {
   padding-bottom: max(170px, calc(50vh - 221.5px));
+}
+/* Below 1024 the same, with the mobile stage: half of it is 57.3px + half the hands row (56.2px, or
+   14.3vw above 393; vw, as cqw here would read an ancestor, not this section), and 100px padding. */
+@media (max-width: 1023.98px) {
+  [data-story][data-animate] {
+    padding-bottom: max(100px, calc(50vh - 57.3px - max(56.2px, 14.3vw)));
+  }
 }

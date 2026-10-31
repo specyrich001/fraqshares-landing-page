@@ -41,6 +41,12 @@ function devPhase() {
  *
  * Its background: AboutBackdrop (it spans this section's pin and section 3, and fades the grey into
  * section 3's dark green). Without the scenes the section keeps its own bg-soft.
+ *
+ * Below 1024 (Figma 11074:45136, 393 × 1105): 100px top and bottom, the paragraphs (24px) and statement
+ * (32px) in one 345 column (24px sides, 512 max on tablets), 100px apart; the hands, 272 wide (desktop's
+ * scaled to 0.302), right under the statement, cut by the screen edges. The same scroll scene as
+ * desktop: highlight, fade, and the pin with the group centred (about-story.css keeps the section
+ * reaching the screen bottom for the pin, as on desktop).
  */
 export function AboutStory() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -48,7 +54,10 @@ export function AboutStory() {
   useGSAP(
     () => {
       const mm = gsap.matchMedia()
-      mm.add(STORY_MEDIA, () => {
+      // Desktop and mobile share the scene; only the pin length differs (STORY.pin). matchMedia rebuilds
+      // it when the window crosses 1024.
+      mm.add(STORY_MEDIA, (context) => {
+        const { desktop } = context.conditions as { desktop: boolean }
         const section = sectionRef.current!
         const copy = section.querySelector<HTMLElement>('[data-story-copy]')!
         const stage = section.querySelector<HTMLElement>('[data-story-stage]')!
@@ -106,7 +115,7 @@ export function AboutStory() {
             : {
                 trigger: stage,
                 start: P.start,
-                end: () => `+=${window.innerHeight * P.length}`,
+                end: () => `+=${window.innerHeight * (desktop ? P.length : P.lengthMobile)}`,
                 pin: section,
                 scrub: P.scrub,
                 invalidateOnRefresh: true,
@@ -137,10 +146,10 @@ export function AboutStory() {
   )
 
   return (
-    <section ref={sectionRef} data-story className="relative z-10 overflow-clip bg-soft pt-[130px] pb-[170px]">
+    <section ref={sectionRef} data-story className="relative z-10 overflow-clip bg-soft pt-[130px] pb-[170px] max-lg:py-[100px]">
       {/* 690 wide, centred; Figma separates the paragraphs with an empty line (1.4em, 44.8px). Its box
           ends at 667.6 (130 + 10 lines and 2 blank ones at 44.8). */}
-      <div data-story-copy className="mx-auto w-[690px] max-w-[calc(100%-2*var(--spacing-gutter))] text-center text-lead-lg text-strong [&>p+p]:mt-[1.4em]">
+      <div data-story-copy className="mx-auto w-[690px] max-w-[calc(100%-2*var(--spacing-gutter))] text-center text-lead-lg text-strong max-lg:w-[calc(100%-48px)] max-lg:max-w-[512px] [&>p+p]:mt-[1.4em]">
         <p>
           Owning property or investing in a business can feel out of reach when it requires substantial capital,
           specialist knowledge, and time to manage.
@@ -155,12 +164,13 @@ export function AboutStory() {
 
       {/* The pinned group (Figma y 870 → 1313): the statement, and the hands row 71px below its top,
           tucked under its last line (Figma draws the hands over the statement's box; their dots start
-          lower). The group's height is that offset plus the row, which grows above 1440. */}
-      <div data-story-stage className="relative mt-[202.4px] h-[calc(71px+max(372px,25.8333cqw))]">
+          lower). The group's height is that offset plus the row, which grows above 1440.
+          Below 1024 the row starts under the statement (about-story.css), 100px under the paragraphs. */}
+      <div data-story-stage className="relative mt-[202.4px] h-[calc(71px+max(372px,25.8333cqw))] max-lg:mt-[100px] max-lg:h-[calc(114.6px+max(112.4px,28.6cqw))]">
         {/* Figma y 870, 616 wide. Its three lines are part of the design ("Start with as little as /
             ₦25,000 and build your / portfolio over time."), so they're set here rather than split at
             runtime; each animates on its own. */}
-        <h2 className="mx-auto w-[616px] max-w-[calc(100%-2*var(--spacing-gutter))] text-center text-statement-h2 text-strong">
+        <h2 className="mx-auto w-[616px] max-w-[calc(100%-2*var(--spacing-gutter))] text-center text-statement-h2 text-strong max-lg:w-[calc(100%-32px)] max-lg:max-w-[512px]">
           <span data-statement-line className="block">
             Start with as little as
           </span>{' '}
@@ -180,7 +190,7 @@ export function AboutStory() {
             data-hand="left"
             src={handLeft.src}
             srcSet={handLeft.srcset}
-            sizes="max(900px, 62.5vw)"
+            sizes="(max-width: 1023px) max(272px, 69.2vw), max(900px, 62.5vw)"
             width={900}
             height={369.4}
             alt=""
@@ -191,7 +201,7 @@ export function AboutStory() {
             data-hand="right"
             src={handRight.src}
             srcSet={handRight.srcset}
-            sizes="max(900px, 62.5vw)"
+            sizes="(max-width: 1023px) max(272px, 69.2vw), max(900px, 62.5vw)"
             width={900}
             height={372}
             alt=""

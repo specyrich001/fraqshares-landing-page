@@ -56,7 +56,7 @@ const display: Token[] = [
     role: 'statement-h2',
     cls: 'text-statement-h2',
     spec: '58px / 120% / 500 / -4% (= section-h2, 120% leading)',
-    mobile: '36px @ 375px',
+    belowLg: '32px / 120% / 500 / -4% (Figma 11074:62047)',
     sample: `Start with as little as ${MIN_INVESTMENT} and build your portfolio over time.`,
   },
   {
@@ -91,6 +91,7 @@ const reading: Token[] = [
     role: 'lead-lg',
     cls: 'text-lead-lg',
     spec: '32px / 140% / 400 / -4% (--ls-tight-body)',
+    belowLg: '24px / 140% / 400 / -4% (Figma 11074:45141)',
     sample: 'We created Fraqshares to make that starting point smaller.',
   },
   {

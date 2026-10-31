@@ -31,6 +31,8 @@ export const STORY = {
     start: 'center center',
     /** Pin length, in viewport heights. */
     length: 1.5,
+    /** Below 1024: shorter, so the statement and hands come in faster on a phone (user request). */
+    lengthMobile: 1,
     scrub: 0.5,
   },
   /** The hands come in with the statement: same start, done when the amount lands. */
@@ -61,4 +63,7 @@ export const STORY = {
 }
 
 /** The scroll scene runs only with motion allowed; otherwise everything shows in its final state. */
-export const STORY_MEDIA = '(prefers-reduced-motion: no-preference)'
+export const STORY_MEDIA = {
+  desktop: '(min-width: 1024px) and (prefers-reduced-motion: no-preference)',
+  mobile: '(max-width: 1023.98px) and (prefers-reduced-motion: no-preference)',
+}
