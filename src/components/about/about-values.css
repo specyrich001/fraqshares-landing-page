@@ -1,0 +1,7 @@
+/* About section 4. With JS and motion allowed, the intro starts hidden (the GSAP intro brings it in), so
+   it never shows for a frame before playing. Without JS or with reduced motion it's simply visible. */
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-js] [data-values] :is([data-compass], [data-values-title], [data-values-copy] > p) {
+    opacity: 0;
+  }
+}

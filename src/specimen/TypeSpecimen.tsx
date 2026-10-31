@@ -26,6 +26,17 @@ const display: Token[] = [
     sample: 'Building wealth should have a smaller starting point.',
   },
   {
+    role: 'display-lg',
+    cls: 'text-display-lg',
+    spec: '72px / 120% / 500 / -4% (= hero-h1, 120% leading)',
+    mobile: '40px @ 375px',
+    sample: (
+      <>
+        Our true north: <span className="text-olive">You!</span>
+      </>
+    ),
+  },
+  {
     role: 'section-h2',
     cls: 'text-section-h2',
     spec: '58px / 110% / 500 / -4%',
@@ -103,6 +114,7 @@ const reading: Token[] = [
     sample:
       'To make fractional ownership more accessible to Africans at home and abroad, opening up opportunities to build wealth through real estate, land, and businesses.',
   },
+  { role: 'value-title', cls: 'text-value-title', spec: '20px / 110% / 500 / -4%', sample: 'Continuous Innovation' },
   { role: 'tab', cls: 'text-tab', spec: '20px / 140% / 500 / -1%', sample: 'Real estate' },
   { role: 'faq-question', cls: 'text-faq-question', spec: '= tab', sample: 'What is Fraqshares?' },
   {
@@ -123,6 +135,13 @@ const reading: Token[] = [
     spec: '16px / 150% / 400 / -1%',
     sample:
       'Whether you are just getting started or you are an experienced investor, Fraqshares makes it easy to access the wealth-building power of shared ownership.',
+  },
+  {
+    role: 'body-sm-tight',
+    cls: 'text-body-sm-tight text-body-faint',
+    spec: '16px / 140% / 400 / -4% (--ls-tight-body) · shown in text-body-faint',
+    sample:
+      'A smaller starting point opens the door to more people. Fractional ownership lets you invest without purchasing an entire property, parcel of land, or business.',
   },
   {
     role: 'faq-answer',
@@ -207,6 +226,8 @@ const colors = [
   { name: 'muted', hex: '#999999', note: '--text-muted · display sizes only' },
   { name: 'nav', hex: '#606060', note: '--text-nav · header links' },
   { name: 'secondary', hex: '#5E5E5E', note: '--text-secondary · supporting paragraphs' },
+  { name: 'body-faint', hex: 'rgba(17,17,17,0.5)', note: '--text-body-faint · #111 at 50% · About values body (3.5:1, flagged)' },
+  { name: 'border-light', hex: '#E4E4E4', note: '--border-light · About section dividers' },
   { name: 'dim', hex: 'rgba(17,17,17,0.3)', note: '--text-dim · #111 at 30% · words before the scroll highlights them' },
   { name: 'body-muted', hex: 'rgba(17,17,17,0.7)', note: '--text-body-muted · #111 at 70% · inner-page intro paragraphs' },
   { name: 'meta', hex: '#767676', note: '--text-meta · product-card meta' },

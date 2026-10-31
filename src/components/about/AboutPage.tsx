@@ -5,6 +5,7 @@ import { AboutBackdrop } from './AboutBackdrop.tsx'
 import { AboutIntro } from './AboutIntro.tsx'
 import { AboutMission } from './AboutMission.tsx'
 import { AboutStory } from './AboutStory.tsx'
+import { AboutValues } from './AboutValues.tsx'
 
 /** /about (about/index.html). The plain white header (About marked current), sections, the footer. */
 export function AboutPage() {
@@ -19,6 +20,7 @@ export function AboutPage() {
           <AboutStory />
           <AboutMission />
         </AboutBackdrop>
+        <AboutValues />
       </main>
       <SiteFooter />
     </>

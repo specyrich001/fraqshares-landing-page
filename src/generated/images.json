@@ -1,4 +1,10 @@
 {
+  "about/compass": {
+    "width": 345,
+    "height": 408,
+    "src": "/images/about/compass-345.webp",
+    "srcset": "/images/about/compass-345.webp 345w, /images/about/compass-690.webp 690w"
+  },
   "about/hand-left": {
     "width": 900,
     "height": 370,

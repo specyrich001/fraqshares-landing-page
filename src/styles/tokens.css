@@ -10,6 +10,9 @@
 
    Tailwind's default size scale (text-sm, text-lg, …) is removed
    so off-guide sizes can't creep in.
+
+   To consolidate later: three 72px / 500 / -4% headings differ only
+   in line height: hero-h1 (100%), page-title (110%), display-lg (120%).
    ============================================================ */
 
 @theme static {
@@ -25,6 +28,8 @@
   --color-secondary: #5e5e5e; /* text-secondary — supporting paragraphs (6.5:1 on white) */
   --color-tab-inactive: #a1a1a1; /* text-tab-inactive — unselected tabs. 2.6:1 on white: below AA for 20px text (design call, flagged) */
   --color-dim: rgb(17 17 17 / 0.3); /* text-dim — #111 at 30%, About section 2's words before the scroll highlights them (decorative state; the text ends #111) */
+  --color-body-faint: rgb(17 17 17 / 0.5); /* text-body-faint — #111 at 50%, About values body copy (≈ #888 on white, 3.5:1: below AA for 16px text, design call, flagged) */
+  --color-border-light: #e4e4e4; /* border-light — About section dividers (decorative) */
   --color-body-muted: rgb(17 17 17 / 0.7); /* text-body-muted — #111 at 70%, inner-page intro paragraphs (≈ #585858 on white, 7:1) */
 
   /* Product UI (hero activity feed cards) */
@@ -63,6 +68,13 @@
   --text-page-title--font-weight: var(--text-hero-h1--font-weight);
   --text-page-title--letter-spacing: var(--text-hero-h1--letter-spacing);
 
+  /* About section 4 title (Figma 11051:29345): hero-h1 with 120% leading.
+     72px / 120% / 500 / -4%   MOBILE: 40px @ 375 (hero-h1's scale; no mobile design yet) */
+  --text-display-lg: var(--text-hero-h1);
+  --text-display-lg--line-height: 1.2;
+  --text-display-lg--font-weight: var(--text-hero-h1--font-weight);
+  --text-display-lg--letter-spacing: var(--text-hero-h1--letter-spacing);
+
   /* 58px / 110% / 500 / -4%   MOBILE: 36px @ 375
      (guide also allows 100% — add `leading-none`) */
   --text-section-h2: clamp(2.25rem, 1.7658rem + 2.0658vw, 3.625rem);
@@ -91,8 +103,8 @@
 
   /* ---- Reading & interface (fixed at every width) ----------- */
 
-  /* The About page's tight body tracking, shared by lead-lg, intro-body-tight and body-main-tight so
-     they switch together. FLAGGED: every other body style is -1%; -4% is very tight for reading
+  /* The About page's tight body tracking, shared by lead-lg, intro-body-tight, body-main-tight and
+     body-sm-tight so they switch together. FLAGGED: every other body style is -1%; -4% is very tight for reading
      text. If it was a Figma slip, change this one value to -0.01em. */
   --ls-tight-body: -0.04em;
 
@@ -132,6 +144,12 @@
   --text-body-main-tight--font-weight: 400;
   --text-body-main-tight--letter-spacing: var(--ls-tight-body);
 
+  /* 20px / 110% / 500 / -4%. About value titles (Figma 11052:30835). */
+  --text-value-title: 1.25rem;
+  --text-value-title--line-height: 1.1;
+  --text-value-title--font-weight: 500;
+  --text-value-title--letter-spacing: -0.04em;
+
   /* 20px / 140% / 500 / -1% */
   --text-tab: 1.25rem;
   --text-tab--line-height: 1.4;
@@ -160,6 +178,12 @@
   --text-body--line-height: 1.5;
   --text-body--font-weight: 400;
   --text-body--letter-spacing: -0.01em;
+
+  /* 16px / 140% / 400 / -4% (--ls-tight-body). About value descriptions. */
+  --text-body-sm-tight: 1rem;
+  --text-body-sm-tight--line-height: 1.4;
+  --text-body-sm-tight--font-weight: 400;
+  --text-body-sm-tight--letter-spacing: var(--ls-tight-body);
 
   --text-faq-answer: var(--text-body);
   --text-faq-answer--line-height: var(--text-body--line-height);
@@ -302,6 +326,8 @@
   --text-secondary: var(--color-secondary);
   --text-tab-inactive: var(--color-tab-inactive);
   --text-body-muted: var(--color-body-muted);
+  --text-body-faint: var(--color-body-faint);
+  --border-light: var(--color-border-light);
   --text-dim: var(--color-dim);
   --text-meta: var(--color-meta);
   --money-in: var(--color-money-in);
