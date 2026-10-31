@@ -66,7 +66,7 @@ const reading: Token[] = [
   {
     role: 'lead-lg',
     cls: 'text-lead-lg',
-    spec: '32px / 140% / 400 / -4%',
+    spec: '32px / 140% / 400 / -4% (--ls-tight-body)',
     sample: 'We created Fraqshares to make that starting point smaller.',
   },
   {
@@ -79,7 +79,7 @@ const reading: Token[] = [
   {
     role: 'intro-body-tight',
     cls: 'text-intro-body-tight text-body-muted',
-    spec: '18px / 140% / 400 / -4% · shown in text-body-muted (FLAG: -4% vs the usual -1%)',
+    spec: '18px / 140% / 400 / -4% (--ls-tight-body) · shown in text-body-muted (FLAG: -4% vs the usual -1%)',
     sample:
       'Through fractional investing, you can own a share of an asset without covering its full purchase price or taking on its day-to-day management.',
   },
@@ -95,6 +95,13 @@ const reading: Token[] = [
     spec: '20px / 140% / 400 / -1%',
     sample:
       'All it takes is a few taps on your phone to manage your portfolio, earn income, and stay on top of your investments.',
+  },
+  {
+    role: 'body-main-tight',
+    cls: 'text-body-main-tight',
+    spec: '20px / 140% / 400 / -4% (--ls-tight-body, shared with lead-lg and intro-body-tight)',
+    sample:
+      'To make fractional ownership more accessible to Africans at home and abroad, opening up opportunities to build wealth through real estate, land, and businesses.',
   },
   { role: 'tab', cls: 'text-tab', spec: '20px / 140% / 500 / -1%', sample: 'Real estate' },
   { role: 'faq-question', cls: 'text-faq-question', spec: '= tab', sample: 'What is Fraqshares?' },

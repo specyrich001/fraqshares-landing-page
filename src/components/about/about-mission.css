@@ -1,0 +1,32 @@
+/* About section 3 (Mission and Vision). Without the scroll scene (no JS, reduced motion) the cards sit
+   side by side, centred, 32px apart, in Figma's 1024px-tall frame, so Mission is never covered. With
+   it ([data-animate]) the section is one screen tall and the cards stack, each `--step` lower than the
+   one before. */
+[data-mission-stage] {
+  display: flex;
+  min-height: 1024px;
+  align-items: center;
+  justify-content: center;
+}
+[data-mission-cards] {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 32px;
+}
+
+[data-mission][data-animate] [data-mission-stage] {
+  height: 100vh;
+  min-height: 640px;
+}
+[data-mission][data-animate] [data-mission-cards] {
+  display: block;
+  position: relative;
+  width: 488px;
+  height: calc(478px + var(--step) * (var(--count) - 1));
+}
+[data-mission][data-animate] [data-card] {
+  position: absolute;
+  left: 0;
+  top: calc(var(--step) * var(--i));
+}

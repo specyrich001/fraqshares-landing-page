@@ -91,11 +91,16 @@
 
   /* ---- Reading & interface (fixed at every width) ----------- */
 
+  /* The About page's tight body tracking, shared by lead-lg, intro-body-tight and body-main-tight so
+     they switch together. FLAGGED: every other body style is -1%; -4% is very tight for reading
+     text. If it was a Figma slip, change this one value to -0.01em. */
+  --ls-tight-body: -0.04em;
+
   /* 32px / 140% / 400 / -4%. About section 2's scroll-highlighted paragraphs (Figma 11049:459). */
   --text-lead-lg: 2rem;
   --text-lead-lg--line-height: 1.4;
   --text-lead-lg--font-weight: 400;
-  --text-lead-lg--letter-spacing: -0.04em;
+  --text-lead-lg--letter-spacing: var(--ls-tight-body);
 
   /* 24px / 140% / 400 / -1% */
   --text-intro-body: 1.5rem;
@@ -103,13 +108,11 @@
   --text-intro-body--font-weight: 400;
   --text-intro-body--letter-spacing: -0.01em;
 
-  /* 18px / 140% / 400 / -4%. About intro paragraphs (Figma 11049:454).
-     FLAGGED: every other body style is -1%; -4% is very tight for 18px reading text. If it was a
-     Figma slip, change this one value to -0.01em. */
+  /* 18px / 140% / 400 / -4% (--ls-tight-body). About intro paragraphs (Figma 11049:454). */
   --text-intro-body-tight: 1.125rem;
   --text-intro-body-tight--line-height: 1.4;
   --text-intro-body-tight--font-weight: 400;
-  --text-intro-body-tight--letter-spacing: -0.04em;
+  --text-intro-body-tight--letter-spacing: var(--ls-tight-body);
 
   /* 24px / 140% / 500 / -1% */
   --text-step-title: 1.5rem;
@@ -122,6 +125,12 @@
   --text-body-main--line-height: 1.4;
   --text-body-main--font-weight: 400;
   --text-body-main--letter-spacing: -0.01em;
+
+  /* body-main at -4% (--ls-tight-body). About Mission / Vision cards (Figma 11050:465). */
+  --text-body-main-tight: 1.25rem;
+  --text-body-main-tight--line-height: 1.4;
+  --text-body-main-tight--font-weight: 400;
+  --text-body-main-tight--letter-spacing: var(--ls-tight-body);
 
   /* 20px / 140% / 500 / -1% */
   --text-tab: 1.25rem;

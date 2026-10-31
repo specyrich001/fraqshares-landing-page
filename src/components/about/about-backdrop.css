@@ -1,0 +1,16 @@
+/* AboutBackdrop. Off (no JS, reduced motion): the dark layer isn't drawn and sections 2 and 3 keep their
+   own backgrounds. On ([data-fade]): both go transparent over the wrapper's grey, and the dark layer,
+   behind them across the whole wrapper, fades in. */
+[data-backdrop-dark] {
+  display: none;
+}
+[data-about-backdrop][data-fade] [data-backdrop-dark] {
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: var(--color-dark);
+  opacity: 0;
+}
+[data-about-backdrop][data-fade] :is([data-story], [data-mission]) {
+  background-color: transparent;
+}
