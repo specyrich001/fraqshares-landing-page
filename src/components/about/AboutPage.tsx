@@ -4,6 +4,7 @@ import { useSmoothScroll } from '../../motion/useSmoothScroll.ts'
 import { AboutBackdrop } from './AboutBackdrop.tsx'
 import { AboutIntro } from './AboutIntro.tsx'
 import { AboutMission } from './AboutMission.tsx'
+import { AboutOwnership } from './AboutOwnership.tsx'
 import { AboutStory } from './AboutStory.tsx'
 import { AboutValues } from './AboutValues.tsx'
 
@@ -21,6 +22,7 @@ export function AboutPage() {
           <AboutMission />
         </AboutBackdrop>
         <AboutValues />
+        <AboutOwnership />
       </main>
       <SiteFooter />
     </>

@@ -1,4 +1,10 @@
 {
+  "about/card-thumb-cafe": {
+    "width": 64,
+    "height": 64,
+    "src": "/images/about/card-thumb-cafe-64.webp",
+    "srcset": "/images/about/card-thumb-cafe-64.webp 64w, /images/about/card-thumb-cafe-128.webp 128w"
+  },
   "about/compass": {
     "width": 345,
     "height": 408,
@@ -22,6 +28,12 @@
     "height": 810,
     "src": "/images/about/intro-photo-1440.webp",
     "srcset": "/images/about/intro-photo-1440.webp 1440w, /images/about/intro-photo-1920.webp 1920w, /images/about/intro-photo-2000.webp 2000w"
+  },
+  "about/ownership-photo": {
+    "width": 541,
+    "height": 628,
+    "src": "/images/about/ownership-photo-541.webp",
+    "srcset": "/images/about/ownership-photo-541.webp 541w, /images/about/ownership-photo-1082.webp 1082w"
   },
   "faq/glow-mobile": {
     "width": 393,

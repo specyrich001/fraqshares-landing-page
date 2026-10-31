@@ -1,25 +1,15 @@
 import discountIcon from '../../assets/icons/discount-shape.svg'
 import bellIcon from '../../assets/icons/notification-bing.svg'
 import images from '../../generated/images.json'
+import { CardStack } from '../product/CardStack.tsx'
 import { ProductPill } from '../product/ProductPill.tsx'
 import { ScaledArtboard } from '../ScaledArtboard.tsx'
-import { TransactionCard } from '../product/TransactionCard.tsx'
 import { wealthPhoto } from './wealthPhoto.ts'
 
 const photo = wealthPhoto
 const thumb = images['wealth/card-thumb']
 const bottomBlur = images['wealth/bottom-blur']
 const bottomBlurMobile = images['wealth/bottom-blur-mobile']
-
-/*
- * Card stack, inside the 473 × 649 image block. Both cards are the 306px base TransactionCard
- * scaled from their centres (Figma: 1.3036 front, 1.2093 back; every Figma value divides back to
- * the base recipe). Each is placed by its centre so the rendered box lands on Figma's:
- *   front 399 × 96.97 at (37.5, 485)   → centre (237, 533.49), base height 74.39
- *   back  370 × 74.01 at (51.94, 527)  → centre (237, 564.00), base height 61.2
- * left 84px = 237 − 306 / 2. The back card is first so the front one covers it, leaving ~19px peeking.
- */
-const cardPlacement = 'absolute left-[84px] -translate-y-1/2'
 
 /**
  * Figma: Desktop - 12 (10800:25226), 1440 × 909. Static layout; the hero → section scroll
@@ -92,38 +82,18 @@ export function WealthSection() {
                 className="absolute top-12 left-[37.5px]"
               />
 
-              {/* Figma "background blur 51" = CSS 25.5px; the card's scale takes it to the 30.86px Figma renders. */}
-              <TransactionCard
-                data-wealth-card="back"
-                media={<img src={discountIcon} width={32} height={32} alt="" className="shrink-0" />}
-                title="Interest for August"
-                meta="Dividend"
-                amount="+₦250,000"
-                amountClassName="product-amount-lg text-money-in"
-                surfaceClassName="bg-white/30 backdrop-blur-[25.5px] opacity-64"
-                paddingClassName="h-[61.2px] px-4"
-                className={`${cardPlacement} top-[564px] scale-[1.2093]`}
-              />
-              <TransactionCard
-                data-wealth-card="front"
-                media={
-                  <img
-                    src={thumb.src}
-                    srcSet={thumb.srcset}
-                    sizes="64px"
-                    width={thumb.width}
-                    height={thumb.height}
-                    alt=""
-                    loading="lazy"
-                    className="size-[49.1px] shrink-0 object-cover"
-                  />
-                }
+              {/* Front card's box at (37.5, 485) in the 473 × 649 block. The stage animates the cards by
+                  data-wealth-card. This page's front card is 90% white (About's is solid). */}
+              <CardStack
+                thumbnail={thumb}
                 title="New business added to portfolio"
                 meta="Investment update"
-                surfaceClassName="bg-white/90"
-                paddingClassName="h-[74.39px] pr-4 pl-[11.87px]"
-                gapClassName="gap-[11.08px]"
-                className={`${cardPlacement} top-[533.49px] scale-[1.3036]`}
+                backIcon={discountIcon}
+                backAmount="+₦250,000"
+                frontSurfaceClassName="bg-white/90"
+                frontAttrs={{ 'data-wealth-card': 'front' }}
+                backAttrs={{ 'data-wealth-card': 'back' }}
+                className="top-[485px] left-[37.5px]"
               />
             </div>
           </div>

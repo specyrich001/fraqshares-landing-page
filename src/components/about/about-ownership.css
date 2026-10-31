@@ -1,0 +1,9 @@
+/* About section 5. With JS and motion allowed, the heading and paragraphs start hidden (the entrance
+   brings them in), so they never show for a frame before it plays. Without JS or with reduced motion
+   they're simply visible. The cards are hidden by the component itself: hiding an ancestor of the back
+   card would cut its backdrop blur. */
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-js] [data-ownership] :is([data-ownership-title], [data-ownership-copy] > p) {
+    opacity: 0;
+  }
+}

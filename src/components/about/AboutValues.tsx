@@ -1,17 +1,17 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { SplitText } from 'gsap/SplitText'
 import { useRef } from 'react'
 import accessibilityIcon from '../../assets/about/value-accessibility.svg'
 import accountabilityIcon from '../../assets/about/value-accountability.svg'
 import innovationIcon from '../../assets/about/value-innovation.svg'
 import transparencyIcon from '../../assets/about/value-transparency.svg'
 import images from '../../generated/images.json'
+import { revealLines } from './revealLines.ts'
 import { VALUES, VALUES_MEDIA } from './valuesTiming.ts'
 import './about-values.css'
 
-gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP)
+gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 /** Figma 11051:29346's visible fill: a crop of the 1000 × 1000 original, transparent torn-paper edges. */
 const compass = images['about/compass']
@@ -100,7 +100,12 @@ export function AboutValues() {
         // the matchMedia context, so a revert also reverts what it made.
         const { compass: C, title: T, paragraph: P } = VALUES.intro
         const play = context.add('play', () => {
-          const split = SplitText.create(title, { type: 'lines', aria: 'auto' })
+          const { split, tween: lines } = revealLines(title, {
+            from: { y: T.rise, opacity: 0 },
+            duration: T.duration,
+            ease: T.ease,
+            stagger: T.stagger,
+          })
           const you = title.querySelector<HTMLElement>('[data-you]')!
           gsap.set(title, { opacity: 1 })
           const tl = gsap.timeline({ onComplete: () => split.revert() })
@@ -111,7 +116,7 @@ export function AboutValues() {
             C.at,
           )
           tl.to(compassEl, { keyframes: { rotate: C.wobble, easeEach: C.wobbleEase }, duration: C.wobbleDuration, ease: 'none' })
-          tl.fromTo(split.lines, { y: T.rise, opacity: 0 }, { y: 0, opacity: 1, duration: T.duration, ease: T.ease, stagger: T.stagger }, T.at)
+          tl.add(lines, T.at)
           tl.fromTo(you, { opacity: 0, scale: T.youScale }, { opacity: 1, scale: 1, duration: T.duration, ease: T.ease }, T.at + T.youDelay)
           tl.fromTo(paras, { y: P.rise, opacity: 0 }, { y: 0, opacity: 1, duration: P.duration, ease: P.ease, stagger: P.stagger }, P.at)
         }) as () => void
