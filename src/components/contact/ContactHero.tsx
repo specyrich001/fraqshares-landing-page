@@ -1,14 +1,9 @@
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
 import { useRef, type ReactNode } from 'react'
-import { INTRO_TEXT as I, INTRO_TEXT_MEDIA } from '../about/introTiming.ts'
-import { revealLines } from '../about/revealLines.ts'
 import { LocationIcon, MailIcon, PhoneIcon } from '../icons/ContactIcons.tsx'
 import { focusRingOnDark } from '../linkStyles.ts'
+import { useTextIntro } from '../useTextIntro.ts'
 import { CONTACT_DETAILS } from './contactDetails.ts'
 import { ContactForm } from './ContactForm.tsx'
-
-gsap.registerPlugin(useGSAP)
 
 /** Mint 16px / 140%, underlined on hover and focus only. */
 const link = `text-footer-link text-mint decoration-1 underline-offset-4 hover:underline focus-visible:underline ${focusRingOnDark}`
@@ -40,9 +35,8 @@ const icon = 'size-6 shrink-0 text-olive'
  * twice as readily (at least 40px apart; the H1 is smaller there anyway, as page-title scales with the
  * screen), and the address drops under email and phone when there isn't room beside them.
  *
- * Text intro on load, About's (introTiming.ts): the H1's lines rise out of their masks one after
- * another, then the rule and the three details fade up in turn. Hidden before first paint, played once
- * the font is in, plain text again afterwards. The card doesn't move. Never with reduced motion.
+ * Text intro on load (useTextIntro): the H1's lines rise out of their masks one after another, then
+ * the rule and the three details fade up in turn. The card doesn't move.
  *
  * relative z-10: above the footer, which waits under the page for its reveal (as every section does).
  */
@@ -50,53 +44,7 @@ export function ContactHero() {
   const { email, phone, addressLines, mapsUrl } = CONTACT_DETAILS
   const sectionRef = useRef<HTMLElement>(null)
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia()
-      mm.add(INTRO_TEXT_MEDIA, (context) => {
-        const title = sectionRef.current!.querySelector<HTMLElement>('#contact-title')!
-        const rest = gsap.utils.toArray<HTMLElement>('[data-contact-reveal]', sectionRef.current)
-        const text = [title, ...rest]
-        // Opacity, not visibility, so screen readers still have the text while it's hidden.
-        gsap.set(text, { opacity: 0 })
-
-        let split: SplitText | undefined
-        let cancelled = false
-        const play = context.add('play', () => {
-          if (cancelled) return
-          const reveal = revealLines(title, {
-            from: { yPercent: I.heading.yPercent },
-            mask: true,
-            className: 'intro-line',
-            duration: I.heading.duration,
-            ease: I.heading.ease,
-            stagger: I.heading.stagger,
-          })
-          split = reveal.split
-          gsap.set(title, { opacity: 1 })
-          const P = I.paragraphs
-          gsap
-            .timeline({
-              delay: I.delay,
-              onComplete: () => {
-                split?.revert()
-                gsap.set(text, { clearProps: 'opacity,transform,translate,rotate,scale' })
-              },
-            })
-            .add(reveal.tween, 0)
-            .fromTo(rest, { opacity: 0, y: P.y }, { opacity: 1, y: 0, duration: P.duration, ease: P.ease, stagger: P.stagger }, P.at)
-        }) as () => void
-        Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, I.fontTimeoutMs))]).then(() => play())
-
-        return () => {
-          cancelled = true
-          split?.revert()
-          gsap.set(text, { clearProps: 'opacity,transform,translate' })
-        }
-      })
-    },
-    { scope: sectionRef },
-  )
+  useTextIntro(sectionRef, '#contact-title', '[data-contact-reveal]')
 
   return (
     <section ref={sectionRef} aria-labelledby="contact-title" className="relative z-10 bg-forest py-[130px] max-lg:py-[100px]">

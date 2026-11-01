@@ -18,6 +18,10 @@ export const FAQ_HREF = '/#faq'
 /** The Contact page: the home page FAQ's "Contact Us" and the About / Glossary link cards. */
 export const CONTACT_HREF = '/contact'
 
+/** The legal pages: the footer (and the Terms link to the Privacy Policy). */
+export const PRIVACY_POLICY_HREF = '/privacy-policy'
+export const TERMS_HREF = '/terms-and-conditions'
+
 /** The current page's path without a trailing slash ('' for home), to mark its nav link aria-current. */
 export const currentPath = () => (typeof window === 'undefined' ? '' : window.location.pathname.replace(/\/$/, ''))
 

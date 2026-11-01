@@ -8,7 +8,7 @@ import logoFooter from '../../assets/logo-footer.svg'
 import images from '../../generated/images.json'
 import { ArrowRightIcon } from '../icons/ArrowRightIcon.tsx'
 import { buttonBase, focusRing, focusRingOnDark } from '../linkStyles.ts'
-import { ABOUT_HREF, FAQ_HREF, GLOSSARY_HREF, LOGIN_URL, SIGNUP_URL, SOCIAL_URLS } from '../siteLinks.ts'
+import { ABOUT_HREF, FAQ_HREF, GLOSSARY_HREF, LOGIN_URL, PRIVACY_POLICY_HREF, SIGNUP_URL, SOCIAL_URLS, TERMS_HREF } from '../siteLinks.ts'
 import { STAGE_MEDIA } from '../stage/stageTiming.ts'
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from './SocialIcons.tsx'
 
@@ -20,7 +20,14 @@ const phoneMobile = images['footer/phone-hand-mobile']
 const year = new Date().getFullYear()
 
 // PLACEHOLDER hrefs (#) for the pages that don't exist yet. Listings opens the web app's log in.
-const hrefs: Record<string, string> = { Listings: LOGIN_URL, 'About Us': ABOUT_HREF, Glossary: GLOSSARY_HREF, FAQs: FAQ_HREF }
+const hrefs: Record<string, string> = {
+  Listings: LOGIN_URL,
+  'About Us': ABOUT_HREF,
+  'Terms & Conditions': TERMS_HREF,
+  'Privacy Policy': PRIVACY_POLICY_HREF,
+  Glossary: GLOSSARY_HREF,
+  FAQs: FAQ_HREF,
+}
 
 const columns = [
   { heading: 'Products', links: ['Listings', 'Investments'] },

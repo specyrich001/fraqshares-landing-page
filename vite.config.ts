@@ -44,9 +44,14 @@ type GlossaryRenderer = {
   assertValidGlossary: () => void
   renderGlossary: (siteUrl: string) => { html: string; jsonLd: string }
 }
-type ContactRenderer = { renderContact: () => string }
+type PageRenderer = { renderPage: () => string }
 const GLOSSARY_RENDERER = '/src/prerender/glossary.tsx'
-const CONTACT_RENDERER = '/src/prerender/contact.tsx'
+/** Pages prerendered as they are (no structured data): <name>/index.html → its renderer. */
+const PAGE_RENDERERS: Record<string, string> = {
+  contact: '/src/prerender/contact.tsx',
+  'privacy-policy': '/src/prerender/privacyPolicy.tsx',
+  'terms-and-conditions': '/src/prerender/termsAndConditions.tsx',
+}
 
 /** Loads a module through Vite (TSX, JSON, CSS imports), with the dev server or a throwaway one. */
 async function loadRenderer<T>(id: string, server?: ViteDevServer): Promise<T> {
@@ -74,8 +79,8 @@ async function loadRenderer<T>(id: string, server?: ViteDevServer): Promise<T> {
  * The glossary data is validated when the build or dev server starts (unique slugs and category ids,
  * every category exists, no empty definitions): any problem stops it, listing each one.
  *
- * /contact, prerendered the same way (no structured data): the page with its empty form, so the form
- * can be read and sent without JS.
+ * /contact and the legal pages, prerendered the same way (no structured data; PAGE_RENDERERS): the
+ * Contact form can be read and sent without JS, and the legal text is in the HTML.
  */
 function pagePrerender(): Plugin {
   let server: ViteDevServer | undefined
@@ -92,8 +97,9 @@ function pagePrerender(): Plugin {
       order: 'pre',
       async handler(html, ctx) {
         const file = ctx.filename.replaceAll('\\', '/')
-        if (file.endsWith('/contact/index.html')) {
-          const page = (await loadRenderer<ContactRenderer>(CONTACT_RENDERER, ctx.server ?? server)).renderContact()
+        const renderer = PAGE_RENDERERS[path.basename(path.dirname(file))]
+        if (renderer) {
+          const page = (await loadRenderer<PageRenderer>(renderer, ctx.server ?? server)).renderPage()
           return html.replace('<div id="root"></div>', () => `<div id="root">${page}</div>`)
         }
         if (!file.endsWith('/glossary/index.html')) return html
@@ -107,7 +113,7 @@ function pagePrerender(): Plugin {
 }
 
 /** Pages besides the home page: each is <name>/index.html, served at /<name>. */
-const PAGES = ['about', 'glossary', 'contact']
+const PAGES = ['about', 'glossary', 'contact', 'privacy-policy', 'terms-and-conditions']
 
 /**
  * Dev and preview serve <name>/index.html only at /<name>/; this serves it at /<name> too, as the
