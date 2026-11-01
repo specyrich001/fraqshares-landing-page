@@ -1,50 +1,30 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useRef } from 'react'
+import { useRef, type ReactNode } from 'react'
 import images from '../../generated/images.json'
+import { revealLines } from '../about/revealLines.ts'
 import { ArrowRightIcon } from '../icons/ArrowRightIcon.tsx'
-import { GLOSSARY_HREF } from '../siteLinks.ts'
 import { LINKS, LINKS_MEDIA, LINKS_MOBILE } from './linksTiming.ts'
-import { revealLines } from './revealLines.ts'
-import './about-links.css'
+import './link-cards.css'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
 /** Figma 11063:45029's render: the shared green blur (tint 0.63) on #FAFAFA, inside the card's border. */
 const glow = images['about/card-glow']
 
-// PLACEHOLDER href: #contact is the homepage FAQ's own placeholder.
-const CARDS = [
-  {
-    title: 'FAQs',
-    body: 'Find answers about getting started, ownership, fees, returns, and selling your shares.',
-    label: 'Explore FAQs',
-    href: '/#faq',
-  },
-  {
-    title: 'Glossary',
-    body: 'Get familiar with the terms used in fractional investing, from shares and SPVs to distributions and valuations.',
-    label: 'Explore Glossary',
-    href: GLOSSARY_HREF,
-  },
-  {
-    title: 'Still Have Questions?',
-    body: 'We’re here to help you understand how Fraqshares works.',
-    label: 'Contact Us',
-    href: '#contact',
-  },
-]
+export type LinkCard = { title: string; body: string; label: string; href: string }
 
 /** DEV: window.linksReplay() plays the entrance again. */
 type DevWindow = Window & { linksReplay?: () => void }
 
 /**
- * About section 6, Figma: Desktop - 25 (11063:31700), 1440 × 756, under section 5, above the footer.
- * Timings: linksTiming.ts.
+ * A page's closing section: a split-tone heading and three link cards, above the footer. About section 6
+ * (Figma: Desktop - 25, 11063:31700) and the Glossary's last section (Desktop - 25, 11100:112333), both
+ * 1440 × 756; the pages pass their own heading and cards. Timings: linksTiming.ts.
  *
- * 130px above and below: the split-tone H2 (717 wide), 80px, then three link cards (381 × 268, 68px
- * apart). Each card is one link: the link row is the <a>, and its ::after covers the whole card, so the
+ * 130px above and below: the H2 (its width from `headingClassName`: 717 on About, 575 on Glossary),
+ * 80px, then three link cards (381 × 268, 68px apart). Each card is one link: the link row is the <a>, and its ::after covers the whole card, so the
  * card is clickable while screen readers hear just "Explore FAQs" and so on. Focus on the link outlines
  * the whole card. Hover / focus (pointers that can hover): the green glow rises in at the bottom, the
  * arrow nudges right, the border darkens (about-links.css).
@@ -57,12 +37,27 @@ type DevWindow = Window & { linksReplay?: () => void }
  *
  * relative z-10 + bg-soft: the last section, so the footer reveal slides it up off the footer.
  *
- * Below 1024 (Figma 11074:79176, 393 × 1255): 100px above and below; the heading (40px) centred, 50px
- * over the cards, which stack 24px apart, 345 × 271 (24px sides, 512 max on tablets), 40px top and
- * 24px sides. The heading and each card play their entrance as they reach the screen (LINKS_MOBILE).
+ * Below 1024 (About: Figma 11074:79176, Glossary: 11107:113154, both 393 × 1255): 100px above, 148
+ * below; the heading (40px) centred and 6px wider than the column on each side, as in Figma (357 at
+ * 393), 50px over the cards, which stack 24px apart, full width (24px sides, 560 max on tablets),
+ * 40px top and bottom, 24px sides. The link row sits a fixed 40px under the text (per the brief: the
+ * frames draw every card 271 tall with the link at the bottom), so the cards are as tall as their
+ * text. The heading and each card play their entrance as they reach the screen (LINKS_MOBILE).
  * Touch screens have no hover, so no glow there.
  */
-export function AboutLinks() {
+export function LinkCardsSection({
+  id,
+  heading,
+  headingClassName,
+  cards: CARDS,
+}: {
+  /** The heading's id (the section is labelled by it). */
+  id: string
+  heading: ReactNode
+  /** Its desktop width: Figma's text box, which sets where it wraps. */
+  headingClassName: string
+  cards: LinkCard[]
+}) {
   const sectionRef = useRef<HTMLElement>(null)
 
   useGSAP(
@@ -157,12 +152,15 @@ export function AboutLinks() {
   )
 
   return (
-    <section ref={sectionRef} data-links aria-labelledby="links-title" className="relative z-10 bg-soft py-[130px] max-lg:py-[100px]">
+    <section ref={sectionRef} data-links aria-labelledby={id} className="relative z-10 bg-soft py-[130px] max-lg:pt-[100px] max-lg:pb-[148px]">
       <div className="page-row max-lg:max-w-[560px] max-lg:px-6">
-        {/* One heading, two tones: "Build Your Investment / Portfolio with Fraqshares." at 717 wide.
-            Below 1024 centred, and 6px wider than the column on each side, as in Figma (357 at 393). */}
-        <h2 id="links-title" data-links-title className="w-[717px] max-w-full text-display-md text-strong max-lg:-mx-1.5 max-lg:w-auto max-lg:max-w-none max-lg:text-center">
-          <span className="text-muted">Build Your</span> Investment Portfolio with Fraqshares.
+        {/* One heading, two tones (the muted part in a span). Below 1024 centred, 6px past the column. */}
+        <h2
+          id={id}
+          data-links-title
+          className={`max-w-full text-display-md text-strong max-lg:-mx-1.5 max-lg:w-auto max-lg:max-w-none max-lg:text-center ${headingClassName}`}
+        >
+          {heading}
         </h2>
 
         <ul role="list" className="mt-20 grid grid-cols-3 gap-[68px] max-lg:mt-[50px] max-lg:grid-cols-1 max-lg:gap-6">
@@ -172,7 +170,7 @@ export function AboutLinks() {
             <li
               key={card.title}
               data-link-card
-              className="relative isolate flex h-[268px] flex-col overflow-hidden border border-border-light px-8 py-10 max-lg:h-[271px] max-lg:px-6 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-forest"
+              className="relative isolate flex h-[268px] flex-col overflow-hidden border border-border-light px-8 py-10 max-lg:h-auto max-lg:px-6 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-forest"
             >
               <img
                 data-card-glow
@@ -188,13 +186,13 @@ export function AboutLinks() {
               <h3 data-card-part className="text-card-title text-strong">
                 {card.title}
               </h3>
-              {/* Figma's box is 315, but Chrome sets "…getting started, ownership," 315.83 wide and would wrap
-                  "ownership,"; 316 keeps Figma's lines (0.7px into the padding: the content box is 315.3).
+              {/* Figma's box is 315, but Chrome sets the FAQs card's "…getting started, ownership," 315.83 wide
+                  and would wrap "ownership,"; 316 keeps Figma's lines (0.7px into the padding: the content box is 315.3).
                   Below 1024 it fills the card (295 at 393). */}
               <p data-card-part className="mt-6 w-[316px] text-body-sm-tight text-body-faint max-lg:w-auto">
                 {card.body}
               </p>
-              <div data-card-part className="mt-auto">
+              <div data-card-part className="mt-auto max-lg:mt-10">
                 <a
                   href={card.href}
                   className="inline-flex items-center gap-2.5 text-button text-black outline-none after:absolute after:inset-0 after:content-[''] max-lg:text-button-sm"

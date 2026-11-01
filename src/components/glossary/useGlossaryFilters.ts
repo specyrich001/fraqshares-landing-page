@@ -14,10 +14,12 @@ import { NO_FILTERS, readFilters, revealing, writeFilters, type GlossaryFilters 
  *    cleared, then it's scrolled to and briefly highlighted (data-flash, glossary.css).
  *  - Filtering changes the page's length a lot (29 terms to 1), so after every change the smooth
  *    scroll and the footer reveal's trigger re-measure. And when the reader changes a filter while
- *    scrolled past the top of the list (`listRef`), the list's top is brought back into view, so the
- *    results are read from their start instead of the page ending under them.
+ *    scrolled past the top of the results (`topRef`: the row of filters and list, whose top is the
+ *    list's on desktop and the filter bar's below 1024), that top is brought back into view, so the
+ *    results are read from their start instead of the page ending under them. Applying the mobile
+ *    filter sheet always brings it to the top.
  */
-export function useGlossaryFilters(glossary: Glossary, listRef: RefObject<HTMLElement | null>) {
+export function useGlossaryFilters(glossary: Glossary, topRef: RefObject<HTMLElement | null>) {
   const [filters, setFilters] = useState<GlossaryFilters>(() =>
     typeof window === 'undefined' ? NO_FILTERS : readFilters(window.location.search, glossary),
   )
@@ -27,30 +29,36 @@ export function useGlossaryFilters(glossary: Glossary, listRef: RefObject<HTMLEl
   const debounce = useRef<number | undefined>(undefined)
   const current = useRef(filters)
   current.current = filters
-  /** The next filter change came from the reader (not a term link): bring the list's top into view. */
-  const byReader = useRef(false)
+  /** The next filter change came from the reader (not a term link): bring the results' top into view
+   *  if it's above the screen ('above'), or to the top whatever (the sheet's 'apply'). */
+  const byReader = useRef<false | 'above' | 'apply'>(false)
 
   const setInput = useCallback((value: string) => {
     setInputState(value)
     window.clearTimeout(debounce.current)
     debounce.current = window.setTimeout(() => {
-      byReader.current = true
+      byReader.current = 'above'
       setFilters((f) => ({ ...f, query: value }))
     }, GLOSSARY.searchDebounceMs)
   }, [])
   const setLetter = useCallback((letter: string) => {
-    byReader.current = true
+    byReader.current = 'above'
     setFilters((f) => ({ ...f, letter }))
   }, [])
   const setCategory = useCallback((category: string) => {
-    byReader.current = true
+    byReader.current = 'above'
     setFilters((f) => ({ ...f, category }))
   }, [])
   const clear = useCallback(() => {
     window.clearTimeout(debounce.current)
-    byReader.current = true
+    byReader.current = 'above'
     setInputState('')
     setFilters(NO_FILTERS)
+  }, [])
+  /** The mobile filter sheet's "Apply Filter": both at once (a new object, so it scrolls even unchanged). */
+  const applyFilters = useCallback(({ letter, category }: Pick<GlossaryFilters, 'letter' | 'category'>) => {
+    byReader.current = 'apply'
+    setFilters((f) => ({ ...f, letter, category }))
   }, [])
 
   // After each change (not on load): re-measure, then, if the reader changed it, show the list's top.
@@ -64,18 +72,19 @@ export function useGlossaryFilters(glossary: Glossary, listRef: RefObject<HTMLEl
       const lenis = smoothScroll()
       lenis?.resize()
       ScrollTrigger.refresh()
-      if (!byReader.current) return
+      const mode = byReader.current
+      if (!mode) return
       byReader.current = false
-      const list = listRef.current
-      if (!list) return
-      const top = list.getBoundingClientRect().top
-      if (top >= GLOSSARY.topOffset) return
+      const el = topRef.current
+      if (!el) return
+      const top = el.getBoundingClientRect().top
+      if (mode === 'above' && top >= GLOSSARY.topOffset) return
       const y = top + window.scrollY - GLOSSARY.topOffset
       if (lenis) lenis.scrollTo(y, { immediate: true, force: true })
       else window.scrollTo(0, y)
     })
     return () => cancelAnimationFrame(frame)
-  }, [filters, listRef])
+  }, [filters, topRef])
   useEffect(() => () => window.clearTimeout(debounce.current), [])
 
   // URL: replace, so filtering doesn't fill the history.
@@ -133,5 +142,5 @@ export function useGlossaryFilters(glossary: Glossary, listRef: RefObject<HTMLEl
     }
   }, [target])
 
-  return { filters, input, setInput, setLetter, setCategory, clear }
+  return { filters, input, setInput, setLetter, setCategory, applyFilters, clear }
 }

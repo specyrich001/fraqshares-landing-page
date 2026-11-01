@@ -1,7 +1,7 @@
 /**
- * About section 6 (Figma 11063:31700), "Build Your Investment Portfolio with Fraqshares." and the three
- * link cards: the entrance, in seconds from its start. Plays once, when the section is 35% on screen.
- * The cards' hover / focus glow is CSS (about-links.css).
+ * The closing link cards (LinkCardsSection: About section 6, Figma 11063:31700, and the Glossary's last
+ * section, 11100:112333), the heading and the three cards: the entrance, in seconds from its start. Plays once, when the section is 35% on screen.
+ * The cards' hover / focus glow is CSS (link-cards.css).
  */
 export const LINKS = {
   start: '35% bottom',

@@ -24,7 +24,8 @@ function Highlight({ text, query }: { text: string; query: string }) {
 }
 
 function Block({ block, query }: { block: GlossaryBlock; query: string }) {
-  // A formula stands out in bold #111 at 70% (Figma: Rental Yield). Notes render as paragraphs for now.
+  // A formula stands out in bold #111 at 70% (Figma: Rental Yield), at the definition's size. Notes
+  // render as paragraphs for now.
   return (
     <p className={block.type === 'formula' ? 'font-bold text-body-muted' : undefined}>
       <Highlight text={block.text} query={query} />
@@ -32,14 +33,18 @@ function Block({ block, query }: { block: GlossaryBlock; query: string }) {
   )
 }
 
-/** One term (Figma 11100:112737): 354 wide, the title, 24px, the definition's blocks a blank line apart. */
+/**
+ * One term (Figma 11100:112737): 354 wide, the title, 24px, the definition's blocks a blank line apart.
+ * Below 1024 (Figma 11107:113115) the column's width, the title 16px and the definition 14px. Set here,
+ * not by stepping the tokens: value-title and body-sm-tight keep their sizes elsewhere on mobile.
+ */
 function Term({ term, query }: { term: ResolvedTerm; query: string }) {
   return (
     <article id={term.slug} data-term className="glossary-term">
-      <h3 className="text-value-title text-strong">
+      <h3 className="text-value-title text-strong max-lg:text-[1rem]">
         <Highlight text={term.term} query={query} />
       </h3>
-      <div className="mt-6 text-body-sm-tight text-body-faint [&>p+p]:mt-[1.4em]">
+      <div className="mt-6 text-body-sm-tight text-body-faint max-lg:text-[0.875rem] [&>p+p]:mt-[1.4em]">
         {term.definition.map((block, i) => (
           <Block key={i} block={block} query={query} />
         ))}
@@ -53,7 +58,8 @@ const rule = <div aria-hidden="true" className="-mb-px border-t border-border-li
 
 /**
  * The term list (Figma 11100:112731), 802 wide: each category with matches, 50px apart: its heading,
- * a rule, the terms in two 354px columns (94px apart, rows 50px apart), a closing rule.
+ * a rule, the terms in two 354px columns (94px apart, rows 50px apart), a closing rule. Below 1024
+ * (Figma 11107:113110) one column, the terms 32px apart.
  */
 export function GlossaryList({ groups, query }: { groups: TermGroup[]; query: string }) {
   return groups.map(({ category, terms }) => (
@@ -62,7 +68,7 @@ export function GlossaryList({ groups, query }: { groups: TermGroup[]; query: st
         {category.label}
       </h2>
       {rule}
-      <div className="grid grid-cols-[354px_354px] items-start gap-x-[94px] gap-y-[50px]">
+      <div className="grid grid-cols-[354px_354px] items-start gap-x-[94px] gap-y-[50px] max-lg:grid-cols-1 max-lg:gap-y-8">
         {terms.map((t) => (
           <Term key={t.slug} term={t} query={query} />
         ))}

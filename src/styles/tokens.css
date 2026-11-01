@@ -390,6 +390,7 @@
     --text-display-lg: 2.625rem; /* 42px, About section 4 title (Figma 11074:78990) */
     --text-display-md: 2.5rem; /* 40px, About section 6 heading (Figma 11074:79202) */
     --text-card-title: 1.25rem; /* 20px, About section 6 link-card titles (Figma 11074:79207) */
+    --text-category-title: 1.25rem; /* 20px, Glossary category headings (Figma 11107:113111) */
   }
 }
 

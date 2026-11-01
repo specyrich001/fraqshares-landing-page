@@ -1,13 +1,36 @@
 import { SiteFooter } from '../footer/SiteFooter.tsx'
+import { LinkCardsSection, type LinkCard } from '../linkCards/LinkCardsSection.tsx'
 import { SiteHeader } from '../SiteHeader.tsx'
+import { FAQ_HREF, GLOSSARY_HREF } from '../siteLinks.ts'
 import { useSmoothScroll } from '../../motion/useSmoothScroll.ts'
 import { AboutBackdrop } from './AboutBackdrop.tsx'
 import { AboutIntro } from './AboutIntro.tsx'
-import { AboutLinks } from './AboutLinks.tsx'
 import { AboutMission } from './AboutMission.tsx'
 import { AboutOwnership } from './AboutOwnership.tsx'
 import { AboutStory } from './AboutStory.tsx'
 import { AboutValues } from './AboutValues.tsx'
+
+// PLACEHOLDER href: #contact is the homepage FAQ's own placeholder.
+const LINK_CARDS: LinkCard[] = [
+  {
+    title: 'FAQs',
+    body: 'Find answers about getting started, ownership, fees, returns, and selling your shares.',
+    label: 'Explore FAQs',
+    href: FAQ_HREF,
+  },
+  {
+    title: 'Glossary',
+    body: 'Get familiar with the terms used in fractional investing, from shares and SPVs to distributions and valuations.',
+    label: 'Explore Glossary',
+    href: GLOSSARY_HREF,
+  },
+  {
+    title: 'Still Have Questions?',
+    body: 'We’re here to help you understand how Fraqshares works.',
+    label: 'Contact Us',
+    href: '#contact',
+  },
+]
 
 /** /about (about/index.html). The plain white header (About marked current), sections, the footer. */
 export function AboutPage() {
@@ -32,7 +55,17 @@ export function AboutPage() {
         </AboutBackdrop>
         <AboutValues />
         <AboutOwnership />
-        <AboutLinks />
+        {/* Section 6. "Build Your Investment / Portfolio with Fraqshares." at 717 wide. */}
+        <LinkCardsSection
+          id="links-title"
+          heading={
+            <>
+              <span className="text-muted">Build Your</span> Investment Portfolio with Fraqshares.
+            </>
+          }
+          headingClassName="w-[717px]"
+          cards={LINK_CARDS}
+        />
       </main>
       <SiteFooter />
     </>

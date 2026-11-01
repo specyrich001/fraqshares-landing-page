@@ -8,7 +8,7 @@ import logoFooter from '../../assets/logo-footer.svg'
 import images from '../../generated/images.json'
 import { ArrowRightIcon } from '../icons/ArrowRightIcon.tsx'
 import { buttonBase, focusRing, focusRingOnDark } from '../linkStyles.ts'
-import { ABOUT_HREF, SIGNUP_URL, SOCIAL_URLS } from '../siteLinks.ts'
+import { ABOUT_HREF, FAQ_HREF, GLOSSARY_HREF, SIGNUP_URL, SOCIAL_URLS } from '../siteLinks.ts'
 import { STAGE_MEDIA } from '../stage/stageTiming.ts'
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from './SocialIcons.tsx'
 
@@ -20,12 +20,13 @@ const phoneMobile = images['footer/phone-hand-mobile']
 const year = new Date().getFullYear()
 
 // PLACEHOLDER hrefs (#) for the pages that don't exist yet.
-const hrefs: Record<string, string> = { 'About Us': ABOUT_HREF }
+const hrefs: Record<string, string> = { 'About Us': ABOUT_HREF, Glossary: GLOSSARY_HREF, FAQs: FAQ_HREF }
 
 const columns = [
   { heading: 'Products', links: ['Listings', 'Investments'] },
   { heading: 'Company', links: ['About Us', 'Terms & Conditions', 'Privacy Policy'] },
-  { heading: 'Support', links: ['Blog', 'Community'] },
+  // Glossary and FAQs: Figma 11114:114087 / 11114:114011.
+  { heading: 'Support', links: ['Blog', 'Community', 'Glossary', 'FAQs'] },
 ]
 
 const socials = [

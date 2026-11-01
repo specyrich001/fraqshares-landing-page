@@ -141,6 +141,7 @@ const reading: Token[] = [
     role: 'category-title',
     cls: 'text-category-title',
     spec: '24px / 140% / 700 / -4% (--ls-tight-body) · Glossary category headings, empty state',
+    belowLg: '20px / 140% / 700 / -4% (Figma 11107:113111)',
     sample: 'Income, Costs & Returns',
   },
   { role: 'value-title', cls: 'text-value-title', spec: '20px / 110% / 500 / -4%', sample: 'Continuous Innovation' },
