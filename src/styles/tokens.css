@@ -31,6 +31,10 @@
   --color-dim: rgb(17 17 17 / 0.3); /* text-dim — #111 at 30%, About section 2's words before the scroll highlights them (decorative state; the text ends #111) */
   --color-body-faint: rgb(17 17 17 / 0.5); /* text-body-faint — #111 at 50%, About values body copy (≈ #888 on white, 3.5:1: below AA for 16px text, design call, flagged) */
   --color-border-light: #e4e4e4; /* border-light — About section dividers (decorative) */
+  --color-label-faint: rgb(17 17 17 / 0.4); /* text-label-faint — #111 at 40%, Glossary filter labels (SORT, CATEGORIES). ≈ #a0a0a0 on white, 2.6:1: below AA for 14px text (design call, flagged) */
+  --color-disabled: rgb(17 17 17 / 0.25); /* text-disabled — #111 at 25%, Glossary letters with no terms (disabled controls are exempt from contrast) */
+  --color-filter-border: #dedede; /* border-filter-border — Glossary letter squares (decorative) */
+  --color-filter-border-disabled: #eeeeee; /* border-filter-border-disabled — Glossary letters with no terms */
   --color-body-muted: rgb(17 17 17 / 0.7); /* text-body-muted — #111 at 70%, inner-page intro paragraphs (≈ #585858 on white, 7:1) */
 
   /* Product UI (hero activity feed cards) */
@@ -111,8 +115,8 @@
 
   /* ---- Reading & interface (fixed at every width) ----------- */
 
-  /* The About page's tight body tracking, shared by lead-lg, intro-body-tight, body-main-tight and
-     body-sm-tight so they switch together. FLAGGED: every other body style is -1%; -4% is very tight for reading
+  /* The About and Glossary pages' tight body tracking, shared by lead-lg, intro-body-tight, body-main-tight,
+     body-sm-tight and category-title so they switch together. FLAGGED: every other body style is -1%; -4% is very tight for reading
      text. If it was a Figma slip, change this one value to -0.01em. */
   --ls-tight-body: -0.04em;
 
@@ -161,6 +165,20 @@
   --text-card-title--line-height: 1.1;
   --text-card-title--font-weight: 500;
   --text-card-title--letter-spacing: -0.04em;
+
+  /* 24px / 140% / 700 / -4% (--ls-tight-body). Glossary category headings and the empty state
+     (Figma 11100:112733). */
+  --text-category-title: 1.5rem;
+  --text-category-title--line-height: 1.4;
+  --text-category-title--font-weight: 700;
+  --text-category-title--letter-spacing: var(--ls-tight-body);
+
+  /* 14px / 140% / 400 / 10%, set in capitals (add `uppercase`; the source text stays as written, so
+     screen readers read words, not letters). Glossary filter labels (Figma 11100:112667). */
+  --text-label-caps: 0.875rem;
+  --text-label-caps--line-height: 1.4;
+  --text-label-caps--font-weight: 400;
+  --text-label-caps--letter-spacing: 0.1em;
 
   /* 20px / 110% / 500 / -4%. About value titles (Figma 11052:30835). */
   --text-value-title: 1.25rem;

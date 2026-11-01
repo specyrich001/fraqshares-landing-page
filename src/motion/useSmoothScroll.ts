@@ -9,7 +9,8 @@ gsap.registerPlugin(ScrollTrigger)
 ScrollTrigger.config({ ignoreMobileResize: true })
 // Web fonts (display: swap) can land after the load event's refresh, and the swap changes section
 // heights, which would leave every trigger below measured against the fallback font's layout.
-document.fonts?.addEventListener('loadingdone', () => ScrollTrigger.refresh())
+// (Guarded: the Glossary page is also rendered at build time, in Node.)
+if (typeof document !== 'undefined') document.fonts?.addEventListener('loadingdone', () => ScrollTrigger.refresh())
 
 /** Higher = snappier, lower = glidier. 0.1 turns a 100px wheel notch into ~0.4s of motion. */
 const LERP = 0.1

@@ -9,8 +9,11 @@ export const HOW_IT_WORKS_HREF = '/#getting-started'
 
 export const ABOUT_HREF = '/about'
 
+/** Not in the main nav; linked from the About page's link cards. */
+export const GLOSSARY_HREF = '/glossary'
+
 /** The current page's path without a trailing slash ('' for home), to mark its nav link aria-current. */
-export const currentPath = () => window.location.pathname.replace(/\/$/, '')
+export const currentPath = () => (typeof window === 'undefined' ? '' : window.location.pathname.replace(/\/$/, ''))
 
 /** Social profiles, as supplied (the X, Facebook and Instagram links keep their share parameters). */
 export const SOCIAL_URLS = {

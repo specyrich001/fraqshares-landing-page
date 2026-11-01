@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useRef } from 'react'
 import images from '../../generated/images.json'
 import { ArrowRightIcon } from '../icons/ArrowRightIcon.tsx'
+import { GLOSSARY_HREF } from '../siteLinks.ts'
 import { LINKS, LINKS_MEDIA, LINKS_MOBILE } from './linksTiming.ts'
 import { revealLines } from './revealLines.ts'
 import './about-links.css'
@@ -13,8 +14,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 /** Figma 11063:45029's render: the shared green blur (tint 0.63) on #FAFAFA, inside the card's border. */
 const glow = images['about/card-glow']
 
-// PLACEHOLDER hrefs: the glossary page doesn't exist yet, and #contact is the homepage FAQ's own
-// placeholder.
+// PLACEHOLDER href: #contact is the homepage FAQ's own placeholder.
 const CARDS = [
   {
     title: 'FAQs',
@@ -26,7 +26,7 @@ const CARDS = [
     title: 'Glossary',
     body: 'Get familiar with the terms used in fractional investing, from shares and SPVs to distributions and valuations.',
     label: 'Explore Glossary',
-    href: '/glossary',
+    href: GLOSSARY_HREF,
   },
   {
     title: 'Still Have Questions?',

@@ -1,0 +1,52 @@
+/* Glossary main section. */
+
+/* Without JS (the prerendered page): every term is listed and the filters can't work, so they're
+   hidden, keeping their space so the list stays where it is. */
+:root:not([data-js]) [data-glossary-filters] {
+  visibility: hidden;
+}
+
+/* The search box: the browser's own clear button is replaced by ours. */
+#glossary-search::-webkit-search-cancel-button,
+#glossary-search::-webkit-search-decoration {
+  appearance: none;
+}
+
+/* Search matches in titles and definitions. */
+.glossary-mark {
+  background-color: rgb(171 176 109 / 0.3);
+  color: inherit;
+}
+
+/* A term opened from a link (/glossary#slug): a brief olive wash that fades out. */
+.glossary-term[data-flash] {
+  animation: glossary-flash 1.5s ease-out;
+}
+@keyframes glossary-flash {
+  from {
+    background-color: rgb(171 176 109 / 0.15);
+  }
+  to {
+    background-color: rgb(171 176 109 / 0);
+  }
+}
+
+/* Results after a filter change: a quick fade in. */
+[data-glossary-results='changed'] {
+  animation: glossary-fade 150ms ease-out;
+}
+@keyframes glossary-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-glossary-results='changed'] {
+    animation: none;
+  }
+  /* Still shown, but at once and briefly. */
+  .glossary-term[data-flash] {
+    animation-timing-function: steps(1, end);
+  }
+}

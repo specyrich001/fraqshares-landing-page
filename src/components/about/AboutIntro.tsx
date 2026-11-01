@@ -1,6 +1,7 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { useRef } from 'react'
+import { PageIntro } from '../PageIntro.tsx'
 import { ExpandingPhoto } from './ExpandingPhoto.tsx'
 import { INTRO_TEXT as I, INTRO_TEXT_MEDIA } from './introTiming.ts'
 import { revealLines } from './revealLines.ts'
@@ -82,32 +83,24 @@ export function AboutIntro() {
   return (
     <section ref={sectionRef} aria-labelledby="about-title" className="relative z-10 bg-white py-[130px] max-lg:pt-[100px] max-lg:pb-0">
       <div className="page-row max-lg:max-w-[560px] max-lg:px-6">
-        <div className="flex items-center justify-between gap-10 max-lg:flex-col max-lg:gap-6 max-lg:text-center">
-          {/* One element, two tones: "Building wealth / should have a smaller / starting point." The break
-              is explicit: Chrome sets "Building wealth should" 695px wide, so it would fit the 698 box.
-              Mobile breaks there too: "Building wealth / should have a / smaller starting / point."
-              Its intro line masks are widened (as on the hero) so descenders aren't cut while rising. */}
-          <h1
-            id="about-title"
-            className="w-[698px] max-w-full text-page-title max-lg:w-full text-strong [&_.intro-line-mask]:overflow-visible! [&_.intro-line-mask]:[clip-path:inset(-0.2em_-0.15em_-0.25em)]"
-          >
-            <span className="text-muted">Building wealth</span>
-            <br /> should have a smaller starting point.
-          </h1>
-          {/* Figma separates the two with an empty 18px line: one line height (1.4em, 25.2px).
-              Figma's box is 414, but Chrome sets "…you can own a share of an" 415.25px wide and would wrap
-              "an"; 416 with the 2px hung into the gutter keeps Figma's lines and its left edge (x 946). */}
-          <div data-intro-copy className="-mr-0.5 w-[416px] max-w-full shrink-0 text-intro-body-tight max-lg:mr-0 max-lg:w-full text-body-muted [&>p+p]:mt-[1.4em]">
-            <p>
-              Fraqshares makes ownership in real estate, land, and businesses more accessible to Africans at home
-              and abroad.
-            </p>
-            <p>
-              Through fractional investing, you can own a share of an asset without covering its full purchase
-              price or taking on its day-to-day management.
-            </p>
-          </div>
-        </div>
+        {/* "Building wealth / should have a smaller / starting point." (PageIntro breaks after the muted
+            part): Chrome sets "Building wealth should" 695px wide, so it would fit the 698 box unbroken.
+            Mobile breaks there too: "Building wealth / should have a / smaller starting / point."
+            Its intro line masks are widened (as on the hero) so descenders aren't cut while rising.
+            Paragraphs: Figma's box is 414, but Chrome sets "…you can own a share of an" 415.25px wide
+            and would wrap "an"; 416 with the 2px hung into the gutter keeps Figma's lines and its left
+            edge (x 946). */}
+        <PageIntro
+          id="about-title"
+          muted="Building wealth"
+          heading="should have a smaller starting point."
+          headingClassName="w-[698px] [&_.intro-line-mask]:overflow-visible! [&_.intro-line-mask]:[clip-path:inset(-0.2em_-0.15em_-0.25em)]"
+          copyClassName="-mr-0.5 w-[416px]"
+          paragraphs={[
+            'Fraqshares makes ownership in real estate, land, and businesses more accessible to Africans at home and abroad.',
+            'Through fractional investing, you can own a share of an asset without covering its full purchase price or taking on its day-to-day management.',
+          ]}
+        />
       </div>
 
       {/* In the row on desktop (it opens from there); outside it below 1024, full-bleed. */}

@@ -89,8 +89,10 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
     return () => mq.removeEventListener('change', onChange)
   }, [menuOpen])
 
+  // z-50 in both tones: the footer waits pulled up one screen behind the page for its reveal
+  // (SiteFooter), so on a page shorter than that it would otherwise cover the header.
   return (
-    <header ref={headerRef} className={overlay ? 'relative z-50 bg-white lg:absolute lg:inset-x-0 lg:top-0 lg:bg-transparent' : 'relative bg-white'}>
+    <header ref={headerRef} className={overlay ? 'relative z-50 bg-white lg:absolute lg:inset-x-0 lg:top-0 lg:bg-transparent' : 'relative z-50 bg-white'}>
       {overlay && (
         <>
           <div
