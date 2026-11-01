@@ -12,8 +12,11 @@ export const ABOUT_HREF = '/about'
 /** Not in the main nav; linked from the About page's link cards and the footer. */
 export const GLOSSARY_HREF = '/glossary'
 
-/** The home page's FAQ section: the footer and the About / Glossary link cards. */
+/** The home page's FAQ section: the footer and the About / Glossary / Contact link cards. */
 export const FAQ_HREF = '/#faq'
+
+/** The Contact page: the home page FAQ's "Contact Us" and the About / Glossary link cards. */
+export const CONTACT_HREF = '/contact'
 
 /** The current page's path without a trailing slash ('' for home), to mark its nav link aria-current. */
 export const currentPath = () => (typeof window === 'undefined' ? '' : window.location.pathname.replace(/\/$/, ''))

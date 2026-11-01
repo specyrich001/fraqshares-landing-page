@@ -31,7 +31,7 @@
   --color-dim: rgb(17 17 17 / 0.3); /* text-dim — #111 at 30%, About section 2's words before the scroll highlights them (decorative state; the text ends #111) */
   --color-body-faint: rgb(17 17 17 / 0.5); /* text-body-faint — #111 at 50%, About values body copy (≈ #888 on white, 3.5:1: below AA for 16px text, design call, flagged) */
   --color-border-light: #e4e4e4; /* border-light — About section dividers (decorative) */
-  --color-label-faint: rgb(17 17 17 / 0.6); /* text-label-faint — #111 at 60%, Glossary filter labels (SORT, CATEGORIES, Filter:) and the search placeholder. ≈ #707070 on white, 4.9:1 (Figma has 40%; darkened for AA) */
+  --color-label-faint: rgb(17 17 17 / 0.6); /* text-label-faint — #111 at 60%, Glossary filter labels (SORT, CATEGORIES, Filter:), the Glossary search and contact form placeholders. ≈ #707070 on white, 4.9:1 (Figma has 40%; darkened for AA) */
   --color-disabled: rgb(17 17 17 / 0.25); /* text-disabled — #111 at 25%, Glossary letters with no terms (disabled controls are exempt from contrast) */
   --color-filter-border: #dedede; /* border-filter-border — Glossary letter squares (decorative) */
   --color-filter-border-disabled: #eeeeee; /* border-filter-border-disabled — Glossary letters with no terms */
@@ -50,6 +50,12 @@
   --color-step-body: #827979; /* text-step-body — step descriptions. 4.3:1 on bg-dark: just below AA for 18px text (design call, flagged) */
   --color-indicator-inactive: #5c5c5c; /* step indicator, inactive segments (decorative) */
   --color-indicator-progress: #f3ff60; /* step indicator, progress fill (decorative) */
+  /* Contact form (Figma 11102:112857 and its states). */
+  --color-label-gray: #545663; /* text-label-gray — form field labels (Figma "Neutral 4"; 7.3:1 on white). The brief calls it --text-label, but that name is the 12px eyebrow label's size */
+  --color-error: #e12525; /* text-error / border-error — form errors. Figma has #FD2A2A (3.8:1 on white); darkened for AA: 4.7:1. Kept apart from money-out (still #FD2A2A) */
+  --color-gray: #707070; /* text-gray — the contact form's success message. Figma has #7E7E7E (4.1:1 on white); darkened for AA: 4.9:1 */
+  --color-ink-success: #061e18; /* text-ink-success — the contact form's success title and tick (Figma "Fraqvest/Color 5") */
+  --color-button-disabled: #eaeaea; /* bg-button-disabled — Submit before the form is ready (its label stays #111, 15.7:1) */
 
   /* ---- Layout ---------------------------------------------- */
   --spacing-gutter: clamp(1rem, 5.5556vw, 5rem); /* 80px at 1440 → px-gutter */
@@ -238,6 +244,24 @@
   --text-nav-link--font-weight: 500;
   --text-nav-link--letter-spacing: -0.02em;
 
+  /* Contact form (Figma 11102:112857). Field label and error: 16px / 16px (100%) / 400 / +0.5px */
+  --text-field-label: 1rem;
+  --text-field-label--line-height: 1;
+  --text-field-label--font-weight: 400;
+  --text-field-label--letter-spacing: 0.03125em;
+
+  /* Field text and placeholder: 16px / normal / 400 / -4% (--ls-tight-body). Figma has 14px; 16 on request */
+  --text-field-input: 1rem;
+  --text-field-input--line-height: normal;
+  --text-field-input--font-weight: 400;
+  --text-field-input--letter-spacing: var(--ls-tight-body);
+
+  /* "Thank you for submitting" (Figma 11118:115053): 32px / normal / 500 / 0 */
+  --text-success-title: 2rem;
+  --text-success-title--line-height: normal;
+  --text-success-title--font-weight: 500;
+  --text-success-title--letter-spacing: 0em;
+
   /* 16px / 125% / 500 / 0 */
   --text-button: 1rem;
   --text-button--line-height: 1.25;
@@ -374,6 +398,11 @@
   --text-step-body: var(--color-step-body);
   --indicator-inactive: var(--color-indicator-inactive);
   --indicator-progress: var(--color-indicator-progress);
+  --text-label-gray: var(--color-label-gray);
+  --error: var(--color-error);
+  --text-gray: var(--color-gray);
+  --ink-success: var(--color-ink-success);
+  --button-disabled: var(--color-button-disabled);
 }
 
 /* ---- Mobile values (below 1024, the site's layout breakpoint) -------------------
@@ -391,6 +420,7 @@
     --text-display-md: 2.5rem; /* 40px, About section 6 heading (Figma 11074:79202) */
     --text-card-title: 1.25rem; /* 20px, About section 6 link-card titles (Figma 11074:79207) */
     --text-category-title: 1.25rem; /* 20px, Glossary category headings (Figma 11107:113111) */
+    --text-success-title: 1.5rem; /* 24px, contact form success (not designed for mobile) */
   }
 }
 

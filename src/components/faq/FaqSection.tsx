@@ -3,6 +3,7 @@ import addSquare from '../../assets/icons/add-square.svg'
 import minusSquare from '../../assets/icons/minus-square.svg'
 import images from '../../generated/images.json'
 import { buttonBase, focusRing } from '../linkStyles.ts'
+import { CONTACT_HREF } from '../siteLinks.ts'
 import './faq.css'
 import { faqs } from './faqContent.ts'
 
@@ -112,10 +113,9 @@ export function FaqSection() {
             Still Have Questions? We’re here to help you understand how Fraqshares works
           </p>
           {/* Outline button as section 3's, without the arrow. 17px + 1px border = Figma's 18px.
-              Mobile: 48px tall with the 14px label (Figma 110 × 48).
-              PLACEHOLDER href: no contact page or anchor exists yet. */}
+              Mobile: 48px tall with the 14px label (Figma 110 × 48). */}
           <a
-            href="#contact"
+            href={CONTACT_HREF}
             className={`${buttonBase} h-13 border border-black px-[17px] text-black hover:bg-black hover:text-white max-lg:h-12 max-lg:text-button-sm ${focusRing}`}
           >
             Contact Us

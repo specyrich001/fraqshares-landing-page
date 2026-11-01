@@ -199,6 +199,25 @@ const reading: Token[] = [
   },
   { role: 'nav-link', cls: 'text-nav-link', spec: '16px / 140% / 500 / -2%', sample: 'How it works' },
   { role: 'button', cls: 'text-button', spec: '16px / 125% / 500 / 0', sample: 'Get started' },
+  {
+    role: 'field-label',
+    cls: 'text-field-label text-label-gray',
+    spec: '16px / 16px (100%) / 400 / +0.5px · contact form labels and errors · shown in text-label-gray',
+    sample: 'Your Message',
+  },
+  {
+    role: 'field-input',
+    cls: 'text-field-input text-strong',
+    spec: '16px / normal / 400 / -4% (--ls-tight-body) · contact form field text and placeholders (Figma 14px)',
+    sample: 'Jonathan Nathaniel Burrows',
+  },
+  {
+    role: 'success-title',
+    cls: 'text-success-title text-ink-success',
+    spec: '32px / normal / 500 / 0 · contact form success · shown in text-ink-success',
+    belowLg: '24px / normal / 500 / 0 (not designed for mobile)',
+    sample: 'Thank you for submitting',
+  },
   { role: 'footer-heading', cls: 'text-footer-heading', spec: '16px / 140% / 700 / 0', sample: 'Company' },
   { role: 'footer-link', cls: 'text-footer-link', spec: '16px / 140% / 400 / 0', sample: 'About us' },
   { role: 'eyebrow', cls: 'text-eyebrow', spec: '12px / auto / 700 / +4%', sample: 'How it works' },
@@ -279,6 +298,11 @@ const colors = [
   { name: 'step-body', hex: '#827979', note: '--text-step-body · step descriptions, on bg-dark' },
   { name: 'indicator-inactive', hex: '#5C5C5C', note: '--indicator-inactive · step indicator' },
   { name: 'indicator-progress', hex: '#F3FF60', note: '--indicator-progress · step indicator fill' },
+  { name: 'label-gray', hex: '#545663', note: '--text-label-gray · contact form labels (the brief’s --text-label: that name is taken by a type size)' },
+  { name: 'error', hex: '#E12525', note: '--error · contact form errors (Figma #FD2A2A, darkened for AA: 4.7:1)' },
+  { name: 'gray', hex: '#707070', note: '--text-gray · contact form success message (Figma #7E7E7E, darkened for AA: 4.9:1)' },
+  { name: 'ink-success', hex: '#061E18', note: '--ink-success · contact form success title and tick' },
+  { name: 'button-disabled', hex: '#EAEAEA', note: '--button-disabled · Submit before the form is ready' },
 ]
 
 const px = (v: string) => `${+parseFloat(v).toFixed(2)}px`

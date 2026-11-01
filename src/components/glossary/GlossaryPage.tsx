@@ -1,13 +1,12 @@
 import { SiteFooter } from '../footer/SiteFooter.tsx'
 import { LinkCardsSection, type LinkCard } from '../linkCards/LinkCardsSection.tsx'
 import { SiteHeader } from '../SiteHeader.tsx'
-import { FAQ_HREF, LOGIN_URL } from '../siteLinks.ts'
+import { CONTACT_HREF, FAQ_HREF, LOGIN_URL } from '../siteLinks.ts'
 import { useSmoothScroll } from '../../motion/useSmoothScroll.ts'
 import { GlossaryIntro } from './GlossaryIntro.tsx'
 import { GlossarySection } from './GlossarySection.tsx'
 
-// Listings opens the web app's log in (the listings are behind it). PLACEHOLDER: #contact is the homepage
-// FAQ's own placeholder.
+// Listings opens the web app's log in (the listings are behind it).
 // Listings' description has no final period, as supplied.
 const LINK_CARDS: LinkCard[] = [
   {
@@ -26,7 +25,7 @@ const LINK_CARDS: LinkCard[] = [
     title: 'Still Have Questions?',
     body: 'We’re here to help you understand how Fraqshares works.',
     label: 'Contact Us',
-    href: '#contact',
+    href: CONTACT_HREF,
   },
 ]
 

@@ -1,7 +1,7 @@
 import { SiteFooter } from '../footer/SiteFooter.tsx'
 import { LinkCardsSection, type LinkCard } from '../linkCards/LinkCardsSection.tsx'
 import { SiteHeader } from '../SiteHeader.tsx'
-import { FAQ_HREF, GLOSSARY_HREF } from '../siteLinks.ts'
+import { CONTACT_HREF, FAQ_HREF, GLOSSARY_HREF } from '../siteLinks.ts'
 import { useSmoothScroll } from '../../motion/useSmoothScroll.ts'
 import { AboutBackdrop } from './AboutBackdrop.tsx'
 import { AboutIntro } from './AboutIntro.tsx'
@@ -10,7 +10,6 @@ import { AboutOwnership } from './AboutOwnership.tsx'
 import { AboutStory } from './AboutStory.tsx'
 import { AboutValues } from './AboutValues.tsx'
 
-// PLACEHOLDER href: #contact is the homepage FAQ's own placeholder.
 const LINK_CARDS: LinkCard[] = [
   {
     title: 'FAQs',
@@ -28,7 +27,7 @@ const LINK_CARDS: LinkCard[] = [
     title: 'Still Have Questions?',
     body: 'We’re here to help you understand how Fraqshares works.',
     label: 'Contact Us',
-    href: '#contact',
+    href: CONTACT_HREF,
   },
 ]
 

@@ -1,0 +1,24 @@
+/* Without JS, a message that went through lands on /contact?sent=1#message-sent (src/server/contact):
+   the fragment targets the success, which takes the form's place in the card as it does with JS
+   (ContactForm). Unlayered, so it beats the utilities that hide one or the other. */
+.contact-card:has(#message-sent:target) [data-contact-form] {
+  visibility: hidden;
+  opacity: 0;
+}
+
+#message-sent:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Jumping to the fragment: on desktop the page stays at the top (the card is in the first screen);
+   below 1024, where the card is further down, the success comes to the middle of the screen. */
+#message-sent {
+  scroll-margin-top: 100vh;
+}
+
+@media (max-width: 1023.98px) {
+  #message-sent {
+    scroll-margin-top: calc(50svh - 120px);
+  }
+}

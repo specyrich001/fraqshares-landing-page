@@ -1,8 +1,9 @@
-import { rmSync } from 'node:fs'
+import { readFileSync, rmSync } from 'node:fs'
+import type { IncomingMessage, ServerResponse } from 'node:http'
 import path from 'node:path'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
-import { createServer, defineConfig, type Plugin, type ViteDevServer } from 'vite'
+import { createServer, defineConfig, loadEnv, type Plugin, type ViteDevServer } from 'vite'
 
 /** Figma reference renders for the dev-only ?overlay=1 views: served in dev, left out of builds. */
 const DEV_ONLY_IMAGES = ['images/steps/sign-up-reference']
@@ -38,16 +39,18 @@ function siteUrl(): Plugin {
   }
 }
 
-/** src/prerender/glossary.tsx, as loaded in Node. */
+/** The renderers in src/prerender, as loaded in Node. */
 type GlossaryRenderer = {
   assertValidGlossary: () => void
   renderGlossary: (siteUrl: string) => { html: string; jsonLd: string }
 }
+type ContactRenderer = { renderContact: () => string }
 const GLOSSARY_RENDERER = '/src/prerender/glossary.tsx'
+const CONTACT_RENDERER = '/src/prerender/contact.tsx'
 
-/** Loads the renderer through Vite (TSX, JSON, CSS imports), with the dev server or a throwaway one. */
-async function loadGlossaryRenderer(server?: ViteDevServer): Promise<GlossaryRenderer> {
-  if (server) return (await server.ssrLoadModule(GLOSSARY_RENDERER)) as GlossaryRenderer
+/** Loads a module through Vite (TSX, JSON, CSS imports), with the dev server or a throwaway one. */
+async function loadRenderer<T>(id: string, server?: ViteDevServer): Promise<T> {
+  if (server) return (await server.ssrLoadModule(id)) as T
   const temp = await createServer({
     configFile: false,
     root: import.meta.dirname,
@@ -57,7 +60,7 @@ async function loadGlossaryRenderer(server?: ViteDevServer): Promise<GlossaryRen
     server: { middlewareMode: true, hmr: false, ws: false },
   })
   try {
-    return (await temp.ssrLoadModule(GLOSSARY_RENDERER)) as GlossaryRenderer
+    return (await temp.ssrLoadModule(id)) as T
   } finally {
     await temp.close()
   }
@@ -70,8 +73,11 @@ async function loadGlossaryRenderer(server?: ViteDevServer): Promise<GlossaryRen
  *
  * The glossary data is validated when the build or dev server starts (unique slugs and category ids,
  * every category exists, no empty definitions): any problem stops it, listing each one.
+ *
+ * /contact, prerendered the same way (no structured data): the page with its empty form, so the form
+ * can be read and sent without JS.
  */
-function glossaryPrerender(): Plugin {
+function pagePrerender(): Plugin {
   let server: ViteDevServer | undefined
   return {
     name: 'glossary-prerender',
@@ -79,14 +85,19 @@ function glossaryPrerender(): Plugin {
       server = s
     },
     async buildStart() {
-      const renderer = await loadGlossaryRenderer()
+      const renderer = await loadRenderer<GlossaryRenderer>(GLOSSARY_RENDERER)
       renderer.assertValidGlossary()
     },
     transformIndexHtml: {
       order: 'pre',
       async handler(html, ctx) {
-        if (!ctx.filename.replaceAll('\\', '/').endsWith('/glossary/index.html')) return html
-        const { html: page, jsonLd } = (await loadGlossaryRenderer(ctx.server ?? server)).renderGlossary(SITE_URL)
+        const file = ctx.filename.replaceAll('\\', '/')
+        if (file.endsWith('/contact/index.html')) {
+          const page = (await loadRenderer<ContactRenderer>(CONTACT_RENDERER, ctx.server ?? server)).renderContact()
+          return html.replace('<div id="root"></div>', () => `<div id="root">${page}</div>`)
+        }
+        if (!file.endsWith('/glossary/index.html')) return html
+        const { html: page, jsonLd } = (await loadRenderer<GlossaryRenderer>(GLOSSARY_RENDERER, ctx.server ?? server)).renderGlossary(SITE_URL)
         return html
           .replace('<div id="root"></div>', () => `<div id="root">${page}</div>`)
           .replace('</head>', () => `    <script type="application/ld+json">${jsonLd}</script>\n  </head>`)
@@ -96,7 +107,7 @@ function glossaryPrerender(): Plugin {
 }
 
 /** Pages besides the home page: each is <name>/index.html, served at /<name>. */
-const PAGES = ['about', 'glossary']
+const PAGES = ['about', 'glossary', 'contact']
 
 /**
  * Dev and preview serve <name>/index.html only at /<name>/; this serves it at /<name> too, as the
@@ -115,12 +126,94 @@ function pageUrls(): Plugin {
   }
 }
 
+/** src/server/contact, as loaded in Node. */
+type ContactModule = { handleContactRequest: (request: Request, ctx: object) => Promise<Response> }
+const CONTACT_SERVER = '/src/server/contact/index.ts'
+
+type Connect = { use: (route: string, handler: (req: IncomingMessage, res: ServerResponse) => void) => unknown }
+
+/** Hands /api/contact posts to src/server/contact as web Requests, and writes its Responses back. */
+function serveContact(
+  middlewares: Connect,
+  { load, loadPage, dev, mode, root, logger }: {
+    load: () => Promise<ContactModule>
+    loadPage: () => Promise<string>
+    dev: boolean
+    mode: string
+    root: string
+    logger: { info: (message: string) => void }
+  },
+) {
+  middlewares.use('/api/contact', async (req, res) => {
+    if (req.method !== 'POST') {
+      res.writeHead(405, { allow: 'POST' }).end()
+      return
+    }
+    const chunks: Buffer[] = []
+    for await (const chunk of req) chunks.push(chunk as Buffer)
+    const headers = new Headers()
+    for (const [key, value] of Object.entries(req.headers)) if (value !== undefined) headers.set(key, String(value))
+    const request = new Request(new URL('/api/contact', `http://${req.headers.host ?? 'localhost'}`), {
+      method: 'POST',
+      headers,
+      body: Buffer.concat(chunks),
+    })
+    const response = await (await load()).handleContactRequest(request, {
+      env: { ...loadEnv(mode, root, ''), ...process.env },
+      dev,
+      ip: req.socket.remoteAddress ?? 'unknown',
+      loadPage,
+      log: (message: string, data?: unknown) => logger.info(data === undefined ? message : `${message}\n${JSON.stringify(data, null, 2)}`),
+    })
+    res.writeHead(response.status, Object.fromEntries(response.headers))
+    res.end(Buffer.from(await response.arrayBuffer()))
+  })
+}
+
+/**
+ * POST /api/contact locally: the same handler Vercel runs (api/contact.ts). Environment: the shell's,
+ * plus .env files (all variables, not only VITE_ ones; they stay on the server).
+ * src/server/contact/README.md has the variables.
+ *
+ * Dev server: answers no-JS posts with the dev /contact page; a destination that isn't set up here (no
+ * email API key, say) logs the message while the form shows success. vite preview: the built page,
+ * treated as production, as on Vercel (not set up: 503, and the form says so).
+ */
+function contactApi(): Plugin {
+  return {
+    name: 'contact-api',
+    configureServer(server) {
+      const { mode, root, logger } = server.config
+      serveContact(server.middlewares, {
+        load: () => server.ssrLoadModule(CONTACT_SERVER) as Promise<ContactModule>,
+        loadPage: () => server.transformIndexHtml('/contact/index.html', readFileSync(path.join(root, 'contact/index.html'), 'utf8')),
+        dev: true,
+        mode,
+        root,
+        logger,
+      })
+    },
+    configurePreviewServer(server) {
+      const { mode, root, logger, build } = server.config
+      let module: Promise<ContactModule> | undefined
+      serveContact(server.middlewares, {
+        load: () => (module ??= loadRenderer<ContactModule>(CONTACT_SERVER)),
+        loadPage: async () => readFileSync(path.resolve(root, build.outDir, 'contact/index.html'), 'utf8'),
+        dev: false,
+        mode,
+        root,
+        logger,
+      })
+    },
+  }
+}
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), dropDevOnlyImages(), siteUrl(), pageUrls(), glossaryPrerender()],
+  plugins: [react(), tailwindcss(), dropDevOnlyImages(), siteUrl(), pageUrls(), pagePrerender(), contactApi()],
   build: {
     // One HTML file per page, so each has its own title and description without a router or SSR
-    // (the Glossary's is prerendered: glossaryPrerender).
+    // (the Glossary's and Contact's are prerendered: pagePrerender).
     rollupOptions: {
       input: {
         main: path.resolve(import.meta.dirname, 'index.html'),
