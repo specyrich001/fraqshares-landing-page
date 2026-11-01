@@ -3,14 +3,15 @@ import { CloseIcon, MenuIcon } from './icons/MenuIcons.tsx'
 import { buttonBase, focusRing, focusRingOnDark } from './linkStyles.ts'
 import { Logo } from './Logo.tsx'
 import { MOBILE_MENU_ID, MobileMenu } from './MobileMenu.tsx'
-import { ABOUT_HREF, currentPath, HOW_IT_WORKS_HREF, LOGIN_URL, SIGNUP_URL } from './siteLinks.ts'
+import { ABOUT_HREF, CONTACT_HREF, currentPath, GLOSSARY_HREF, HOW_IT_WORKS_HREF, LOGIN_URL, SIGNUP_URL } from './siteLinks.ts'
 
-// Learn and List Property are placeholders until those pages exist.
+// Learn opens the Glossary. List Property is a placeholder until its page exists.
 const links = [
   { label: 'About Us', href: ABOUT_HREF },
   { label: 'How It Works', href: HOW_IT_WORKS_HREF },
-  { label: 'Learn', href: '#learn' },
+  { label: 'Learn', href: GLOSSARY_HREF },
   { label: 'List Property', href: '#list-property' },
+  { label: 'Contact Us', href: CONTACT_HREF },
 ]
 
 const button = `${buttonBase} h-10`
@@ -133,7 +134,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
         </button>
 
         <nav aria-label="Primary" className="max-lg:hidden">
-          <ul className="flex flex-wrap gap-x-10 gap-y-2">
+          <ul className="flex flex-wrap gap-x-nav-gap gap-y-2">
             {links.map((link) => (
               <li key={link.href}>
                 <a

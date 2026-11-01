@@ -29,8 +29,7 @@ const LINK_CARDS: LinkCard[] = [
   },
 ]
 
-/** /glossary (glossary/index.html). The plain white header (Glossary isn't in the nav, so nothing is
- *  marked current), the intro, the term list with its filters, the closing link cards, the footer. Prerendered at build
+/** /glossary (glossary/index.html). The plain white header (Learn marked current), the intro, the term list with its filters, the closing link cards, the footer. Prerendered at build
  *  (vite.config.ts) so the terms are in the HTML. */
 export function GlossaryPage() {
   useSmoothScroll()

@@ -9,13 +9,13 @@ export const HOW_IT_WORKS_HREF = '/#getting-started'
 
 export const ABOUT_HREF = '/about'
 
-/** Not in the main nav; linked from the About page's link cards and the footer. */
+/** The nav's Learn and the hero's Learn More; also the link cards and the footer. */
 export const GLOSSARY_HREF = '/glossary'
 
 /** The home page's FAQ section: the footer and the About / Glossary / Contact link cards. */
 export const FAQ_HREF = '/#faq'
 
-/** The Contact page: the home page FAQ's "Contact Us" and the About / Glossary link cards. */
+/** The Contact page: the nav's Contact Us, the home page FAQ's "Contact Us" and the link cards. */
 export const CONTACT_HREF = '/contact'
 
 /** The legal pages: the footer (and the Terms link to the Privacy Policy). */

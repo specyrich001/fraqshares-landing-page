@@ -5,7 +5,7 @@ import { useRef, type ReactNode } from 'react'
 import images from '../../generated/images.json'
 import { ArrowRightIcon } from '../icons/ArrowRightIcon.tsx'
 import { buttonBase, focusRingOnDark } from '../linkStyles.ts'
-import { HOW_IT_WORKS_HREF, SIGNUP_URL } from '../siteLinks.ts'
+import { GLOSSARY_HREF, SIGNUP_URL } from '../siteLinks.ts'
 import { useMediaQuery } from '../../motion/useMediaQuery.ts'
 import { HeroActivityFeed } from './HeroActivityFeed.tsx'
 import { HERO_COPY_SHOWN } from './heroEvents.ts'
@@ -251,8 +251,8 @@ export function Hero({ transitionMedia }: { transitionMedia?: ReactNode }) {
               Start Investing
               <ArrowRightIcon className="shrink-0 max-lg:size-5" />
             </a>
-            {/* Learn More: the same place as the nav's How It Works. */}
-            <a href={HOW_IT_WORKS_HREF} className={`${button} bg-white text-black hover:bg-mint`}>
+            {/* Learn More: the Glossary, as the nav's Learn. */}
+            <a href={GLOSSARY_HREF} className={`${button} bg-white text-black hover:bg-mint`}>
               Learn More
             </a>
           </div>

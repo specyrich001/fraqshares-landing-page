@@ -28,7 +28,7 @@ const LINK_CARDS: LinkCard[] = [
   },
 ]
 
-/** /contact (contact/index.html). The plain white header (Contact isn't in the nav), the hero with the
+/** /contact (contact/index.html). The plain white header (Contact Us marked current), the hero with the
  *  form, the closing link cards, the footer. Prerendered at build (vite.config.ts), so the form works
  *  without JS. */
 export function ContactPage() {

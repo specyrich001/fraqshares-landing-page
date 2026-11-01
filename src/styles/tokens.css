@@ -59,6 +59,7 @@
 
   /* ---- Layout ---------------------------------------------- */
   --spacing-gutter: clamp(1rem, 5.5556vw, 5rem); /* 80px at 1440 → px-gutter */
+  --spacing-nav-gap: clamp(1.25rem, 4.8077vw - 1.8269rem, 2.5rem); /* header links: Figma's 40px at 1440, easing to 20px at 1024 so all five fit on one row with the buttons → gap-x-nav-gap */
 
   --text-*: initial;
 
