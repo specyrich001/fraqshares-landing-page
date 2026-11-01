@@ -144,13 +144,16 @@ export function GlossaryFilterSheet({
       data-glossary-sheet
       // Visibility changes at once on opening (so the title can take focus straight away) and only
       // after the slide on closing.
-      className={`fixed inset-x-0 top-0 z-[60] h-[100svh] bg-white motion-reduce:transition-none lg:hidden ${
+      // White to the largest viewport height (Safari with its toolbars hidden or floating), so nothing
+      // behind shows below it; the content inside fits the height actually visible (dvh, which follows
+      // the toolbars), so Apply Filter stays on screen either way.
+      className={`fixed inset-x-0 top-0 z-[60] h-lvh bg-white motion-reduce:transition-none lg:hidden ${
         open
           ? 'visible translate-y-0 transition-[translate] duration-300 ease-[cubic-bezier(0.215,0.61,0.355,1)]'
           : 'invisible translate-y-full transition-[translate,visibility] duration-[250ms] ease-[cubic-bezier(0.55,0.055,0.675,0.19)]'
       }`}
     >
-      <div className="mx-auto flex h-full w-full max-w-[560px] flex-col px-6">
+      <div className="mx-auto flex h-dvh w-full max-w-[560px] flex-col px-6">
         <div className="flex shrink-0 items-center justify-between pt-[calc(50px+env(safe-area-inset-top))]">
           {/* card-title steps to 20 below 1024; the sheet's title stays 24 (Figma 11107:113553). */}
           <h2 id={titleId} ref={titleRef} tabIndex={-1} className="text-card-title text-strong outline-none max-lg:text-[1.5rem]">
