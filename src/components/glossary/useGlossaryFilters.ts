@@ -49,12 +49,6 @@ export function useGlossaryFilters(glossary: Glossary, topRef: RefObject<HTMLEle
     byReader.current = 'above'
     setFilters((f) => ({ ...f, category }))
   }, [])
-  const clear = useCallback(() => {
-    window.clearTimeout(debounce.current)
-    byReader.current = 'above'
-    setInputState('')
-    setFilters(NO_FILTERS)
-  }, [])
   /** The mobile filter sheet's "Apply Filter": both at once (a new object, so it scrolls even unchanged). */
   const applyFilters = useCallback(({ letter, category }: Pick<GlossaryFilters, 'letter' | 'category'>) => {
     byReader.current = 'apply'
@@ -142,5 +136,5 @@ export function useGlossaryFilters(glossary: Glossary, topRef: RefObject<HTMLEle
     }
   }, [target])
 
-  return { filters, input, setInput, setLetter, setCategory, applyFilters, clear }
+  return { filters, input, setInput, setLetter, setCategory, applyFilters }
 }

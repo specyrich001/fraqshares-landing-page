@@ -10,7 +10,8 @@ import './glossary.css'
 /**
  * The Glossary's main section, Figma: Desktop - 27 (11100:112660), 1440 × 4892, under the intro.
  * White, 130px top and bottom, the 1280 row: the sticky filters (328) and, 150px over, the term list
- * (802), then the disclaimer 50px under the last category.
+ * (802), then the disclaimer 50px under the last category. With nothing to show (Figma 11116:114194)
+ * the column stretches to the filters' height and centres GlossaryEmpty in it, without the disclaimer.
  *
  * Below 1024 (Figma 11107:113029, 393 wide): 100px top and bottom, 24px sides (560 max on tablets).
  * The filter bar (GlossarySidebar's mobile form, its button opening GlossaryFilterSheet), 50px, then
@@ -31,7 +32,7 @@ import './glossary.css'
 export function GlossarySection() {
   const glossary = getGlossary()
   const rowRef = useRef<HTMLDivElement>(null)
-  const { filters, input, setInput, setLetter, setCategory, applyFilters, clear } = useGlossaryFilters(glossary, rowRef)
+  const { filters, input, setInput, setLetter, setCategory, applyFilters } = useGlossaryFilters(glossary, rowRef)
   const [sheetOpen, setSheetOpen] = useState(false)
   const sheetButtonRef = useRef<HTMLButtonElement>(null)
   const closeSheet = useCallback(() => setSheetOpen(false), [])
@@ -58,7 +59,7 @@ export function GlossarySection() {
           sheetButtonRef={sheetButtonRef}
         />
 
-        <div className="flex w-[802px] min-w-0 flex-col gap-[50px] max-lg:w-full">
+        <div className={`flex w-[802px] min-w-0 flex-col gap-[50px] max-lg:w-full ${count ? '' : 'self-stretch justify-center'}`}>
           <p role="status" className="sr-only">
             {count ? `Showing ${count} ${count === 1 ? 'term' : 'terms'}` : 'No terms found'}
           </p>
@@ -66,19 +67,21 @@ export function GlossarySection() {
             {count ? (
               <GlossaryList groups={groups} query={filters.query} />
             ) : (
-              <GlossaryEmpty query={filters.query} onClear={clear} />
+              <GlossaryEmpty />
             )}
           </div>
           {/* Figma: 18px Medium (the brief said 16), 780 wide, one sentence a line. Below 1024 18px too
-              (the token steps to 16), full width, the sentences running on. */}
-          <p className="w-[780px] text-intro-body-tight font-medium text-strong max-lg:w-full max-lg:text-[1.125rem]">
-            {glossary.settings.disclaimer.map((line, i) => (
-              <span key={i} className="lg:block">
-                {i > 0 && ' '}
-                {line}
-              </span>
-            ))}
-          </p>
+              (the token steps to 16), full width, the sentences running on. Not with the empty state. */}
+          {count > 0 && (
+            <p className="w-[780px] text-intro-body-tight font-medium text-strong max-lg:w-full max-lg:text-[1.125rem]">
+              {glossary.settings.disclaimer.map((line, i) => (
+                <span key={i} className="lg:block">
+                  {i > 0 && ' '}
+                  {line}
+                </span>
+              ))}
+            </p>
+          )}
         </div>
       </div>
       <GlossaryFilterSheet

@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import type { GlossaryBlock, ResolvedTerm } from '../../content/glossary/index.ts'
-import { focusRing } from '../linkStyles.ts'
 import { GLOSSARY } from './glossaryConfig.ts'
 import { matchRanges, type TermGroup } from './glossaryFilter.ts'
 
@@ -78,20 +77,16 @@ export function GlossaryList({ groups, query }: { groups: TermGroup[]; query: st
   ))
 }
 
-/** Nothing matches (not in Figma: FLAGGED for review). */
-export function GlossaryEmpty({ query, onClear }: { query: string; onClear: () => void }) {
+/**
+ * Nothing matches, Figma 11116:114194: "No results found" (24px Bold) and, 10px under, the hint (18px,
+ * #111 at 50%), centred in the list column; GlossarySection centres it against the filters. The same
+ * for a search or filters with no terms. Below 1024 the title steps to 20 with the token.
+ */
+export function GlossaryEmpty() {
   return (
-    <div className="flex flex-col items-start gap-6">
-      <p className="text-category-title text-strong">
-        {query.trim() ? `No terms match “${query.trim()}”.` : 'No terms match these filters.'}
-      </p>
-      <button
-        type="button"
-        onClick={onClear}
-        className={`text-button text-strong underline decoration-1 underline-offset-4 hover:decoration-2 ${focusRing}`}
-      >
-        Clear filters
-      </button>
+    <div className="flex flex-col gap-2.5 text-center">
+      <p className="text-category-title text-strong">No results found</p>
+      <p className="text-intro-body-tight text-body-faint">Search for other glossary and get educated</p>
     </div>
   )
 }

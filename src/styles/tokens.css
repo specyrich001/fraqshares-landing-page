@@ -31,7 +31,7 @@
   --color-dim: rgb(17 17 17 / 0.3); /* text-dim — #111 at 30%, About section 2's words before the scroll highlights them (decorative state; the text ends #111) */
   --color-body-faint: rgb(17 17 17 / 0.5); /* text-body-faint — #111 at 50%, About values body copy (≈ #888 on white, 3.5:1: below AA for 16px text, design call, flagged) */
   --color-border-light: #e4e4e4; /* border-light — About section dividers (decorative) */
-  --color-label-faint: rgb(17 17 17 / 0.4); /* text-label-faint — #111 at 40%, Glossary filter labels (SORT, CATEGORIES). ≈ #a0a0a0 on white, 2.6:1: below AA for 14px text (design call, flagged) */
+  --color-label-faint: rgb(17 17 17 / 0.6); /* text-label-faint — #111 at 60%, Glossary filter labels (SORT, CATEGORIES, Filter:) and the search placeholder. ≈ #707070 on white, 4.9:1 (Figma has 40%; darkened for AA) */
   --color-disabled: rgb(17 17 17 / 0.25); /* text-disabled — #111 at 25%, Glossary letters with no terms (disabled controls are exempt from contrast) */
   --color-filter-border: #dedede; /* border-filter-border — Glossary letter squares (decorative) */
   --color-filter-border-disabled: #eeeeee; /* border-filter-border-disabled — Glossary letters with no terms */

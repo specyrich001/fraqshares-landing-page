@@ -148,7 +148,7 @@ const reading: Token[] = [
   {
     role: 'label-caps',
     cls: 'text-label-caps uppercase text-label-faint',
-    spec: '14px / 140% / 400 / +10% · with uppercase · shown in text-label-faint (#111 at 40%, 2.6:1, flagged)',
+    spec: '14px / 140% / 400 / +10% · with uppercase · shown in text-label-faint (#111 at 60%, 4.9:1)',
     sample: 'Categories',
   },
   { role: 'tab', cls: 'text-tab', spec: '20px / 140% / 500 / -1%', sample: 'Real estate' },
@@ -264,7 +264,7 @@ const colors = [
   { name: 'secondary', hex: '#5E5E5E', note: '--text-secondary · supporting paragraphs' },
   { name: 'body-faint', hex: 'rgba(17,17,17,0.5)', note: '--text-body-faint · #111 at 50% · About values body (3.5:1, flagged)' },
   { name: 'border-light', hex: '#E4E4E4', note: '--border-light · About section dividers' },
-  { name: 'label-faint', hex: 'rgba(17,17,17,0.4)', note: '--text-label-faint · #111 at 40% · Glossary filter labels (2.6:1, flagged)' },
+  { name: 'label-faint', hex: 'rgba(17,17,17,0.6)', note: '--text-label-faint · #111 at 60% · Glossary filter labels and search placeholder (4.9:1; Figma has 40%)' },
   { name: 'disabled', hex: 'rgba(17,17,17,0.25)', note: '--text-disabled · #111 at 25% · Glossary letters with no terms' },
   { name: 'filter-border', hex: '#DEDEDE', note: '--border-filter-border · Glossary letter squares' },
   { name: 'filter-border-disabled', hex: '#EEEEEE', note: '--border-filter-border-disabled · Glossary letters with no terms' },

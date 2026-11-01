@@ -1,12 +1,13 @@
 import { SiteFooter } from '../footer/SiteFooter.tsx'
 import { LinkCardsSection, type LinkCard } from '../linkCards/LinkCardsSection.tsx'
 import { SiteHeader } from '../SiteHeader.tsx'
-import { FAQ_HREF } from '../siteLinks.ts'
+import { FAQ_HREF, LOGIN_URL } from '../siteLinks.ts'
 import { useSmoothScroll } from '../../motion/useSmoothScroll.ts'
 import { GlossaryIntro } from './GlossaryIntro.tsx'
 import { GlossarySection } from './GlossarySection.tsx'
 
-// PLACEHOLDER hrefs: /listings doesn't exist yet; #contact is the homepage FAQ's own placeholder.
+// Listings opens the web app's log in (the listings are behind it). PLACEHOLDER: #contact is the homepage
+// FAQ's own placeholder.
 // Listings' description has no final period, as supplied.
 const LINK_CARDS: LinkCard[] = [
   {
@@ -19,7 +20,7 @@ const LINK_CARDS: LinkCard[] = [
     title: 'Listings',
     body: 'Explore fractional investment opportunities in real estate, land, and businesses with Fraqshares',
     label: 'Explore Investment Opportunities',
-    href: '/listings',
+    href: LOGIN_URL,
   },
   {
     title: 'Still Have Questions?',

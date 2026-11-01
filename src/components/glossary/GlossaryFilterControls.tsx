@@ -6,7 +6,8 @@ import { focusRing } from '../linkStyles.ts'
  * The letter squares and the category list, shared by the desktop sidebar (GlossarySidebar) and the
  * mobile filter sheet (GlossaryFilterSheet). They only show the value they're given: the sidebar
  * passes the applied filters, the sheet its staged ones. Letters and categories come from the data;
- * a letter with no terms is disabled, and pressing the active letter returns to All.
+ * a letter with no terms is disabled, and pressing what is already selected does nothing (back to
+ * every term is "All").
  *
  * Below 1024 (the sheet, Figma 11107:113557 / 11107:113614) the squares are 10px apart (7 to a row in
  * 345) and both lists are 18px (the token they use steps to 16 there).
@@ -33,7 +34,7 @@ export function LetterFilter({ glossary, value, onChange }: { glossary: Glossary
         <button
           type="button"
           aria-pressed={value === ALL}
-          onClick={() => onChange(ALL)}
+          onClick={value === ALL ? undefined : () => onChange(ALL)}
           className={`${square} ${value === ALL ? squareState.active : squareState.idle}`}
         >
           All
@@ -47,7 +48,7 @@ export function LetterFilter({ glossary, value, onChange }: { glossary: Glossary
               type="button"
               aria-pressed={active}
               aria-disabled={disabled || undefined}
-              onClick={disabled ? undefined : () => onChange(active ? ALL : letter)}
+              onClick={disabled || active ? undefined : () => onChange(letter)}
               className={`${square} ${disabled ? squareState.disabled : active ? squareState.active : squareState.idle}`}
             >
               {letter}
@@ -74,7 +75,7 @@ export function CategoryFilter({ glossary, value, onChange }: { glossary: Glossa
               <button
                 type="button"
                 aria-pressed={active}
-                onClick={() => onChange(category)}
+                onClick={active ? undefined : () => onChange(category)}
                 className={`text-left text-intro-body-tight transition-colors duration-150 motion-reduce:transition-none max-lg:text-[1.125rem] ${focusRing} ${
                   active ? 'font-bold text-olive' : 'text-body-muted hover:text-strong'
                 }`}

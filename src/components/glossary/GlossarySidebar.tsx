@@ -60,7 +60,7 @@ export function GlossarySidebar({ glossary, filters, input, setInput, setLetter,
           placeholder="Search all terms"
           autoComplete="off"
           spellCheck={false}
-          className="block w-full appearance-none rounded-none border-b border-muted bg-transparent pr-8 pb-4 text-intro-body-tight leading-[23px] text-strong outline-none placeholder:text-muted focus:border-strong max-lg:pb-[18px] max-lg:leading-[21px]"
+          className="block w-full appearance-none rounded-none border-b border-muted bg-transparent pr-8 pb-4 text-intro-body-tight leading-[23px] text-strong outline-none placeholder:text-label-faint focus:border-strong max-lg:pb-[18px] max-lg:leading-[21px]"
         />
         {input && (
           <button
