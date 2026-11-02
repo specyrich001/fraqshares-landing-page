@@ -13,6 +13,9 @@ import './glossary.css'
  * (802), then the disclaimer 50px under the last category. With nothing to show (Figma 11116:114194)
  * the column stretches to the filters' height and centres GlossaryEmpty in it, without the disclaimer.
  *
+ * Narrower than 1440 (a laptop, or zoomed in) the gap and the list shrink in proportion, so nothing is
+ * cut off at the right; the filters keep their 328. The list goes to one column below 1280 (GlossaryList).
+ *
  * Below 1024 (Figma 11107:113029, 393 wide): 100px top and bottom, 24px sides (560 max on tablets).
  * The filter bar (GlossarySidebar's mobile form, its button opening GlossaryFilterSheet), 50px, then
  * the list in one column. The disclaimer
@@ -46,7 +49,7 @@ export function GlossarySection() {
 
   return (
     <section aria-label="Glossary terms" className="relative z-10 bg-white py-[130px] max-lg:py-[100px]">
-      <div ref={rowRef} className="page-row flex items-start gap-[150px] max-lg:max-w-[560px] max-lg:flex-col max-lg:items-stretch max-lg:gap-[50px] max-lg:px-6">
+      <div ref={rowRef} className="page-row flex items-start gap-[calc(100%*150/1280)] max-lg:max-w-[560px] max-lg:flex-col max-lg:items-stretch max-lg:gap-[50px] max-lg:px-6">
         <GlossarySidebar
           glossary={glossary}
           filters={filters}
@@ -59,7 +62,7 @@ export function GlossarySection() {
           sheetButtonRef={sheetButtonRef}
         />
 
-        <div className={`flex w-[802px] min-w-0 flex-col gap-[50px] max-lg:w-full ${count ? '' : 'self-stretch justify-center'}`}>
+        <div className={`flex min-w-0 flex-1 flex-col gap-[50px] lg:max-w-[802px] ${count ? '' : 'self-stretch justify-center'}`}>
           <p role="status" className="sr-only">
             {count ? `Showing ${count} ${count === 1 ? 'term' : 'terms'}` : 'No terms found'}
           </p>
@@ -73,7 +76,7 @@ export function GlossarySection() {
           {/* Figma: 18px Medium (the brief said 16), 780 wide, one sentence a line. Below 1024 18px too
               (the token steps to 16), full width, the sentences running on. Not with the empty state. */}
           {count > 0 && (
-            <p className="w-[780px] text-intro-body-tight font-medium text-strong max-lg:w-full max-lg:text-[1.125rem]">
+            <p className="w-full max-w-[780px] text-intro-body-tight font-medium text-strong max-lg:w-full max-lg:text-[1.125rem]">
               {glossary.settings.disclaimer.map((line, i) => (
                 <span key={i} className="lg:block">
                   {i > 0 && ' '}

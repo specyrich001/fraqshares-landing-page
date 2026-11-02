@@ -57,7 +57,9 @@ const rule = <div aria-hidden="true" className="-mb-px border-t border-border-li
 
 /**
  * The term list (Figma 11100:112731), 802 wide: each category with matches, 50px apart: its heading,
- * a rule, the terms in two 354px columns (94px apart, rows 50px apart), a closing rule. Below 1024
+ * a rule, the terms in two 354px columns (94px apart, rows 50px apart), a closing rule. Narrower than
+ * 1440 the columns and their gap shrink with the list; below 1280 they would get too narrow for the
+ * titles, so the terms stack in one column (rows still 50px apart). Below 1024
  * (Figma 11107:113110) one column, the terms 32px apart.
  */
 export function GlossaryList({ groups, query }: { groups: TermGroup[]; query: string }) {
@@ -67,7 +69,7 @@ export function GlossaryList({ groups, query }: { groups: TermGroup[]; query: st
         {category.label}
       </h2>
       {rule}
-      <div className="grid grid-cols-[354px_354px] items-start gap-x-[94px] gap-y-[50px] max-lg:grid-cols-1 max-lg:gap-y-8">
+      <div className="grid grid-cols-1 items-start gap-y-[50px] max-lg:gap-y-8 xl:grid-cols-2 xl:gap-x-[calc(100%*94/802)]">
         {terms.map((t) => (
           <Term key={t.slug} term={t} query={query} />
         ))}
