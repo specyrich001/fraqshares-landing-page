@@ -10,7 +10,7 @@ import { ArrowRightIcon } from '../icons/ArrowRightIcon.tsx'
 import { buttonBase, focusRing, focusRingOnDark } from '../linkStyles.ts'
 import { ABOUT_HREF, BLOG_URL, COMMUNITY_URL, FAQ_HREF, GLOSSARY_HREF, LOGIN_URL, PRIVACY_POLICY_HREF, SIGNUP_URL, SOCIAL_URLS, TERMS_HREF } from '../siteLinks.ts'
 import { STAGE_MEDIA } from '../stage/stageTiming.ts'
-import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from './SocialIcons.tsx'
+import { FacebookIcon, InstagramIcon, LinkedinIcon, XIcon } from './SocialIcons.tsx'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
@@ -42,7 +42,7 @@ const columns = [
 ]
 
 const socials = [
-  { label: 'Fraqshares on X (Twitter)', href: SOCIAL_URLS.x, Icon: TwitterIcon },
+  { label: 'Fraqshares on X (Twitter)', href: SOCIAL_URLS.x, Icon: XIcon },
   { label: 'Fraqshares on Facebook', href: SOCIAL_URLS.facebook, Icon: FacebookIcon },
   { label: 'Fraqshares on LinkedIn', href: SOCIAL_URLS.linkedin, Icon: LinkedinIcon },
   { label: 'Fraqshares on Instagram', href: SOCIAL_URLS.instagram, Icon: InstagramIcon },
