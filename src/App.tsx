@@ -5,10 +5,12 @@ import { SiteHeader } from './components/SiteHeader.tsx'
 import { HeroWealthStage } from './components/stage/HeroWealthStage.tsx'
 import { StepsSection } from './components/steps/StepsSection.tsx'
 import { TestimonialsSection } from './components/testimonials/TestimonialsSection.tsx'
+import { useLandOnHash } from './motion/useLandOnHash.ts'
 import { useSmoothScroll } from './motion/useSmoothScroll.ts'
 
 export default function App() {
   useSmoothScroll()
+  useLandOnHash()
 
   return (
     <>

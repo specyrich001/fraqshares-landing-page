@@ -22,6 +22,11 @@ export const CONTACT_HREF = '/contact'
 export const PRIVACY_POLICY_HREF = '/privacy-policy'
 export const TERMS_HREF = '/terms-and-conditions'
 
+/** The footer's Support links: the Medium blog post and the WhatsApp channel, as supplied. */
+export const BLOG_URL =
+  'https://fraqshares.medium.com/fraqshares-friday-edition-five-16th-october-2026-a-clearer-landing-page-website-a-verification-208abf0f2afc?postPublishedType=initial'
+export const COMMUNITY_URL = 'https://whatsapp.com/channel/0029VaaGhNj0lwgzL8AKlT0e'
+
 /** The current page's path without a trailing slash ('' for home), to mark its nav link aria-current. */
 export const currentPath = () => (typeof window === 'undefined' ? '' : window.location.pathname.replace(/\/$/, ''))
 

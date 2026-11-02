@@ -8,7 +8,7 @@ import logoFooter from '../../assets/logo-footer.svg'
 import images from '../../generated/images.json'
 import { ArrowRightIcon } from '../icons/ArrowRightIcon.tsx'
 import { buttonBase, focusRing, focusRingOnDark } from '../linkStyles.ts'
-import { ABOUT_HREF, FAQ_HREF, GLOSSARY_HREF, LOGIN_URL, PRIVACY_POLICY_HREF, SIGNUP_URL, SOCIAL_URLS, TERMS_HREF } from '../siteLinks.ts'
+import { ABOUT_HREF, BLOG_URL, COMMUNITY_URL, FAQ_HREF, GLOSSARY_HREF, LOGIN_URL, PRIVACY_POLICY_HREF, SIGNUP_URL, SOCIAL_URLS, TERMS_HREF } from '../siteLinks.ts'
 import { STAGE_MEDIA } from '../stage/stageTiming.ts'
 import { FacebookIcon, InstagramIcon, LinkedinIcon, TwitterIcon } from './SocialIcons.tsx'
 
@@ -19,15 +19,20 @@ const phoneMobile = images['footer/phone-hand-mobile']
 /** Read once when the page loads. */
 const year = new Date().getFullYear()
 
-// PLACEHOLDER hrefs (#) for the pages that don't exist yet. Listings opens the web app's log in.
+// PLACEHOLDER href (#) for Investments, which doesn't exist yet. Listings opens the web app's log in.
 const hrefs: Record<string, string> = {
   Listings: LOGIN_URL,
   'About Us': ABOUT_HREF,
   'Terms & Conditions': TERMS_HREF,
   'Privacy Policy': PRIVACY_POLICY_HREF,
+  Blog: BLOG_URL,
+  Community: COMMUNITY_URL,
   Glossary: GLOSSARY_HREF,
   FAQs: FAQ_HREF,
 }
+
+/** Off-site links (Medium, WhatsApp) open in a new tab, like the social icons. */
+const newTab = new Set(['Blog', 'Community'])
 
 const columns = [
   { heading: 'Products', links: ['Listings', 'Investments'] },
@@ -160,6 +165,7 @@ export function SiteFooter() {
                           <li key={label}>
                             <a
                               href={hrefs[label] ?? '#'}
+                              {...(newTab.has(label) && { target: '_blank', rel: 'noopener noreferrer' })}
                               className={`text-mint/50 transition-colors duration-150 hover:text-mint focus-visible:text-mint motion-reduce:transition-none ${focusRingOnDark}`}
                             >
                               {label}
